@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050630
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050630&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEHODDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000135.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050630</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050630&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEHODDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050630">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Fri Jul  1 08:39:43 CEST 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000135.html">[Rcpviewer-contributors] Progress 20050701
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> 4. Review of Ted's DefaultEditor changes
+</I>&gt;<i> * A few minor specifics - look for REVIEW_CHANGE
+</I>&gt;<i> * Major one - DefaultEditorConetntPane is still doing its own
+</I>&gt;<i> reflection. Is there a reason it is not using the IDomainClass stuff?
+</I>&gt;<i> This will impact the contract of IFieldBuilder.
+</I>
+I'm sure that's just legacy.  Putting my foot down here - there should be no
+reflection in the UI layer, that is a responsibility of the
+...domain.runtime plugins.  We'll extend them if necessary.  Please change.
+
+Dan
+
+
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+</I>&gt;<i> Sent: 30 June 2005 10:17
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> Subject: [Rcpviewer-contributors] Progress 20050630
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi All,
+</I>&gt;<i>
+</I>&gt;<i> 1. Incorporated search functionality - not hard really as Ted built it in
+</I>&gt;<i> Notes:
+</I>&gt;<i> * had to change dependency for ...persistence.ui project from ...rcp
+</I>&gt;<i> project to ...gui
+</I>&gt;<i> * there is one REVIEW_CHANGE - just fitting it in with job model
+</I>&gt;<i> * the default run of ...gui.acme does NOT include the search - see wiki
+</I>&gt;<i> for details.
+</I>&gt;<i>
+</I>&gt;<i> 2. Standardised format
+</I>&gt;<i> No check-style yet but used __ and _ prefixes for fields.
+</I>&gt;<i> We can now start the struggle to assert whose coding style is second
+</I>&gt;<i> best after mine.
+</I>&gt;<i> Other suggested standards in the wiki.
+</I>&gt;<i>
+</I>&gt;<i> 3. Got rid of &quot;public&quot;
+</I>&gt;<i> A suggested standard - every class/method is private.
+</I>&gt;<i> Only if there is a very good reason should it be package protected.
+</I>&gt;<i> Only if there is a better reason should it be protected.
+</I>&gt;<i> Only is there is an unarguable reason, should it be public.
+</I>&gt;<i> We are building a framework that other might extend - lets minimise our
+</I>&gt;<i> problems from the beginning.  Make everything as tight as possible, use
+</I>&gt;<i> features such as Bundle's ability not to export packages, and later we
+</I>&gt;<i> can explicitly publicise (exactly the right word here!) the stuff we
+</I>&gt;<i> want people to code against.
+</I>&gt;<i>
+</I>&gt;<i> 4. Review of Ted's DefaultEditor changes
+</I>&gt;<i> * A few minor specifics - look for REVIEW_CHANGE
+</I>&gt;<i> * Major one - DefaultEditorConetntPane is still doing its own
+</I>&gt;<i> reflection. Is there a reason it is not using the IDomainClass stuff?
+</I>&gt;<i> This will impact the contract of IFieldBuilder.
+</I>&gt;<i>
+</I>&gt;<i> Tomorrow : session tree view
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000135.html">[Rcpviewer-contributors] Progress 20050701
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#134">[ date ]</a>
+              <a href="thread.html#134">[ thread ]</a>
+              <a href="subject.html#134">[ subject ]</a>
+              <a href="author.html#134">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

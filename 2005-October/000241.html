@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20051014 - on behalf of Mike
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-October/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020051014%20-%20on%20behalf%20of%20Mike&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEBFDFAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000240.html">
+   <LINK REL="Next"  HREF="000242.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20051014 - on behalf of Mike</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020051014%20-%20on%20behalf%20of%20Mike&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEBFDFAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20051014 - on behalf of Mike">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sat Oct 15 07:26:59 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000240.html">[Rcpviewer-contributors] testing, testing
+</A></li>
+        <LI>Next message: <A HREF="000242.html">[Rcpviewer-contributors] Icons uploaded.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#241">[ date ]</a>
+              <a href="thread.html#241">[ thread ]</a>
+              <a href="subject.html#241">[ subject ]</a>
+              <a href="author.html#241">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Finally something to report.
+
+The project 'org.essentialplatform.louis' is (or should be - see last
+paragraph) submitted.  It is a direct replacement for the
+'de.berlios.recpviewer.gui' project. The only external difference is
+that it does not rely on 'net.sf.plugins.utils'.
+Both 'de.berlios.rcpviewer.gui.acme' and
+'de.berlios.rcpviewer.petstore.gui' projects now rely on it.
+
+Internally it is a rewrite that, after much faff and heartache, is not
+really that different to its predecessor.  However I am much happier
+with it as it enables much easier extension for domain &amp; value objects etc.
+
+The core pattern is a IGUIFactory per attribute/reference on a domain
+object. Each generates a GUI component and an IFormPart for.  The
+IFormPart is the model that holds gui values until a commit when these
+are flushed to the domain model.  Essentailly a composite pattern.
+Best to start with DefaultEditor and see how the calls work form there.
+
+Supporting patterns:
+
+Finite Options Factories
+e.g ILouisLabelProvider, ITransferProvider
+- getX( args ) methods which return null if the provider cannot satisfy
+the request
+
+Infinite Options Factories
+e.g. IGuiFactory
+- isApplicable( args1 ) and getX( args2 ) methods where the second can
+only be called if the first is true
+
+Global Factories
+Essentially collections of the above that iterate through the collection
+until the first factory that can satisfy the request. Generally there
+are default factories and an extsnion point for domain specialisations.
+Order is significant.
+
+Obviously I'll get this lot writetn onto the wiki when I get a chance.
+
+Issues.
+1) insufficient testing - I have been on this for far too long and have
+no more time
+2) generics faff - you'll see that my generics are a bit of a mess -
+will get tidied in the fulness of time
+3) domain listening - I have the IFormPart's set up to listen in on
+domain changes and refresh themselves if an external change occurs.
+This takes no account of whetehr they are dirty or not so this will have
+to be worked upon.
+4) Transactions !?  Have not really got to grip with Dan's transaction
+stuff so getting arbitary &amp; confusing issues if I do not save in the
+right order (..?).  Again, with more time will get a better handle on
+this.  Note also that I had to make one emergency change on
+de.berlios.rcpviewer.transaction.internal.TransactionManager
+('de.berlios.recpviewer.deomain.runtime' project) to get anything to
+work.  I have checked this in under a REVIEW_CHANGE marker but accept
+this is most probably my misuderstanding.
+5) Why are the 'Color' attribute in EasyBean and any attribute in
+EasiestBean not picked by up by the model?
+6) AspectJ kills my machine - 512 MB is simply not enough - I have to
+restart every hour!  Much better when I turn off auto-build but hey...
+
+Time
+Due to my own faffing I have spent much too much time on this.  I will
+not be able to do much (/any) more between now and mid-November when I
+return from a conference I am going to.  Obviously I am here for scary
+bugs / ineviatbel SVN problems etc but that's about all.
+
+Finally.
+Dan, my SVN access is crawling &amp; when it did get somewhere it threw up a
+'corrupt data' message (??).  I'll try again tomorow am (again must rush
+off now) but just in case I have sent to you a zip file of the project.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000240.html">[Rcpviewer-contributors] testing, testing
+</A></li>
+	<LI>Next message: <A HREF="000242.html">[Rcpviewer-contributors] Icons uploaded.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#241">[ date ]</a>
+              <a href="thread.html#241">[ thread ]</a>
+              <a href="subject.html#241">[ subject ]</a>
+              <a href="author.html#241">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

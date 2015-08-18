@@ -1,0 +1,469 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Transaction view and other things
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-November/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Transaction%20view%20and%20other%20things&In-Reply-To=%3C438C96DC.2000509%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000254.html">
+   <LINK REL="Next"  HREF="000256.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Transaction view and other things</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Transaction%20view%20and%20other%20things&In-Reply-To=%3C438C96DC.2000509%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Transaction view and other things">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Tue Nov 29 18:58:52 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000254.html">[Rcpviewer-contributors] Transaction view and other things
+</A></li>
+        <LI>Next message: <A HREF="000256.html">[Rcpviewer-contributors] Transaction view and other things
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#255">[ date ]</a>
+              <a href="thread.html#255">[ thread ]</a>
+              <a href="subject.html#255">[ subject ]</a>
+              <a href="author.html#255">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>let me know if you want me to have a look
+else I'll be getting on with b).
+how exciting
+
+Mike E.
+
+Dan Haywood wrote:
+&gt;<i> Right then.
+</I>&gt;<i> 
+</I>&gt;<i> I managed to get the master/child thing going for displaying changesets, and that's when it started spitting out problems with the ITransactionManager.  I think it will look good eventually, but it's problematic at the moment.
+</I>&gt;<i> 
+</I>&gt;<i> What I'd really really like is for you to look at (b).  I know that we need tests and so forth, but I also don't want to get bogged down with large and elaborate mocking of bits of the Eclipse API related solely to the UI.  So unless there's a specific reason (eg for Epic) why you want to learn this stuff, I'd much prefer you work on Jelly/SWT.
+</I>&gt;<i> 
+</I>&gt;<i> Let me know,
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> ----------
+</I>&gt;<i> Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>Dan,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>I was going to see what a master/child looked like.
+</I>&gt;&gt;<i>ie : master : transactions &amp; their enlisted objects
+</I>&gt;&gt;<i>      child : changesets of the transaction selected in the master
+</I>&gt;&gt;<i>Then an option for the master transaction to be linked to the current 
+</I>&gt;&gt;<i>pojo in focus.
+</I>&gt;&gt;<i>If you have your own ideas carry on, else let me know &amp; I'll continue 
+</I>&gt;&gt;<i>with that.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>re: alternatives:
+</I>&gt;&gt;<i>a) define nicer (yes I know it could be improved but how...)
+</I>&gt;&gt;<i>b) oo - interesting
+</I>&gt;&gt;<i>c) oo - interesting
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>However really I should look at unit tests.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Regarding the concurrency discussion we can leave the transaction merges 
+</I>&gt;&gt;<i>for now.  However I'm a little worried about the idea of 
+</I>&gt;&gt;<i>attribute-merging - even if technically feaseable.  Apart from having to 
+</I>&gt;&gt;<i>deal with inconsistent attributes we also run the risk that users change 
+</I>&gt;&gt;<i>  data that they do not correct in the light of other changed data.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Dan Haywood wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Hi Mike,
+</I>&gt;&gt;&gt;<i>Have been playing around with your view and a bunch of issues it's
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>throwing
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>up with the xactn mgmt stuff.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>There's enough things that I can see that need attention with respect to
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>the
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>interaction between the UI and the ITransationManager, and I reckon I have
+</I>&gt;&gt;&gt;<i>enough Eclipse skills, just about, to work them through.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>So, rather than us both tripping over each other, do you want to turn your
+</I>&gt;&gt;&gt;<i>attention to some other area?  And then I'll give you a call when my
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Eclipse
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>knowledge is exhausted (won't be long).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>What's next, then?  I have three suggestions:
+</I>&gt;&gt;&gt;<i>a) a nicer implementation of the operations view.
+</I>&gt;&gt;&gt;<i>b) develop a way of using an optional markup notation (perhaps Commons
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Jelly
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>(<A HREF="http://jakarta.apache.org/commons/jelly/jellyswt.html">http://jakarta.apache.org/commons/jelly/jellyswt.html</A>),
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>similar a little
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>bit to IBM's RIB (<A HREF="http://www.alphaworks.ibm.com/tech/rib">http://www.alphaworks.ibm.com/tech/rib</A>)), cf like
+</I>&gt;&gt;&gt;<i>PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+</I>&gt;&gt;&gt;<i>c) start working on the tooling side - building up a Java AST
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>implementation
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>of the meta-model.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Or anything else that you're interested in, of course.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Dan
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;&gt;&gt;<i>From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i>[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Behalf Of Mike Evans
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Sent: 28 November 2005 18:51
+</I>&gt;&gt;&gt;&gt;<i>To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">dan at haywood-associates.co.uk</A>;
+</I>&gt;&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i>Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Hi Dan,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>TRANSACTION PER POJO
+</I>&gt;&gt;&gt;&gt;<i>Having each newly created pojo in its own transaction will require some
+</I>&gt;&gt;&gt;&gt;<i>sort of merge etc. as I would suggest it will normal practice to create
+</I>&gt;&gt;&gt;&gt;<i>more than one dependent pojo at a time (I mean pojos with their own
+</I>&gt;&gt;&gt;&gt;<i>lifecycles but then linked, e.g Beans &amp; EasyBean).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Perhaps we can have a convention that identifies one pojo as a
+</I>&gt;&gt;&gt;&gt;<i>(non-unique) factory of another type of pojo in which case when an
+</I>&gt;&gt;&gt;&gt;<i>instance of the latter are created by the former they remain in the same
+</I>&gt;&gt;&gt;&gt;<i>transaction.
+</I>&gt;&gt;&gt;&gt;<i>e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating
+</I>&gt;&gt;&gt;&gt;<i>a factory method whose output remains in the transaction.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Irrespective of that the merge/umnmerge would be needed. Perhaps
+</I>&gt;&gt;&gt;&gt;<i>something on the lines of:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>MyTransaction(){...}
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>MyTransaction merge( MyTransaction partner ) {
+</I>&gt;&gt;&gt;&gt;<i>  return new MyTransaction( this, partner );
+</I>&gt;&gt;&gt;&gt;<i>}
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>MyTransaction[] unmerge() {
+</I>&gt;&gt;&gt;&gt;<i>  if ( _dad == null ) throw new IllegalStateException();
+</I>&gt;&gt;&gt;&gt;<i>  if ( _mum == null ) throw new IllegalStateException();
+</I>&gt;&gt;&gt;&gt;<i>  return new MyTransaction[]{ dad, mum };
+</I>&gt;&gt;&gt;&gt;<i>}
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>I'll have a think - we'll probably need a new transaciton state or two
+</I>&gt;&gt;&gt;&gt;<i>to  get the undo/redo logic right.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>CONCURRENCY
+</I>&gt;&gt;&gt;&gt;<i>How scalable are we going to be?
+</I>&gt;&gt;&gt;&gt;<i>Is our distribuetd app going to be peer-to-peer or controlled centrally?
+</I>&gt;&gt;&gt;&gt;<i>If centrally we can go for pessimistic locking of all objects.  As soon
+</I>&gt;&gt;&gt;&gt;<i>as a transaction enlists the object, it cannot be enlisted by any other
+</I>&gt;&gt;&gt;&gt;<i>transaction.  I like that where scalability allows, as no user ever
+</I>&gt;&gt;&gt;&gt;<i>wastes time on lost changes (guess how Epic works).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Other ideas...
+</I>&gt;&gt;&gt;&gt;<i>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+</I>&gt;&gt;&gt;&gt;<i>broadcasts that it has grabbed a lock on a pojo AND when it releases
+</I>&gt;&gt;&gt;&gt;<i>that lock.  All other Transaction Managers record which pojo's are out
+</I>&gt;&gt;&gt;&gt;<i>of bounds.  Fail Safety: the broadcast gives the address of the locking
+</I>&gt;&gt;&gt;&gt;<i>Transaction Manager (TM) so if another TM wants to lock the pojo it can
+</I>&gt;&gt;&gt;&gt;<i>test whether the locking TM is still running and then ...
+</I>&gt;&gt;&gt;&gt;<i>Oh good grief - if you do not like centralised locking let's leave it to
+</I>&gt;&gt;&gt;&gt;<i>File/Save errors for now.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Mike E.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>PS : no coding today - too busy learning NullSoft's installer - which is
+</I>&gt;&gt;&gt;&gt;<i>lovely (if you like Windows).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Dan Haywood wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>(This mail is direct to you only cos the mailing list just bounced me.
+</I>&gt;&gt;&gt;&gt;&gt;<i>Huh).
+</I>&gt;&gt;&gt;&gt;&gt;<i>-------------
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>Hi Mike
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Question : conceptually are all ChangeSets are on a single timeline on
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>which there is a defined point where they are changeable or not?  Or can
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>undoable and redoable changes run concurrently?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>In short: the latter.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>A bit longer: there can be multiple transactions IN_PROGRESS at the same
+</I>&gt;&gt;&gt;&gt;&gt;<i>time.  Each transaction enlists a set of pojos, but a single
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>pojo can only
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>be enlisted in one transaction at a time.  This last is the rule that I
+</I>&gt;&gt;&gt;&gt;&gt;<i>think you partially commented out.  I haven't reinstated it cos
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>I want to
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>see how all this works out in practice.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>The reason that xactn failures occur, I think, is that if one
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>creates one
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>pojo and then another one (eg Beans and then EasyBean) then
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>they will both
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>be in their own transaction.  Attempting to add the EasyBean to
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>the Beans
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>pojo then fails because the EasyBean cannot be enlisted in the
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Beans xactn.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>An alternative design for this would be to automatically merge
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>the xactns.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>But what should happen if the user does an Edit-&gt;Undo - should
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>the xactns
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>unmerge again?  So I want to just see it all in use as I
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>originally designed
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>it and then we can see how it behaves in practice.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>By the way, another wrinkle that I know I'll need to address is that of
+</I>&gt;&gt;&gt;&gt;&gt;<i>concurrent updates.  I intend there to be a JMS subscription
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>thing going on
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>so that xactns committed by other users will be automatically published.
+</I>&gt;&gt;&gt;&gt;&gt;<i>That means that the user will always have an up-to-date view,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>and should be
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>great for when a user isn't in the process of changing an
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>object.  But if
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>they are, then I think that we'll need to get them to
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>acknowledge the update
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>and throw away their own IN_PROGRESS transaction.  My thinking is again
+</I>&gt;&gt;&gt;&gt;&gt;<i>better for them to find out earlier rather than later when they do their
+</I>&gt;&gt;&gt;&gt;&gt;<i>File-&gt;Save and get an optimistic locking error.  But I'd appreciate your
+</I>&gt;&gt;&gt;&gt;&gt;<i>views - I've not designed a &quot;conventional&quot; application this
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>way, so I'm a
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>little nervous if this is a little close to the bleeding edge.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>Later
+</I>&gt;&gt;&gt;&gt;&gt;<i>Dan
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>From: Mike Evans [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>]
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Sent: 26 November 2005 12:34
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">dan at haywood-associates.co.uk</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Subject: Re: [Rcpviewer-contributors] Transaction view
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Yuh.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>I was thinking of adding to 'config' options to show changesets and/or
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>enlisted pojos.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>However I think two seperate views would be better.  Sigh.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>ChangeSets are a composite I noticed - hence I was going to have an
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>infinite-leveled tree for this.  May not look so good so might just go
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>with two levels and use icons to indicate dependencies.  We'll see how
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>it goes.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Question : conceptually are all ChangeSets are on a single timeline on
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>which there is a defined point where they are changeable or not?  Or can
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>undoable and redoable changes run concurrently?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Mike E.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Dan Haywood wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>I've put a patch in to stop all those spurious transactions
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>from appearing.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>I see that you are using a tree for the transaction view -
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>good-o.  But as
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>you've noticed, there's actually two or three dimensions to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>what lives in a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>transaction
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>- the enlisted pojos
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>- the change sets (which can be undone)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>- possibly change sets which can be redone.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>I think actually we need two views relating to transactions here:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>- the first should be what you are working on, which is really a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>TransactionManager view.  This should show the transactions +
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>the enlisted
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>pojos in each.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>- the second should show the current transaction for the
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>current pojo that
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>has focus, showing the two sets of changesets (undoable and redoable).
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>Note that changesets follow the composite pattern, so in theory
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>they could
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>be nested.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>Hope that makes sense.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>Dan
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>--
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>--
+</I>&gt;&gt;&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>-- 
+</I>&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000254.html">[Rcpviewer-contributors] Transaction view and other things
+</A></li>
+	<LI>Next message: <A HREF="000256.html">[Rcpviewer-contributors] Transaction view and other things
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#255">[ date ]</a>
+              <a href="thread.html#255">[ thread ]</a>
+              <a href="subject.html#255">[ subject ]</a>
+              <a href="author.html#255">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

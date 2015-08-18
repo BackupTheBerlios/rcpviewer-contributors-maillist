@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Ted's screenshot - comment posted.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3C427E0A50.9060805%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000047.html">
+   <LINK REL="Next"  HREF="000049.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Ted's screenshot - comment posted.</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3C427E0A50.9060805%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Ted's screenshot - comment posted.">emorning at yahoo.com
+       </A><BR>
+    <I>Sun May  8 14:47:12 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000047.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+        <LI>Next message: <A HREF="000049.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#43">[ date ]</a>
+              <a href="thread.html#43">[ thread ]</a>
+              <a href="subject.html#43">[ subject ]</a>
+              <a href="author.html#43">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+&gt;<i>I think there's some excellent ideas here - and some things that I like
+</I>&gt;<i>somewhat less.  (But you were after feedback, weren't you?)
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+Yes I was. 
+It occurred to me that it wasn't a good idea to do all this coding 
+before we had any discussion about where things were going.
+I also posted a message in the EMF newsgroup asking for comments about 
+the usability of the EMF UI but got no responses.
+I get the definite impression that nobody is using EMF for end-user apps 
+or has even thought about it.  In this regard NO seems at the very 
+leading edge of UI development. 
+
+&gt;<i>I think the Navigator view looks very nice.  Nice and clean.  Perhaps &quot;List&quot;
+</I>&gt;<i>should be &quot;Search&quot; - in practical terms one wouldn't want to have a list of
+</I>&gt;<i>every Customer.
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>FYI - the contents of the Navigator and Actions views were cut and 
+pasted from QuickBooks Simple Start Edition.
+There are several UI ideas in this application that I like a lot.
+
+I agree with you about the 'List' vs 'Search' thing.  Although with 
+SWT's 'Virtual' table and a peristence layer that can do lazy loading 
+it's practical to display a list of all customers.
+
+
+&gt;<i>Not nearly so sure about the main view.  While I think that it would be fine
+</I>&gt;<i>to have individual views that hold either then left hand side tree or the
+</I>&gt;<i>right-hand side properties, it doesn't (I'm afraid) cut it to me as having
+</I>&gt;<i>anywhere near the level of sophistication for typical end-users.  I did some
+</I>&gt;<i>street testing on the wife and in-laws - they agree I'm afraid.
+</I>&gt;<i>
+</I>&gt;<i>What I am aiming for is something with the sophistication of Mike's RCP app
+</I>&gt;<i>(eg <A HREF="http://www.incremental.pwp.blueyonder.co.uk/screenshots/marketing.png">http://www.incremental.pwp.blueyonder.co.uk/screenshots/marketing.png</A>)
+</I>&gt;<i>or Schoolclipse
+</I>&gt;<i>(<A HREF="https://schoolclipse.dev.java.net/files/documents/2161/10318/Clip2.gif">https://schoolclipse.dev.java.net/files/documents/2161/10318/Clip2.gif</A>) or
+</I>&gt;<i>Xinity (<A HREF="http://www.xinity.org/?About/Xinity%20BASE">http://www.xinity.org/?About/Xinity%20BASE</A>).  Ultimately I'd like
+</I>&gt;<i>UIs with the sophistication of MS Outlook or equivalent.
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>I like Mike's screenshot of the Customer view a lot.
+Ultimately I would like the Properties pane in my application to look 
+like that.
+
+However, a single view like Mike's customer view would not work for many 
+of the objects our application displays (my guess is that the Customer 
+view doesn't work well for all of the objects that Epic displays either).
+Here's why...consider an order that has hundred's or thousands of line 
+items on it.  In terms of Mike's Customer view, consider how that view 
+would work if the Customer has a thousand Contacts. 
+When first displayed you could either...
+
+ a) have the contacts list expanded, in which case the uses won't be see 
+the below the contacts list.  Not good, because users are like newborn 
+babies, if they can't see then it doesn't exist!, or
+
+b) have the contacts list collapsed, in which case the properties below 
+the list disappear.  Again not good, because of my rule that users are 
+like newborn babies, if they can't see then it doesn't exist. 
+In any case, a really long list of items will make it hard to navigate 
+through the view.
+
+So, to solve these problems I think an outline pane is neccessary.  The 
+outline  view affords  the user with 'context' about their current 
+location within a large object tree and it also provides for easier 
+navigation within the object.
+The outline pane could be optional.
+
+-----------------
+
+Also, the Eclipse IDE put the outline in a view that is separate from 
+the editors.  I chose to put the outline inside the editor in a separate 
+pane inside the editor.  I did this because I figure that not all 
+editors that would be displayed in an RCPViewer application would be 
+instances of an RCPViewer.  A typical application will have other 
+editors that display HTML pages,  or screenshot of incoming Faxs, etc, 
+that is, objects that do not have an outline or for which for an outline 
+view cannot be constructed.
+I didn't want to waste the screen real estate an an outline view that 
+wouldn't be used all the time.
+
+Also, I thought it might make it clearer to the user that the outline 
+pane is displaying an outlien of the object that they're looking at if 
+the outline was contained within the same editor as the properties view.
+
+
+&gt;<i>So I'm sorry that the above sounds a little negative.  
+</I>&gt;<i>
+</I>
+Not a problem.  I've been a developer since 1988.  I have developed an 
+incredibly thick skin.
+I'm sure we've all had to sit in meeting's where someone spends a hour 
+questioning the usability of your application because the color scheme 
+is all wrong ;-).
+
+
+
+ted
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000047.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+	<LI>Next message: <A HREF="000049.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#43">[ date ]</a>
+              <a href="thread.html#43">[ thread ]</a>
+              <a href="subject.html#43">[ subject ]</a>
+              <a href="author.html#43">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

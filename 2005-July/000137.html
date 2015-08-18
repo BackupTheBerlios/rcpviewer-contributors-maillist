@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050704
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050704&In-Reply-To=%3C42C8EDE4.7070003%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000136.html">
+   <LINK REL="Next"  HREF="000138.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050704</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050704&In-Reply-To=%3C42C8EDE4.7070003%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050704">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Jul  4 10:05:56 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000136.html">[Rcpviewer-contributors] Re: domainclass plugin not working???
+</A></li>
+        <LI>Next message: <A HREF="000138.html">[Rcpviewer-contributors] progress 20050705
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#137">[ date ]</a>
+              <a href="thread.html#137">[ thread ]</a>
+              <a href="subject.html#137">[ subject ]</a>
+              <a href="author.html#137">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Actually Today taken up with Subclipse commit faff &amp; installing Eclipse 
+3.1.  However over the weekend...
+
+Large Changes to DefaultEditor Processing:
+* It now uses Domain info rather than its own reflection
+* IFieldBuilders is once again a simple contract, rather than having 
+lots of implied requirements due to impls having to create managed 
+parts.  Basically I wrapped all the managed form stuff into a generic 
+FieldPart class which uses IFieldBuilder only for the gui generation.
+* This required two sub-types - IField &amp; IFieldListener but I hope these 
+are straight-forward enough.
+* As all the update &amp; dirty state is now in one place the aforementioned 
+FieldPart) and is tied to Job's, I can easily move on to job-based stuff 
+(undo/redo manager, macros and test harness scripting stuff).
+* However an implication of this is that the DefaultEditor is not quite 
+as generic as it was.  In fact I have completly removed the 
+IEditorContent factory stuff as it really does not fit.  I will 
+re-introduce it at a later stage but probably in a different form - once 
+I know how the DefauyltEditor implementttaion pans out.
+* Finally, as IFieldBuilders are specific to DefaultEditor, having their 
+factories in the GuiPlugin seemed like code leakage to me.  So all gui 
+factories (well - the one  - as I have deleted the 
+EditorContentBuilderFactory) are noe lazily instantiated statics on the 
+DefaultEditor itself.
+
+Keen to get on with Job-based functionality however, sigh, Dan the boss, 
+wants the action view.  Dan - where was that screenshot of QuickBooks?
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000136.html">[Rcpviewer-contributors] Re: domainclass plugin not working???
+</A></li>
+	<LI>Next message: <A HREF="000138.html">[Rcpviewer-contributors] progress 20050705
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#137">[ date ]</a>
+              <a href="thread.html#137">[ thread ]</a>
+              <a href="subject.html#137">[ subject ]</a>
+              <a href="author.html#137">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

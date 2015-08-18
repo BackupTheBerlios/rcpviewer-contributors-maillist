@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050808
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050808&In-Reply-To=%3CZen-1E23Xp-0003UD-7G%40pythagoras.zen.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000183.html">
+   <LINK REL="Next"  HREF="000185.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050808</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050808&In-Reply-To=%3CZen-1E23Xp-0003UD-7G%40pythagoras.zen.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050808">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Mon Aug  8 11:03:41 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000183.html">[Rcpviewer-contributors] Progress 20050808
+</A></li>
+        <LI>Next message: <A HREF="000185.html">[Rcpviewer-contributors] Support for operation prereqs and also defaults
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike
+within
+Dan
+
+---
+Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+
+&gt;<i> crawling through Collections stuff...
+</I>&gt;<i> 
+</I>&gt;<i> Questions for Dan - with respect to your intentions...
+</I>&gt;<i> 
+</I>&gt;<i> 1. When I interrogate ICollection for values I get back a pile of pojos. 
+</I>&gt;<i> The GUI deals with IDomainObjects (so that it can ascertain label 
+</I>&gt;<i> providers etc.) so I have to wrap all of these pojos in IDomainObjects.
+</I>&gt;<i> 
+</I>&gt;<i> Is this how you want it done?
+</I>&gt;<i> 
+</I>&gt;<i> // yuk yuk yuk! REVIEW_CHANGE
+</I>&gt;<i> Collection elements = new ArrayList();
+</I>&gt;<i> for( Object pojo :
+</I>&gt;<i>          ((IDomainObject)obj).getReference(_ref).getCollection() ) {
+</I>&gt;<i>    elements.add( new DomainObject( collectionType, pojo ) );
+</I>&gt;<i> }
+</I>&gt;<i> return elements.toArray();
+</I>
+Half-way there.  Yes, you'll need to wrap them in DomainObjects, however there should only ever be one DomainObject per pojo.  Rather than instantiate one directly you can simply do:
+
+pojo.getDomainObject().
+
+That's because the PojoAspect introduces this method into the pojo.
+
+Alternatively, if AspectJ gives you hassle, then you could copy the code from PojoAspect itself - basically it uses a hash in Session to do a reverse look-up from pojo to wrapping DomainObject.
+
+
+&gt;<i> 
+</I>&gt;<i> 2. Getters and setters do not appear on the op view as they are not 
+</I>&gt;<i> returned by IDomainClass.operations().  Should addToXXX and 
+</I>&gt;<i> removeFromXXX appear? 
+</I>
+No, they shouldn't - so if they are then that's a mistake.  Instead should be able to add or remove using drag/drop into the collection itself (as rendered on the form).
+
+That said, there could be accessibility issues with that, so perhaps this decision is worth reviewing at a later date.
+
+
+If they should, does the model pick up calls to 
+&gt;<i> them so that DomainObjectListener.collectionAddedTo is fired?  Or is 
+</I>&gt;<i> this one that the GUI should handle?
+</I>
+n/a.  If we decide to additionally expose them as operations then I would make DomainObjectListener.operationInvoked be fired.
+
+
+Dan
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000183.html">[Rcpviewer-contributors] Progress 20050808
+</A></li>
+	<LI>Next message: <A HREF="000185.html">[Rcpviewer-contributors] Support for operation prereqs and also defaults
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

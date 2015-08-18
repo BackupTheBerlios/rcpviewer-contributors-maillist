@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050718
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050718&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEMPDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000155.html">
+   <LINK REL="Next"  HREF="000157.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050718</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050718&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEMPDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050718">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Wed Jul 20 23:46:29 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000155.html">[Rcpviewer-contributors] progress 20050718
+</A></li>
+        <LI>Next message: <A HREF="000157.html">[Rcpviewer-contributors] progress 20050718
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#156">[ date ]</a>
+              <a href="thread.html#156">[ thread ]</a>
+              <a href="subject.html#156">[ subject ]</a>
+              <a href="author.html#156">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike, within..
+
+
+&gt;<i> DnD:
+</I>&gt;<i> We now have DnD for DomainObjects which is 'type-safe' - e.g. you can't
+</I>&gt;<i> drop a EasyBean instance on an AnotherEasyBean field.  You can see this
+</I>&gt;<i> if you open the action arguments dialog for the Counter.increment(
+</I>&gt;<i> EasyBean bean1, AnotherEasyBean bean2) method, and drag instances from
+</I>&gt;<i> the session tree onto it.
+</I>&gt;<i> The impl smells so I'd ask Ted to have a look; in particular:
+</I>
+Still, it seems to work ok for me.  Thanks.
+
+
+&gt;<i> Other Stuff: LabelProvider
+</I>&gt;<i> I have added an additional extension point (IDomainObjectLabelProvider)
+</I>&gt;<i> to allow users to specialise the display text and icon for instances of
+</I>&gt;<i> particular IDomainClass's.  This is used by the DefaultEditor,
+</I>&gt;<i> FieldBuilders etc.
+</I>
+Ooh. - we might be about to have a rare disagreement here.  The UI should be
+able to obtain *all* of its information from the IDomainObject and
+associated IDomainClass.  So it shouldn't be going to some other repository
+(ie the manifest) to pick up this extra information.
+
+For example, a domain object an Order might want to have different icons (or
+perhaps different overlays of icons) to represent its state.  Even though
+this is rendered on the UI, it is still business logic and so belongs in the
+domain object.
+
+Of course, the way in which an icon is described in domain objects (using an
+annotation) will introduce a coupling to Eclipse itself.  (Then again,
+putting this information into a manifest is also a dependency).  At any
+rate, that's why I introduced the idea of IDomainBuilder.  If you
+Navigate&gt;Open Type for RcpViewerProgModelBuilder (in ...domain.runtime) then
+you can see the code for picking up an @ImageUrlAt annotation.  This later
+annotation is defined in the ...progmodel.rcpviewer package.  And you can
+see an example usage in ProspectiveSale fixture (...domain.fixture) with
+test in TestImageDescriptor (...domain.tests).
+
+So I'm hoping the above is persuasive enough, because I know that Ted
+doesn't really agree with me on this sort of use of annotations.  I just
+think its an easier binding than putting this info into (what is basically)
+a deployment descriptor.
+
+
+
+&gt;<i> Field builder and label provider factories are back in the base gui
+</I>&gt;<i> package as I take any opportunity I can to decrease scope of objects.
+</I>&gt;<i> Sorry for all this package juggling.
+</I>
+I have some package juggling to do myself, but I'll leave it till it becomes
+too painful.
+
+
+&gt;<i> AAAARGGHH! Stuff : SVN
+</I>&gt;<i> ... which brings me to SVN.
+</I>&gt;<i> I have attached a screenshot of the error(s) I get everytime I try to
+</I>&gt;<i> sync the ...gui project. Any ideas?
+</I>&gt;<i> Hence I had to sync / commit at (almost) file level this time.  I think
+</I>&gt;<i> everything is OK.  Let me know if you have any problems.  When i get
+</I>&gt;<i> back, I'll export the project afresh from the repository to see if this
+</I>&gt;<i> gets rid of my problems.
+</I>
+That really shouldn't be necessary - but no ideas as to what's going on in
+your sync view.
+
+That said, I've now taken to using TSVN for all updates and all commits, and
+I just do them on SVN/trunk/workspace.  It's a bit of a sledgehammer, and of
+course it isn't as pretty as the Eclipse sync view, but it *is* reliable.
+But of course I am using Subclipse implicitly every time I do a refactoring
+(move or rename), because it is calling the appropriate SVN APIs.  And
+that's worth a lot to me.  I definitely don't want this to be the first OSS
+project that moves from SVN to CVS!
+
+
+
+&gt;<i> Finally: AspectJ
+</I>&gt;<i> Dan - Though I have AspectJ in and the ...acme and ...runtime.domain
+</I>&gt;<i> projects dutifully have aspectJ natures, it does not seem to actually
+</I>&gt;<i> change anythign when I run.  Something else for me to look at on
+</I>&gt;<i> my return.
+</I>
+Dunno - I've done a complete update (I move the old trunk to one side now
+and again after I've committed) and seems okay.
+
+Try opening up the cross references view and see if the dummy
+de.berlios.rcpviewer.progmodel.standard.aspects.Customer class (in
+...domain.runtime) is annotated with at all.  So far as the gui.acme plugin
+is concerned, all I had to do in the end was to expose the classes to the
+aspect: Project &gt; Properties &gt; AspectJ Aspect Path &gt; Libraries &gt; Add Class
+Folder &gt; de.berlios.rcpviewer.domain.runtime/bin.  This info doesn't seem to
+get put into the manifest, I guess its in .project?
+
+Last thing: since there was that issue a while back regarding extension
+point metadata being cached, I now have my run configuration to always flush
+the runtime workspace.  Perhaps that's worth a try?
+
+And last last thing: you could also try enabling the trace aspect to see if
+that gives you any joy (either directly against the ...aspects.Customer as
+(a) regular project, (b) plugin project, then same again against the
+...gui.acme classes).
+
+
+Dan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000155.html">[Rcpviewer-contributors] progress 20050718
+</A></li>
+	<LI>Next message: <A HREF="000157.html">[Rcpviewer-contributors] progress 20050718
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#156">[ date ]</a>
+              <a href="thread.html#156">[ thread ]</a>
+              <a href="subject.html#156">[ subject ]</a>
+              <a href="author.html#156">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

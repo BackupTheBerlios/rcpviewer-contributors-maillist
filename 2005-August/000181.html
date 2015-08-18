@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050804
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050804&In-Reply-To=%3C42F1D609.20508%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000180.html">
+   <LINK REL="Next"  HREF="000182.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050804</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050804&In-Reply-To=%3C42F1D609.20508%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050804">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Thu Aug  4 10:47:05 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000180.html">[Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)
+</A></li>
+        <LI>Next message: <A HREF="000182.html">[Rcpviewer-contributors] Progress 20050805
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#181">[ date ]</a>
+              <a href="thread.html#181">[ thread ]</a>
+              <a href="subject.html#181">[ subject ]</a>
+              <a href="author.html#181">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nothing done on collections yet except a bean added to ...acme project 
+that holds a collection.
+A pre-requisite for collections is that FieldBuilders create their own 
+labels.  This they now do.  As an add-on, field sizes are now a bit more 
+intelligent (though not taking account of any annotations as yet) -
+primitive fields now give visual clue, via their length, to their type. 
+      A small step but one I think I like.
+
+Also renamed 'ActionsView' as 'OpsView'.  AND managed to do it in a 
+Subclipse-safe way!!  i.e did not use eclipse refactoring but manually 
+copied, committed, manually deleted, committed etc.
+
+Note that you'll have to clean the runtime workspace as the view name 
+has changed.
+
+Ted - I have added yet another Util class (GCUtil) but have not put it 
+in net.sf.. as it stores static state and you may not like this.
+
+Mike E.
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000180.html">[Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)
+</A></li>
+	<LI>Next message: <A HREF="000182.html">[Rcpviewer-contributors] Progress 20050805
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#181">[ date ]</a>
+              <a href="thread.html#181">[ thread ]</a>
+              <a href="subject.html#181">[ subject ]</a>
+              <a href="author.html#181">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] xactn commit + File&gt;Save
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-September/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20xactn%20commit%20%2B%20File%3ESave&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEKMDEAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000230.html">
+   <LINK REL="Next"  HREF="000233.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] xactn commit + File&gt;Save</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20xactn%20commit%20%2B%20File%3ESave&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEKMDEAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] xactn commit + File&gt;Save">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Thu Sep 15 08:56:29 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000230.html">[Rcpviewer-contributors] Prgoress 20050914
+</A></li>
+        <LI>Next message: <A HREF="000233.html">[Rcpviewer-contributors] movie uploaded to wiki website
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#232">[ date ]</a>
+              <a href="thread.html#232">[ thread ]</a>
+              <a href="subject.html#232">[ subject ]</a>
+              <a href="author.html#232">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike,
+hmmm - I'm thinking we might need that 2 weeks' slush.
+
+I'm seeing some strange behaviour regarding when xactns are committed vs
+when File&gt;Save is called, but I think that's probably to be expected cos I
+don't think you've made any changes here yet?  Can you arrange it such that
+File&gt;Save will do the following:
+
+ITransaction xactn =
+TransactaionManager.instance().getCurrentTransactionFor(pojoInFocus, false);
+if (xactn != null) {
+   xactn.commit();
+}
+
+To determine whether any given pojo is dirty (annotated with a *), need to
+listen on the TransactoinManager for whether it has been enlisted in an
+xactn or not.  That's the theory - though its the listening stuff that I
+haven't completely tested yet, so I might be fibbing.  Note that committing
+a xactn that has &gt;1 pojo enlisted will effectively &quot;save&quot; them both.
+
+
+---
+The other thing I want to get going is the Customer#placeOrder (in
+examples/workspace/demo).  Right now this isn't working at all, in that the
+UI isn't updated.  I suspect the problem is mine completely: the newly
+created Order isn't shown in either the Session view or the Customer's
+collection.  but if you have any insights, please let me know... :-(
+
+Enough already.
+
+Dan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000230.html">[Rcpviewer-contributors] Prgoress 20050914
+</A></li>
+	<LI>Next message: <A HREF="000233.html">[Rcpviewer-contributors] movie uploaded to wiki website
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#232">[ date ]</a>
+              <a href="thread.html#232">[ thread ]</a>
+              <a href="subject.html#232">[ subject ]</a>
+              <a href="author.html#232">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

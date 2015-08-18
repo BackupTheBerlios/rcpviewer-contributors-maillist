@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] action view + prerequisites
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20action%20view%20%2B%20prerequisites&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEPHDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000165.html">
+   <LINK REL="Next"  HREF="000167.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] action view + prerequisites</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20action%20view%20%2B%20prerequisites&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEPHDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] action view + prerequisites">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun Jul 31 11:01:40 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000165.html">[Rcpviewer-contributors] Progress 20050729
+</A></li>
+        <LI>Next message: <A HREF="000167.html">[Rcpviewer-contributors] Progress 20050731 &amp; Re: action view + prerequisites
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike,
+
+Thanks for all the work on the action view.  I know you've still got a bunch
+more boilerplate to do, so before you go do that I wanted to feedback some
+thoughts 'cos I'm not sure the treeview approach will be quite rich enough.
+
+To make this concrete, let's just consider one of operations in the Petstore
+app (though actually I paraphrase cos it isn't implemented quite like this
+at the moment).  One is:
+
+public OrderItem addOrderLine(
+      @DescribedAs(&quot;Item to be purchased&quot;)
+      Item item,
+      @Named(&quot;Quantity&quot;)
+      @DescribedAs(&quot;Number of the item to be purchased; if not specified
+then assume 1&quot;)
+      @Optional
+      int quantity)
+
+which returns an OrderItem (an order line of an Order) for purchasing said
+quantity of said Item.
+
+Now there are two prerequisites to this.  The first is declarative in the
+parameter list in that the Item is not @Optional (though the quantity is).
+If this prerequisite is not met then the operation should be disabled.  I
+imagined this being rendered as an OK button being greyed out.  Your earlier
+dialog box had something a little like this.
+
+The second prerequisite is programmatic to specify says that an order lines
+can only be added provided that the order has not already have shipped.
+This would be coded something like:
+
+public IPrerequisites addOrderLinePre(Item item, int quantity) {
+  return Prerequisites
+         .require(getOrder().getStatus() == Order.State.NOT_SHIPPED, &quot;Cannot
+have been shipped&quot;)
+         .andRequire(quantity &gt;= 0, &quot;Quantity cannot be negative&quot;);
+}
+
+If this prereq is not satisfied, then again the operation should be
+disabled.  I envisaged that the error message (accessible from the returned
+IPrerequisites) would appear as a tooltip over a disabled OK button.
+
+So I'm thinking that the action view will at least need to have an OK button
+for each operation, even those that take no parameters.
+
+My suggestion then is would it be possible to reimplement the action view in
+a style similar to the default editors for the domain objects themselves?  I
+had a vision that each operation would still be listed but then when
+clicking on the operation name would reveal the parameter list (if any)
+along with an OK button that would initially be disabled if prerequisites
+have not been met?
+
+Another benefit is that it should make it easier to be able to group related
+operations together.
+
+Something else related: I've been mulling over these operations with the
+prerequisites and it seems to me that the metamodel (IDomain et al) should
+work harder on behalf of the UI layer.  In particular, I think that each
+IDomainObject should be able to return an IOperation for each of the (EMF)
+EOperations.  This IOperation should then provide listeners so that the UI
+can be told directly when to enable or disable the OK button, rather than
+continually have to poll the metamodel.  So, if another operation were
+invoked that shipped the Order, then any pending &quot;addOrderLine&quot; operation
+would be notified that it should now be disabled out.
+
+Similarly, I think that the IDomainObject should be able to return an
+IAttribute, because there are prerequisites for the editability of
+attributes also.
+
+Just wanted to say all this before you spend ages doing boring boilerplate
+code.  If you agree, it might be worthwhile leaving the action view as it is
+until I've worked on these IOperations etc and turn to something else (eg
+collections).  Alternatively, carry on to get the action view working as a
+first-cut, knowing we'll need to go round the loop to get prerequisites
+functionality working.
+
+Let me know what you think...
+
+Dan
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000165.html">[Rcpviewer-contributors] Progress 20050729
+</A></li>
+	<LI>Next message: <A HREF="000167.html">[Rcpviewer-contributors] Progress 20050731 &amp; Re: action view + prerequisites
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Ted's screenshot - comment posted.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3C427CCB5F.1000605%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000038.html">
+   <LINK REL="Next"  HREF="000040.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Ted's screenshot - comment posted.</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3C427CCB5F.1000605%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Ted's screenshot - comment posted.">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Sat May  7 16:06:23 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000038.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+        <LI>Next message: <A HREF="000040.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Let's crawl before we can walk, let alone run.
+Ted's screenshot is a very desirable interim target.
+In fact my thoughts were that such a GUI would be the default based on 
+annotations without any decorations added.  Methinks Dan is after much 
+richer base GUI semantics than either Ted or I had in mind.
+
+To be a little more concrete let's take for a simple example, ordering 
+String fields in an editor.  Let's assume the metamodel provide the GUI 
+with an 2D array of field names and values (I know, I know - it will be 
+cleverer than that, but this is illustrative).
+
+So options that occur to me are:
+a) the sort order is built into the metamodel which sort the array from 
+annotation values on the domain POJO's.
+b) GUI checks for an ISortAdapter which if found first re-sorts the 
+array as per its ( xml-based..?) configuration
+c) the GUI is user-configurable presenting the user with a default list 
+and then allowing items to be moved up and down - it then remembers this 
+order for all future instances (this is sort of like the old Lotus Notes 
+interface)
+d) the GUI applies it own hard-coded rules
+
+Lets look at grouping (either literally with an SWT Group or in an 
+Expandable Composite), options are:
+a) grouping is built into the domain model and it represents this by say 
+passing a third array column with the name of the group to put the 
+string into
+b) the GUI looks for an xml-based IGroupAdapter which return the fields 
+in smaller, named arrays, one for each group
+c) The GUI is user-configurable as before
+d) The GUI starts being clever - if the domain model presents Strings it 
+just display them; if it presents a struct or javabean, it automatically 
+groups them.
+
+Of course all of these are variations on the same processing, I am just 
+talking about where responsibility lies.  My problem is that I see the 
+repsonsibility ending up in several places - a generally bad outcome. 
+On the one hand some data is core to the domain model so should be there 
+- the name of the field presented to the user for one.  However other 
+stuff makes more sense in the GUI configuration - is a date field 
+represented by a text box with validation or a calender widget?
+
+
+Mike E.
+
+PS : I am in full agreement with Dan regarding the Ted's 'Actions' tab - 
+excellent idea.
+
+
+
+
+Dan Haywood wrote:
+&gt;<i> Ted,
+</I>&gt;<i> posted a comment up on your screenshot on the wiki:
+</I>&gt;<i> <A HREF="http://www.haywood-associates.co.uk/rcpviewer/comments/ted/What+I+think+the+">http://www.haywood-associates.co.uk/rcpviewer/comments/ted/What+I+think+the+</A>
+</I>&gt;<i> RCP+Viewer+could+look+like...#comment-ted/What%20I%20think%20the%20RCP%20Vie
+</I>&gt;<i> wer%20could%20look%20like...-1
+</I>&gt;<i> 
+</I>&gt;<i> But to save you a click, and to cultivate discussion, let me also
+</I>&gt;<i> copy-and-paste it here:
+</I>&gt;<i> 
+</I>&gt;<i> [comment]
+</I>&gt;<i> I think there's some excellent ideas here - and some things that I like
+</I>&gt;<i> somewhat less.  (But you were after feedback, weren't you?)
+</I>&gt;<i> 
+</I>&gt;<i> I think the Navigator view looks very nice.  Nice and clean.  Perhaps &quot;List&quot;
+</I>&gt;<i> should be &quot;Search&quot; - in practical terms one wouldn't want to have a list of
+</I>&gt;<i> every Customer.
+</I>&gt;<i> 
+</I>&gt;<i> Not nearly so sure about the main view.  While I think that it would be fine
+</I>&gt;<i> to have individual views that hold either then left hand side tree or the
+</I>&gt;<i> right-hand side properties, it doesn't (I'm afraid) cut it to me as having
+</I>&gt;<i> anywhere near the level of sophistication for typical end-users.  I did some
+</I>&gt;<i> street testing on the wife and in-laws - they agree I'm afraid.
+</I>&gt;<i> 
+</I>&gt;<i> What I am aiming for is something with the sophistication of Mike's RCP app
+</I>&gt;<i> (eg <A HREF="http://www.incremental.pwp.blueyonder.co.uk/screenshots/marketing.png">http://www.incremental.pwp.blueyonder.co.uk/screenshots/marketing.png</A>)
+</I>&gt;<i> or Schoolclipse
+</I>&gt;<i> (<A HREF="https://schoolclipse.dev.java.net/files/documents/2161/10318/Clip2.gif">https://schoolclipse.dev.java.net/files/documents/2161/10318/Clip2.gif</A>) or
+</I>&gt;<i> Xinity (<A HREF="http://www.xinity.org/?About/Xinity%20BASE">http://www.xinity.org/?About/Xinity%20BASE</A>).  Ultimately I'd like
+</I>&gt;<i> UIs with the sophistication of MS Outlook or equivalent.
+</I>&gt;<i> 
+</I>&gt;<i> So I'm sorry that the above sounds a little negative.  But let me finish on
+</I>&gt;<i> a high note, which is the Actions tab.  I've been wondering where an
+</I>&gt;<i> object's actions might live, but I think that the Actions tab is just
+</I>&gt;<i> wonderful.  It also reminds me of the left-hand side bar in Windows'
+</I>&gt;<i> Explorer, eg the Search bar or the Write CD bar.  One could have the
+</I>&gt;<i> parameters for each such action be exposed  as one clicks on the action.
+</I>&gt;<i> This also has the benefit that the actions are not modal, a definite plus
+</I>&gt;<i> point.  So thanks - I'm really pleased with that idea.
+</I>&gt;<i> [/comment]
+</I>&gt;<i> 
+</I>&gt;<i> Mike/Eoin - any thoughts?
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000038.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+	<LI>Next message: <A HREF="000040.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: transactions &amp; Progress 20050822
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20transactions%20%26%20Progress%2020050822&In-Reply-To=%3C4309BBE5.7030707%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000197.html">
+   <LINK REL="Next"  HREF="000199.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: transactions &amp; Progress 20050822</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20transactions%20%26%20Progress%2020050822&In-Reply-To=%3C4309BBE5.7030707%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: transactions &amp; Progress 20050822">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Aug 22 13:49:57 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000197.html">Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)
+</A></li>
+        <LI>Next message: <A HREF="000199.html">[Rcpviewer-contributors] Re: transactions &amp; Progress 20050822
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#198">[ date ]</a>
+              <a href="thread.html#198">[ thread ]</a>
+              <a href="subject.html#198">[ subject ]</a>
+              <a href="author.html#198">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>1. Transactions : (see Dan's mail below)
+Okey-dokey.
+Note this means things are slightly inconsistent at the moment.
+Gui changes to attributes are only passed to the model on Save,
+reference changes happen immediately.
+
+2. StringFieldBuilder
+There is a now distinct StringFieldBuilder and DefaultFieldBuilder's.
+Using a common impl for both was plain wrong.  Note the latter is read-only.
+
+2. Non-Multi References.
+Dan, your NotifyListeners aspect ain't working for single references -
+mainly coz its code knows nothing about
+IDomainObjectReferenceListener.referenceChanged().  Can I leave this
+with you to fix or are you happy for me to start dabbling in the model
+code?  Hence DnD'ing into a single reference field does not work.
+
+3. Gui prettiness.
+As I could not go much further on meaty stuff until Dan has got a better
+idea on his transaction I returned to GUI fluffiness:
+3.1. Classbar shows instantiable classes only.
+3.2. Added icons to views and editors.  See ImageUtil.getImage( 
+IDomainClass) for the logic - note I have not yet implemented the @urlAt 
+annotation stuff.  Also note the images are nicked off the web so should 
+be replaced!
+
+Mike E.
+
+
+
+
+
+
+Dan Haywood wrote:
+
+&gt;<i> Hi Mike
+</I>&gt;<i> Hope you're making progress getting your property back in order.
+</I>&gt;<i> 
+</I>&gt;<i> Been working on the xactn mgmt stuff, and I've realized that my current
+</I>&gt;<i> design (of no File&gt;Save, but instead a File&gt;Save All) is too simplistic.  So
+</I>&gt;<i> what I want to do is to get closer to what's already there (multiple
+</I>&gt;<i> transactions and nominally File&gt;Save per object), but have a way to (a)
+</I>&gt;<i> potentially have several pojos enlisted in a single xactn, and (b) ensure
+</I>&gt;<i> that any given pojo is not enlisted in &gt;1 xactn at the same time.
+</I>&gt;<i> 
+</I>&gt;<i> Anyway, bottom line is - in case you were going to when you've got your
+</I>&gt;<i> place in order - don't go ripping out that File&gt;Save functionality just yet.
+</I>&gt;<i> I'll continue to work on my stuff and we can go round the loop maybe later
+</I>&gt;<i> in the week.
+</I>&gt;<i> 
+</I>&gt;<i> Later
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000197.html">Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)
+</A></li>
+	<LI>Next message: <A HREF="000199.html">[Rcpviewer-contributors] Re: transactions &amp; Progress 20050822
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#198">[ date ]</a>
+              <a href="thread.html#198">[ thread ]</a>
+              <a href="subject.html#198">[ subject ]</a>
+              <a href="author.html#198">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

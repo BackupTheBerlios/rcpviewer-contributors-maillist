@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Persistence
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Persistence&In-Reply-To=%3C429A0133.7010209%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000087.html">
+   <LINK REL="Next"  HREF="000094.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Persistence</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Persistence&In-Reply-To=%3C429A0133.7010209%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Persistence">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Sun May 29 19:51:47 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000087.html">[Rcpviewer-contributors] Persistence
+</A></li>
+        <LI>Next message: <A HREF="000094.html">[Rcpviewer-contributors] Persistence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>My only issue is with extending IDomainObject.
+
+I see the GUI simply as a client of the model.  Extending IDomainObject 
+from any UI type is inappropriate.  I read a great paper off the 
+alphaworks website years ago (alas can remeber no title nor author) 
+explaining how type families should define one's intentions.  And I 
+would argue that a generic business object type should not be part of 
+any type family defining orthogonal functionalities such as persistence.
+
+On the other hand, IDomainObject is ultimately a descriptor to allow an 
+object to live within our runtime environment - which is all about UI 
+and persistence.  And we are not (yet!) proposing non-Eclipse runtime 
+environments.
+
+So I don't really know...
+
+What does us our resident consultant think, Dan?
+
+Mike E.
+
+PS : What about transactional control?  Are we going down the NO route 
+of having objects representing transactions - a bit of a leap for most 
+object modellers?
+
+ted stockwell wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> This is an overview of how I intend to implement persistence and of 
+</I>&gt;<i> changes that I would make to the API with regard to peristence.
+</I>&gt;<i> Please read this and provide feedback soon in order to prevent me from 
+</I>&gt;<i> persuing a path that you would rather I not persue ;-).
+</I>&gt;<i> 
+</I>&gt;<i> I expect that each application will handle persistence in its own way.  
+</I>&gt;<i> Some applications may use Hibernate, some may save objects as XML in a 
+</I>&gt;<i> file system, etc.
+</I>&gt;<i> As I see it it, RCPViewer should not have any API to actually *perform* 
+</I>&gt;<i> persistence, RCPViewer merely needs a way to hook up peristence objects 
+</I>&gt;<i> to the GUI.
+</I>&gt;<i> 
+</I>&gt;<i> As I see it, these items are what RCPViewer needs with regard to 
+</I>&gt;<i> peristence...
+</I>&gt;<i> 
+</I>&gt;<i> ...Support for 'New' actions.  That is, something similar to 'New 
+</I>&gt;<i> Wizards' in the RCP. So, for instance, to create a new Customer the user 
+</I>&gt;<i> should just be able to select File | New | Customer from the main menu 
+</I>&gt;<i> and an editor should open for entering the Customer information.
+</I>&gt;<i> In order to implement this I propose adding a new method to IDomainClass 
+</I>&gt;<i> named isNewable().  isNewable() returns true if the class should be 
+</I>&gt;<i> included on the File | New menu.  The default value is false.
+</I>&gt;<i> 
+</I>&gt;<i> ... Editor support for Save, SaveAs methods and support for the 'dirty' 
+</I>&gt;<i> decoration in the editor tab.  Every IDomainObject is displayed in it's 
+</I>&gt;<i> own editor.  The RCPViewer editor must implement the 
+</I>&gt;<i> org.eclipse.ui.ISaveablePart interface.  I propose that editor should 
+</I>&gt;<i> simply delegate ISaveablePart  methods to the underlying IDomainObject. 
+</I>&gt;<i> Therefore I propose that IDomainObjects that IDomainObject extends the 
+</I>&gt;<i> org.eclipse.ui.ISaveablePart interface
+</I>&gt;<i> (NOTE: This ties IDomainObject to an Eclipse API.  Is this a bad thing?  
+</I>&gt;<i> Is the de.berlios.rcpviewer.domain API really meant for generic 
+</I>&gt;<i> development?  Or just Eclipse development?  Personally, I have no 
+</I>&gt;<i> problem with tying IDomainObject to Eclipse but what do you guys think?)
+</I>&gt;<i> 
+</I>&gt;<i> ----------------
+</I>&gt;<i> 
+</I>&gt;<i> Assuming all of the above os OK then the next question is how do I 
+</I>&gt;<i> create an implementation of the RCPViewer API that uses POJOs?
+</I>&gt;<i> The simple answer would be to require high level POJOs that are 
+</I>&gt;<i> 'newable' to implement the org.eclipse.ui.ISaveablePart interface. 
+</I>&gt;<i> However, if we require POJOs to implement a specific interface then 
+</I>&gt;<i> they're not really POJOs anymore are they?
+</I>&gt;<i> 
+</I>&gt;<i> I think that Dan's answer would be to add the ISaveablePart interface to 
+</I>&gt;<i> a class as a mixin, using AspectJ or something.
+</I>&gt;<i> 
+</I>&gt;<i> My answer is to provider POJO classes that are 'newable' with an Eclipse 
+</I>&gt;<i> adapter factory that can adapt POJO instances that are saveable to 
+</I>&gt;<i> implementations of ISaveablePart.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ----------------
+</I>&gt;<i> BTW, I would have suggested integrating RCPView with the Eclipse 'New 
+</I>&gt;<i> Wizard' functionality but I have found that the 'New Wizards' 
+</I>&gt;<i> functionality isn't exactly suitable for RCPViewer.  The problem with 
+</I>&gt;<i> Eclipse 'New Wizards' is that they REQUIRE a wizard page to be shown for 
+</I>&gt;<i> whatever object you are creating.  However, most time I expect that 
+</I>&gt;<i> creating objects will not require any kind of configuration before the 
+</I>&gt;<i> object is created.
+</I>&gt;<i> So, for instance, to create a new Customer the user should just be able 
+</I>&gt;<i> to select File | New | Customer from the main menu and an editor should 
+</I>&gt;<i> open for entering the Customer information.
+</I>&gt;<i> However, this cannot be implemented with the Eclipse New Wizard 
+</I>&gt;<i> functionality.  The Eclipse New Wizard functionality REQUIRES that a 
+</I>&gt;<i> wizard be displayed when the user chooses File | New | Customer from the 
+</I>&gt;<i> main menu, then the Customer editor is displayed when the user hits the 
+</I>&gt;<i> FINISH button on the wizard.
+</I>&gt;<i> 
+</I>&gt;<i> ---------------
+</I>&gt;<i> NOTE: I don't see any need for the IObjectStore interface in the 
+</I>&gt;<i> RCPViewer API.
+</I>&gt;<i> 
+</I>&gt;<i> ---------------
+</I>&gt;<i> 
+</I>&gt;<i> Anyway, I will create a simple axmple of these ideas from mikespike3 and 
+</I>&gt;<i> hopefully post it in a couple/few days.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -ted
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000087.html">[Rcpviewer-contributors] Persistence
+</A></li>
+	<LI>Next message: <A HREF="000094.html">[Rcpviewer-contributors] Persistence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

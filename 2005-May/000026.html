@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Dependency Injection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Dependency%20Injection&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEGPDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000025.html">
+   <LINK REL="Next"  HREF="000027.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Dependency Injection</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Dependency%20Injection&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEGPDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Dependency Injection">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun May  1 16:18:06 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000025.html">[Rcpviewer-contributors] Java 5?
+</A></li>
+        <LI>Next message: <A HREF="000027.html">[Rcpviewer-contributors] Acegi Security Was: Dependency Injection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've used Spring.net just for DI; also I prefer setter-based DI over
+constructor-based (Spring favours the former, Pico the latter).
+
+But it sounds like Eoin has made a rather more extensive review.
+
+I'd be happy to go with Pico, too, if only because it gives me exposure to
+another DI implementation, and so that we don't run the risk of our
+application-framework stuff being confused with the app framework stuff that
+Spring in all its glory offers.
+
+Dan
+
+
+
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Eoin Woods
+Sent: 01 May 2005 15:08
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: RE: [Rcpviewer-contributors] Java 5?
+
+
+&gt;<i> Anybody have opinions about Spring (springframework.org)?
+</I>I looked at it seriously a couple of months ago for possible use on a
+customer project.
+
+It's certainly a useful framework that embodies a number of good ideas.
+However my experience was that:
+
+(a) It's complex and inconsistent across the implementation.  It usually
+isn't clear how to use it for anything other than plain IoC and working it
+out can be difficult.
+
+(b) The documentation is poor and the books that have been written about it
+are quite limited too (I've tried to use &quot;Pro Spring&quot; and Rod Johnson's
+&quot;J2EE Without EJB&quot;).
+
+Putting these two experiences together, my opinion is that if you just want
+IoC, it's well worth considering Pico/NanoContainer, which is much simpler.
+If you need a complete application framework, Spring can almost certainly do
+the job, but expect to spend a lot of time working out how to use it.
+
+Cheers,
+
+Eoin.
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>] On Behalf Of ted stockwell
+Sent: 01 May 2005 14:03
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: Re: [Rcpviewer-contributors] Java 5?
+
+Mike Evans wrote:
+
+&gt;<i> As for attracting a user-community, I'd say something like RcpViewer
+</I>&gt;<i> will only appeal to early adaptors, and, by the time we have anything
+</I>&gt;<i> really useful Java 5 will be old hat ...
+</I>
+Agreed.
+
+
+&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> From: Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Anyway next week I'll get going.  As I am in the mood for using the
+</I>&gt;&gt;&gt;<i> newest shiniest of everything what is the consensus on going pure
+</I>&gt;&gt;&gt;<i> Java 5?
+</I>&gt;&gt;&gt;<i>
+</I>
+
+I am also taking this opportunity to explore things that I've wanted to try
+for a while but can't do in the confines of normal work.
+Spring is one of those things.
+We customize our application for each of our clients, I am hoping that
+Spring will help make that process easier by allowing a 'product' plugin to
+easily replace system rules by replacing the objects in the 'engine'
+plugin that implement the rules.
+Anybody have opinions about Spring (springframework.org)?
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000025.html">[Rcpviewer-contributors] Java 5?
+</A></li>
+	<LI>Next message: <A HREF="000027.html">[Rcpviewer-contributors] Acegi Security Was: Dependency Injection
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

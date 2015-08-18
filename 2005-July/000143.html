@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Fwd: Re: [Rcpviewer-contributors] progress 20050707]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BFwd%3A%20Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050707%5D&In-Reply-To=%3C42CD1A15.2000207%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000142.html">
+   <LINK REL="Next"  HREF="000144.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Fwd: Re: [Rcpviewer-contributors] progress 20050707]</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BFwd%3A%20Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050707%5D&In-Reply-To=%3C42CD1A15.2000207%40incremental.eu.com%3E"
+       TITLE="[Fwd: Re: [Rcpviewer-contributors] progress 20050707]">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Thu Jul  7 14:03:33 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000142.html">[Rcpviewer-contributors] Eclipse RCP community
+</A></li>
+        <LI>Next message: <A HREF="000144.html">[Rcpviewer-contributors] progress 20050708
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#143">[ date ]</a>
+              <a href="thread.html#143">[ thread ]</a>
+              <a href="subject.html#143">[ subject ]</a>
+              <a href="author.html#143">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+-------- Original Message --------
+Subject: Re: [Rcpviewer-contributors] progress 20050707
+Date: Thu, 07 Jul 2005 13:03:04 +0100
+From: Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt;
+To: Dan Haywood &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">dan at haywood-associates.co.uk</A>&gt;
+References: &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Zen-1DqSr7-0000O4-JW at pythagoras.zen.co.uk</A>&gt;
+
+let's see how long it lasts...
+
+In response:
+1. I did - OK
+2. Actually since asking i think I'll just extend EasyBean as I can see
+it becoming a test-domain object.
+
+Regarding the new Java 5 type-safety stuff.
+I most definitely do not have a hang on it yet.
+ From now on I'll use a 'JAVA_5_FIXME' task tag for wherever it should
+be used I dunno how.
+
+Mike E.
+
+
+
+
+
+
+Dan Haywood wrote:
+&gt;<i> I have to say your new way of working definitely agrees - getting quite spoilt with (near) daily updates of progress.
+</I>&gt;<i> 
+</I>&gt;<i> To your questions:
+</I>&gt;<i> 
+</I>&gt;<i> 1. you said IRuntimeDomainObject vs IDomainObject - I think you meant IRuntimeDomainClass vs IDomainClass.  To which the answer is &quot;yes&quot;, you should be using IRuntimeDomainClass.  (If you want, we could rename IDomainObject to IRuntimeDomainObject, however there is no such thing as an ICompileTimeDomainObject).  Regarding type-safety, I think we should be exploiting Java 5's covariance of return types, but I'm still coming up to speed on the idioms for that so for now I just add a TODO and do the downcast.
+</I>&gt;<i> 
+</I>&gt;<i> 2. Decent examples of a domain object: I was going to implement JPetstore.  If you go to xpetstore.sourceforge.net there's a couple of implementations, one of which is a lightweight version using Tomcat, servlets and Hibernate.  I was gonna hijack the domain model there - there's about 8 classes or so.  But otherwise I'm happy to do this, will help me validate the programming model.
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ---
+</I>&gt;<i> Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>No progress yesterday - bogged down on own stuff (hibernate 
+</I>&gt;&gt;<i>cross-session stale object problems - yuk!).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Today:
+</I>&gt;&gt;<i>Added framework ActionsView - essentially an emulation of 
+</I>&gt;&gt;<i>PropertiesSheet but specific to IDomainObjects and IEditorParts.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Tomorrow:
+</I>&gt;&gt;<i>Add the actual operations from the IDomainObject to the ActionsView.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Notes:
+</I>&gt;&gt;<i>* Corrected ...gui project manifest - it should NOT be dependent on 
+</I>&gt;&gt;<i>...persistence.gui project as this result in cyclic dependencies.  Just 
+</I>&gt;&gt;<i>add the later to the runtime path rather than as a dependency if you 
+</I>&gt;&gt;<i>want the search functionality.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Questions:
+</I>&gt;&gt;<i>1) Should everything in the gui be in terms of IRunTimeDomainObjects 
+</I>&gt;&gt;<i>rather than IDomainObjects?  If so some methods I am currently using 
+</I>&gt;&gt;<i>are not type-safe.
+</I>&gt;&gt;<i>2) Dan - can you point me at a decent example of a domain object with 
+</I>&gt;&gt;<i>real operations?  Currently the ...acme project supplies only beans.  I 
+</I>&gt;&gt;<i>would rather use something that you have thought up than something I 
+</I>&gt;&gt;<i>create which simply validates my own assumptions.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Worries:
+</I>&gt;&gt;<i>* Drag'n'drop soon - oh gawd...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>-- 
+</I>&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000142.html">[Rcpviewer-contributors] Eclipse RCP community
+</A></li>
+	<LI>Next message: <A HREF="000144.html">[Rcpviewer-contributors] progress 20050708
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#143">[ date ]</a>
+              <a href="thread.html#143">[ thread ]</a>
+              <a href="subject.html#143">[ subject ]</a>
+              <a href="author.html#143">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

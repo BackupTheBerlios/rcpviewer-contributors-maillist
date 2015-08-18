@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050713
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050713&In-Reply-To=%3C42D6389C.9010503%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000151.html">
+   <LINK REL="Next"  HREF="000154.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050713</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050713&In-Reply-To=%3C42D6389C.9010503%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050713">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Thu Jul 14 12:04:12 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000151.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+        <LI>Next message: <A HREF="000154.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#153">[ date ]</a>
+              <a href="thread.html#153">[ thread ]</a>
+              <a href="subject.html#153">[ subject ]</a>
+              <a href="author.html#153">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wow!  Sounds extremely sexy.  A good showcase for aspects methinks...
+
+As to the redo/undo issue - thinking aloud:
+
+Assumptions / Constraints / Enablers (in no particular order)
+* Dan's aspect can pick up all internal state changes, not just public state
+* the gui knows about the model, not vice versa
+* the gui code is targeted at RCP developers, hence on the principle of
+least surprises, the gui code does not use aspects
+* all Jobs are run through the platform's JobManager - hence we have the
+IJobChangeListener interface at our disposal
+* do not want
+
+So how about extending AbstractDomainObjectJob to:
+* have an isUndoable() property
+* if this is true it adds an IJobChangeListener to itself
+* this picks up events aboutToRun() and done() to start &amp; stop 'domain 
+listening'
+* whilst 'domain listening' (using some as-yet-unspec'd contract) all 
+domain change events are recorded by the listener (this is tricky as it 
+would have to pick up all events on all domain objects)
+* the undo() method could then step through these reversing them
+
+Several problems with this, notably:
+* the super-duper domain listener for all objects - how do this?
+* on an undo() or a redo() what about objects that have gone out of 
+scope / been deleted etc.
+
+Bit fuzzy but its a start.  Will think more about this once I have got 
+the Aspect stuff working here and understand Dan's aspect implementations.
+
+Mike E.
+
+
+
+
+
+Dan Haywood wrote:
+
+&gt;<i> Mike / (everyone):
+</I>&gt;<i> 
+</I>&gt;<i> I have my aspect going that picks up modifications to attributes on a
+</I>&gt;<i> pojo, and then uses the IDomainObject to notify any listeners of
+</I>&gt;<i> those attributes.  In other words, invoking increment() on the
+</I>&gt;<i> CounterBean causes the field to be updated.  Unsurprisingly, it
+</I>&gt;<i> didn't take that much code - will check in later today.
+</I>&gt;<i> 
+</I>&gt;<i> What I've now been thinking about is transactions, commands and jobs.
+</I>&gt;<i> It seems to me that my little aspect can easily grab the before and
+</I>&gt;<i> after values of any change to any field, and hence wrap it up into a
+</I>&gt;<i> Command that has an undo.  In other words, the aspect can capture the
+</I>&gt;<i> *effects* of invoking an operation such that it might be undone.
+</I>&gt;<i> 
+</I>&gt;<i> Meanwhile, your (Mike's) job stuff effectively is encapsulating those
+</I>&gt;<i> operations such that they can be invoked - in other words, they
+</I>&gt;<i> represent the *cause* of a change.
+</I>&gt;<i> 
+</I>&gt;<i> What I'm mulling on is how to combine this cause (UI job) and effect
+</I>&gt;<i> (domain object command built dynamically via aspects) such that an
+</I>&gt;<i> invoking Undo on the UI job just delegates to the corresponding undo
+</I>&gt;<i> on the command.  Any suggestions?  My best idea at the moment is that
+</I>&gt;<i> the UI job creates an ICommand that is defined by a domain package,
+</I>&gt;<i> and then binds it to a threadlocal.  The aspect would then pick this
+</I>&gt;<i> up and append the mutations to it.  The Job/ICommand pair would be
+</I>&gt;<i> managed by the UI layer.
+</I>&gt;<i> 
+</I>&gt;<i> Something to think about... Dan
+</I>&gt;<i> 
+</I>&gt;<i> --- Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Journeyman stuff today. Both ...gui and ...gui.acme projects
+</I>&gt;&gt;<i> updated.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> * add further DnD types - Date and even Boolean (the latter is
+</I>&gt;&gt;<i> pointless but at least consistent) * using platform functionality
+</I>&gt;&gt;<i> for restoring gui state - one gotcha - I have to close all editors
+</I>&gt;&gt;<i> on application close as the objects they're displaying do not (yet)
+</I>&gt;&gt;<i> live across application sessions * using using annotations for
+</I>&gt;&gt;<i> parameter display
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Have not addded keyboard accelerators yet. I think the platform key
+</I>&gt;&gt;<i> bindings functionality has got all clever since I last looked at it
+</I>&gt;&gt;<i> so will have to gen up on it.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> So next stages - as the last progress mail!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Mike E.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Dan Haywood wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Mike: within
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> -----Original Message----- From:
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A> 
+</I>&gt;&gt;&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Behalf Of Mike Evans
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> OK - I'm spending too long on this stuff now so the
+</I>&gt;&gt;&gt;&gt;<i> deliverables will be slowing a bit from now on.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> First priority has to be the day job.  Glad you've been able to
+</I>&gt;&gt;&gt;<i> devote so much time recently - the UI is starting to take shape.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> One question : Dan - can we gain access to the name of an
+</I>&gt;&gt;&gt;&gt;<i> operation's parameters? ie. op( int first, int second) &gt;
+</I>&gt;&gt;&gt;&gt;<i> extract &quot;first&quot; and &quot;second&quot; This would make a lot more sense
+</I>&gt;&gt;&gt;&gt;<i> as field labels in the actions view and arguments display.
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> That's supported, though using annotations rather than vanilla
+</I>&gt;&gt;&gt;<i> Java reflection (which doesn't/can't give access to the formal
+</I>&gt;&gt;&gt;<i> parameter
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> names).
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> See
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExplicitlyNamed
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> (in ...domain.tests plugin).   The fixture this works on is:
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> @InDomain public class Appointment { public void moveTo( 
+</I>&gt;&gt;&gt;<i> @Named(&quot;newPeriod&quot;) @DescribedAs(&quot;The time when the appointment
+</I>&gt;&gt;&gt;<i> should now be scheduled&quot;) TimePeriod newPeriod, 
+</I>&gt;&gt;&gt;<i> @Named(&quot;rationale&quot;) @DescribedAs(&quot;The reasoning for moving the
+</I>&gt;&gt;&gt;<i> appointment&quot;) String rationale) { } public static void createAt( 
+</I>&gt;&gt;&gt;<i> @Named(&quot;timePeriod&quot;) @DescribedAs(&quot;When the appointment is to run
+</I>&gt;&gt;&gt;<i> to and from&quot;) TimePeriod timePeriod, @Named(&quot;agenda&quot;) 
+</I>&gt;&gt;&gt;<i> @DescribedAs(&quot;The agenda for this appointment&quot;) String agenda) { 
+</I>&gt;&gt;&gt;<i> } }
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> -- Also, a couple of annoyances... 1. can the GUI remember its
+</I>&gt;&gt;&gt;<i> initial size across invocations?  It always starts by taking up
+</I>&gt;&gt;&gt;<i> the whole screen (which on my widescreen laptop, is rather a
+</I>&gt;&gt;&gt;<i> lot...)
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 2. can you add the accelerator for File menu?
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> Dan
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> _______________________________________________ 
+</I>&gt;&gt;&gt;<i> Rcpviewer-contributors mailing list 
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A> 
+</I>&gt;&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> -- Mike Evans Incremental Ltd. www.incremental.eu.com
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> _______________________________________________ 
+</I>&gt;&gt;<i> Rcpviewer-contributors mailing list 
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A> 
+</I>&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________ 
+</I>&gt;<i> Rcpviewer-contributors mailing list 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A> 
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000151.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+	<LI>Next message: <A HREF="000154.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#153">[ date ]</a>
+              <a href="thread.html#153">[ thread ]</a>
+              <a href="subject.html#153">[ subject ]</a>
+              <a href="author.html#153">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

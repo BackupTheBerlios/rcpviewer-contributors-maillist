@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050708
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050708&In-Reply-To=%3C42CE3AE6.70409%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000143.html">
+   <LINK REL="Next"  HREF="000145.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050708</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050708&In-Reply-To=%3C42CE3AE6.70409%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050708">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Fri Jul  8 10:35:50 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000143.html">[Fwd: Re: [Rcpviewer-contributors] progress 20050707]
+</A></li>
+        <LI>Next message: <A HREF="000145.html">[Rcpviewer-contributors] RE: progress 20050708
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok - unproblematic stuff first:
+1. Have moved field builder stuff into separate ...gui.fields package as 
+I am going to be using field builders outside of the DefaultEditor 
+(notably for an operation parameters dialog).
+2. Hence also FieldBuilderFactory is a singleton so is globally 
+accessible rather than a private class for DefaultEditor.
+3. TODO - just as I write this I realise of course that it should be put 
+back in the GuiPlugin - will do.
+4. Have added an integer field builder.
+5. Have added int fields to the existing beans and added a new domain 
+object in ...acme - Counter.  This will be used for basic operations 
+development.
+
+Now - the problem stuff:
+* The raison d'etre behind Counter is to have a class with operations 
+that affect its publicly accessible state.
+* I want the GUI to automatically pick up such changes.
+* Hence I have added an IDomainObjectListener on every FieldPart within 
+the DefaultEditor which updates the field on reception of an attribute 
+changed event.
+* The theory was that an operation would be triggered, and the open 
+DefaultEditor would automagically display the new values.
+* Alas firing a (non-setter) operation that affects a domain object's 
+attribute does not cause an attribute-change event to be fired.  On 
+hindsight this is obvious - how can Dan's introspection know how an 
+operation affects its parent object?
+* So what can we do?
+* Option 1 : The sledgehammer : Dan add's an operation-fired event to 
+IDomainObjectListener and I completlely refresh the DefaultEditor every 
+time.
+* Option 2 : an 'Affects' attribute : more metadata on every operation 
+that lets me know what external state might be changed
+* Option 3 : ???
+
+Dan?
+
+Mike E.
+
+
+
+
+
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000143.html">[Fwd: Re: [Rcpviewer-contributors] progress 20050707]
+</A></li>
+	<LI>Next message: <A HREF="000145.html">[Rcpviewer-contributors] RE: progress 20050708
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

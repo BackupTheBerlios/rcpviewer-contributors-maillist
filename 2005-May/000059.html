@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Operations (actions) programming model
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Operations%20%28actions%29%20programming%20model&In-Reply-To=%3C4280ADAC.1020308%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000058.html">
+   <LINK REL="Next"  HREF="000063.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Operations (actions) programming model</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Operations%20%28actions%29%20programming%20model&In-Reply-To=%3C4280ADAC.1020308%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Operations (actions) programming model">emorning at yahoo.com
+       </A><BR>
+    <I>Tue May 10 14:48:44 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000058.html">[Rcpviewer-contributors] Operations (actions) programming model
+</A></li>
+        <LI>Next message: <A HREF="000063.html">[Rcpviewer-contributors] Operations (actions) programming model
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+&gt;<i>So my modification is:
+</I>&gt;<i>
+</I>&gt;<i>   public Order placeOrderDefaults(Date[] d) {  // framework will pass in a
+</I>&gt;<i>1-element array
+</I>&gt;<i>     d[0] = yesterdaysDate();                   // typesafe
+</I>&gt;<i>   }
+</I>&gt;<i>   public Order placeOrder(Date d) {            // no need for &quot;action&quot;
+</I>&gt;<i>prefix
+</I>&gt;<i>      ..
+</I>&gt;<i>   }
+</I>&gt;<i>   public void placeOrderPreConditions(Date d) throws
+</I>&gt;<i>RuntimeException(&quot;...&quot;) {  // use RuntimeException as catch all
+</I>&gt;<i>     if (isBlackListed()) throw new IllegalStateException(&quot;Cannot place
+</I>&gt;<i>order if blacklisted&quot;);
+</I>&gt;<i>   }
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+I don't understand why the placeOrderDefaults method returns an Order 
+object instead of just returning an array of defaults for the placeOrder 
+method.
+That is, I would have expected this instead...
+
+public Object[] getPlaceOrderDefaults() { return new Object[] { 
+yesterdaysDate() }; }
+
+
+&gt;<i>(From the UI's point of view, it would invoke placeOrderDefaults(...) when
+</I>&gt;<i>click on the link representing the action (in Ted's action tab; then invoke
+</I>&gt;<i>placeOrder(...).  I'm envisaging an aspect would intercept the call and
+</I>&gt;<i>invoke placeOrderPreConditions first.  That's why the PreConditions method
+</I>&gt;<i>must throw a RuntimeException rather than a checked exception).
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+I would prefer the placeOrderPreConditions method to throw a checked 
+exception.  The aspect that invokes the placeOrderPreConditions method 
+can always rethrow a RuntimeException that wraps the exception thrown by 
+the placeOrderPreConditions method.
+
+
+A thought...
+since you envision an aspect calling the placeOrderPreConditions method 
+anyway then why not just put the code for the placeOrderPreConditions 
+method in an aspect?
+It kinda makes sense to me to that &quot;defaults&quot; and &quot;pre conditions&quot; are 
+aspects of the system that could be implemented separately from the 
+domain model. 
+The advantage of such would be that a domain model could be reused in 
+systems that have different requirements in terms of default and 
+preconditions.  Or even better... different defaults and pre conditions 
+could be 'woven' into a system at runtime.  Now that I think of it, 
+adding the defaults and pre conditions at runtime make more sense for a 
+plugin based product.  Adding preconditions at runtime would make it 
+possible for third-party plugins to add preconditions to a domain.  So 
+for instance, if I added a version control plugin to my IDE that 
+requires developers to 'lock' files before they can edit them then the 
+version control plugin could add a precondition to the domain that denys 
+an 'edit' operation on a file if the file has not been locked.
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000058.html">[Rcpviewer-contributors] Operations (actions) programming model
+</A></li>
+	<LI>Next message: <A HREF="000063.html">[Rcpviewer-contributors] Operations (actions) programming model
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] &quot;observed feature&quot; prerequisites.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20%22observed%20feature%22%20prerequisites.&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKKECGDEAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000185.html">
+   <LINK REL="Next"  HREF="000187.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] &quot;observed feature&quot; prerequisites.</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20%22observed%20feature%22%20prerequisites.&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKKECGDEAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] &quot;observed feature&quot; prerequisites.">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Thu Aug 11 01:38:15 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000185.html">[Rcpviewer-contributors] Support for operation prereqs and also defaults
+</A></li>
+        <LI>Next message: <A HREF="000187.html">[Rcpviewer-contributors] Progress 20050811
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#186">[ date ]</a>
+              <a href="thread.html#186">[ thread ]</a>
+              <a href="subject.html#186">[ subject ]</a>
+              <a href="author.html#186">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Latest blog posting on the wiki re: rev 461...
+
+[quote]
+One of the problems we need to solve is that the prerequisites for accessing
+an attribute or reference, or for invoking an operation, could change as the
+result of some quite unrelated change made either by the current user on
+another domain object in their session or potentially as a result of an
+update by some other user.
+
+We don't want to have the UI continually poll the domain model to determine
+if such-and-such a field for an attribute or OK button for an operation
+should be enabled and disabled.  Instead the domain model should provide a
+callback to which the UI can subscribe and be notified whenever the domain
+model determines that there has been a change such that the prerequisites
+(preconditions) for such-and-such a currently observed feature have now
+changed.
+
+So that's what I've been working on, and have committed a first cut that
+works for attributes (the operations and references might work too, but I
+haven't written the tests).  Whenever the UI asks the domain object for an
+(extended) attribute, reference or operation, it is also added as a weak
+reference to a collection held by the domain object's session.  Then,
+courtesy of AspectJ, whenever a change is made to *any* domain object, we
+ask every observed feature to recompute its own prerequisites and if it
+determines that there has been a change, to notify its own observers.
+
+At the moment this is a little cruder than I'd like because this process can
+happen multiple times.  Ideally it should be performed only once at the end
+of the &quot;tranaaction&quot;.  So that stuff will follow as a refinement.
+[/quote]
+
+Luvverly!  But Mike's UI code does still need to be changed to exploit this
+capability.  All is quiet in Scotland (and everywhere else it seems - sigh).
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000185.html">[Rcpviewer-contributors] Support for operation prereqs and also defaults
+</A></li>
+	<LI>Next message: <A HREF="000187.html">[Rcpviewer-contributors] Progress 20050811
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#186">[ date ]</a>
+              <a href="thread.html#186">[ thread ]</a>
+              <a href="subject.html#186">[ subject ]</a>
+              <a href="author.html#186">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

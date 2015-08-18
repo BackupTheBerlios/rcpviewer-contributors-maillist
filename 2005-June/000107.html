@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] aspects in runtime plugin tests
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20aspects%20in%20runtime%20plugin%20tests&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEPMDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000108.html">
+   <LINK REL="Next"  HREF="000105.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] aspects in runtime plugin tests</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20aspects%20in%20runtime%20plugin%20tests&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEPMDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] aspects in runtime plugin tests">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Fri Jun  3 21:07:27 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000108.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+        <LI>Next message: <A HREF="000105.html">[Rcpviewer-contributors] RE: SVN errors?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#107">[ date ]</a>
+              <a href="thread.html#107">[ thread ]</a>
+              <a href="subject.html#107">[ subject ]</a>
+              <a href="author.html#107">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike,
+
+I stripped out the aspects mostly cause I was frustrated at getting them
+working cross-project.  And the reason for having aspects possibly reducing
+our target audience was a sop to me to not feel so bad for having failed.
+
+I contacted Martin Lippert (google him) and he came back with a suggestion
+on what I was doing wrong, but I wanted to make some progress on getting the
+old emf-builder project divvied up into plugin projects, so simplifying the
+problem I was trying to solve seemed the most pragmatic approach.
+
+So ... if you can get Aspects working cross-project (Martin said to
+configure the ASPECTPATH of the project to be aspectized was probably the
+solution), then go for it.  But please don't let it distract you too much
+from making progress which was what my problem ultimately was about.
+
+Dan
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+Sent: 03 June 2005 17:35
+To: Dan Haywood; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+
+
+Dan,
+
+I saw your confession about stripping aspects out of your projects.
+Can I confirm your reasons?
+Was it because you could not get aspects running in a plugin environment
+or because you think we are excluding people by doing so?
+The reason I ask is that almost at the start of the main GUI I am having
+to introduce some test-harness specifics into the main code so that I
+can test properly (e.g making sure modal dialogs are not opened).  This
+is an obvious case for using an aspect but I do not want to waste my
+time learning how to do this if you have found it not to work in our
+intended environment.
+
+Mike E.
+
+PS : to give you an example, my here's a test-aware class i have:
+
+/**
+  * Static methods that decorate base Eclipse dialog functionality.
+  * @author Mike
+  *
+  */
+public class DialogUtil {
+
+     /**
+      * Exactly as MessageDialog.openError() but aware of test sessions
+      * @link MessageDialog
+      */
+     public static void openError(Shell parent, String title, String
+message) {
+		if ( TestSession.isActive() ) {
+	        MessageDialog dialog = new MessageDialog(
+					parent,
+					title,
+					null,
+	                message,
+					MessageDialog.ERROR,
+	                new String[] { IDialogConstants.OK_LABEL },
+	                0);
+			TestSession.recordEvent( dialog );
+		}
+		else {
+			MessageDialog.openError( parent, title, message );
+		}
+     }
+
+}
+
+A clear case for an aspect..?
+
+
+
+--
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000108.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+	<LI>Next message: <A HREF="000105.html">[Rcpviewer-contributors] RE: SVN errors?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#107">[ date ]</a>
+              <a href="thread.html#107">[ thread ]</a>
+              <a href="subject.html#107">[ subject ]</a>
+              <a href="author.html#107">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

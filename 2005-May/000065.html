@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: Spring as a plugin?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Spring%20as%20a%20plugin%3F&In-Reply-To=%3C42834ECA.5080003%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000064.html">
+   <LINK REL="Next"  HREF="000066.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: Spring as a plugin?</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Spring%20as%20a%20plugin%3F&In-Reply-To=%3C42834ECA.5080003%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: Spring as a plugin?">emorning at yahoo.com
+       </A><BR>
+    <I>Thu May 12 14:40:42 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000064.html">[Rcpviewer-contributors] project website...
+</A></li>
+        <LI>Next message: <A HREF="000066.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#65">[ date ]</a>
+              <a href="thread.html#65">[ thread ]</a>
+              <a href="subject.html#65">[ subject ]</a>
+              <a href="author.html#65">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+&gt;<i>Hi Ted,
+</I>&gt;<i>
+</I>&gt;<i>Is your spike going to look at how to use Spring to configure components?
+</I>&gt;<i>
+</I>&gt;<i>I ask because I'm rather unsure about the relationship between Spring vs
+</I>&gt;<i>regular Eclipse extension-points.  I'd like to use the former so far as
+</I>&gt;<i>possible since it lowers the barrier for non-Eclipse experts like Eoin and
+</I>&gt;<i>me (and thus to our target domain programmers in general).  Then again, we
+</I>&gt;<i>shouldn't go against the grain if configuring our app with Spring would be
+</I>&gt;<i>unnatural for an RCP app.
+</I>&gt;<i>
+</I>&gt;<i>Anyway, do you have any insights here?
+</I>&gt;<i>
+</I>&gt;<i>Cheers
+</I>&gt;<i>Dan
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>I have developed a Spring plugin for my spike.  I have discovered that 
+Spring will make it easier to customize RPCSoftware's system for our 
+many clients.
+However, Spring cannot be used as a replacement for Eclipse extension 
+points since Spring and extension points serve different purposes.
+I would characterize the difference as a 'push' model (Spring) versus a 
+'pull' model (extension points). 
+The difference between the two approaches is that extension points are a 
+way of 'pulling' dependencies into an object that are only known at 
+runtime whereas Spring can only 'push' those dependencies that are known 
+at development time.
+Thus extension points are more appropriate for 'extending' very dynamic 
+plugin-based products.
+
+On the flip side, extension points can only 'pull' dependencies and 
+therefore cannot really be used to replace the implementation of some 
+dependency with a different  implementation, the pull model can only 
+supply ALL the implementations available, the receiving object would 
+have to have some way to distinquish which implementation to use..
+Thus Spring is more appropriate for 'configuring' an application by 
+assembling components into an application.
+
+In terms of the RCPViewer.  Instead of having an application explicitly 
+register all the domain classes with a domain registry when the 
+application starts,  the 'Eclipse way' would be to register the domain 
+classes via extension points.
+In this way the total set of domain classes does not have to be known 
+until runtime. 
+This aspect of extension points can make team development easier because 
+one developer can work on the 'project management' domain while another 
+developer works separately on the 'inventory management' domain.  These 
+domains can then be included or excluded from the final product merely 
+by including or excluding the plugins that contain the domain 
+implementation. 
+
+
+----------------------------------------------
+
+On another note, I'd like to show you all how I wrote the main 
+application class for my spike.
+This class shows off how I think that Spring will make our system easier 
+to customize for our many clients.
+
+When writing my splike I was imagining that I am writing a new version 
+or our ERP system (maybe not such a good thing if what you want is a 
+simple to understand example, but good if you want an example that will 
+make sure that the API is truly reusable).
+The main entry point must do two things, authenticate the user and start 
+the workbench.
+Currently I end up rewriting this class more several clients because I 
+need to special stuff when starting the application, or I need to 
+authenticate users in various ways.
+In the past I have considered using the JAAS API to make it possible to 
+integerate different authentication implementations for different 
+clients.  Or I could have written our application to the Acegi API to 
+accomplish the same thing.
+With Spring I was able to abstract out the details of authentication 
+while introducing NO DEPENDENCIES AT ALL.  Not even to Spring!
+
+Here is the main runnable for my example...
+
+++++++++
+
+import net.sf.plugins.springframework.SpringApplicationLauncher;
+
+import org.eclipse.core.runtime.IPlatformRunnable;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.PlatformUI;
+
+import com.example.ppo.commands.AuthenticationCommand;
+import com.example.ppo.commands.CreateAndRunWorkbenchCommand;
+
+public class PpoApplication
+extends SpringApplicationLauncher
+implements IPlatformRunnable
+{
+    private AuthenticationCommand _authenticationCommand;
+    private CreateAndRunWorkbenchCommand _createAndRunWorkbenchCommand;
+   
+    public PpoApplication(
+            AuthenticationCommand pAuthenticationCommand,
+            CreateAndRunWorkbenchCommand pWorkbenchCommand
+    ) {
+        _authenticationCommand= pAuthenticationCommand;
+        _createAndRunWorkbenchCommand= pWorkbenchCommand;
+    }
+   
+    public Object run(Object args) throws Exception {
+       
+        try {
+            if (_authenticationCommand.run() == null)
+                return null; 
+           
+
+            int returnCode = _createAndRunWorkbenchCommand.run();
+           
+            if (returnCode == PlatformUI.RETURN_RESTART)
+                return IPlatformRunnable.EXIT_RESTART;
+           
+            return IPlatformRunnable.EXIT_OK;
+        }
+        finally {
+            Platform.endSplash();
+        }
+    }
+
+
+}
+
+++++++++++++++
+
+Now the main code does just what it's suppose to...it authenticates the 
+user and starts the workbench.  However it does this with the help of 
+two Stratgey objects that are supplied by Spring.
+I can configure any customer's application by starting the application 
+with a different Spring configuration and I never need to touch this 
+code again.
+Best of all, it does not tie the application to any third-party API.
+
+-------------------
+
+My spring plugin has an extension point for registering Spring 
+configuration files.
+My example application plugin includes a Spring configuration file and 
+the file is registered as a Spring bean factory like so...
+
+    &lt;extension point=&quot;net.sf.plugins.springframework.beanFactories&quot;&gt;
+        &lt;beanFactory id=&quot;net.sf.plugins.rcpviewer.examples.ppo&quot; 
+file=&quot;ppo-beanfactory.xml&quot; /&gt;
+    &lt;/extension&gt;
+
+The Spring plugin also has an application launcher for running 
+Spring-based applications.
+Launch Spring applications like so...
+
+    eclipse.exe -application net.sf.plugins.springframework.launcher 
+-beanFactory net.sf.plugins.rcpviewer.examples.ppo
+
+...where -beanFactory is the id of a registered bean factory.
+The launcher expects to find a bean named &quot;main&quot; that implements 
+org.eclipse.runtime.IPlatformRunnable in the denoted bean factory.
+
+-------------------
+
+
+I have comitted the spring plugin under spikes/teds-workspace (well, I'm 
+trying anyway...)
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000064.html">[Rcpviewer-contributors] project website...
+</A></li>
+	<LI>Next message: <A HREF="000066.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#65">[ date ]</a>
+              <a href="thread.html#65">[ thread ]</a>
+              <a href="subject.html#65">[ subject ]</a>
+              <a href="author.html#65">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

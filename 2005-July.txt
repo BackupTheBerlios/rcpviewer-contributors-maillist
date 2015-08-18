@@ -1,0 +1,2717 @@
+From dan at haywood-associates.co.uk  Fri Jul  1 08:39:43 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 1 Jul 2005 07:39:43 +0100
+Subject: [Rcpviewer-contributors] Progress 20050630
+In-Reply-To: <42C3B89B.2080006@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEHODDAA.dan@haywood-associates.co.uk>
+
+> 4. Review of Ted's DefaultEditor changes
+> * A few minor specifics - look for REVIEW_CHANGE
+> * Major one - DefaultEditorConetntPane is still doing its own
+> reflection. Is there a reason it is not using the IDomainClass stuff?
+> This will impact the contract of IFieldBuilder.
+
+I'm sure that's just legacy.  Putting my foot down here - there should be no
+reflection in the UI layer, that is a responsibility of the
+...domain.runtime plugins.  We'll extend them if necessary.  Please change.
+
+Dan
+
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Sent: 30 June 2005 10:17
+> To: rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Progress 20050630
+>
+>
+> Hi All,
+>
+> 1. Incorporated search functionality - not hard really as Ted built it in
+> Notes:
+> * had to change dependency for ...persistence.ui project from ...rcp
+> project to ...gui
+> * there is one REVIEW_CHANGE - just fitting it in with job model
+> * the default run of ...gui.acme does NOT include the search - see wiki
+> for details.
+>
+> 2. Standardised format
+> No check-style yet but used __ and _ prefixes for fields.
+> We can now start the struggle to assert whose coding style is second
+> best after mine.
+> Other suggested standards in the wiki.
+>
+> 3. Got rid of "public"
+> A suggested standard - every class/method is private.
+> Only if there is a very good reason should it be package protected.
+> Only if there is a better reason should it be protected.
+> Only is there is an unarguable reason, should it be public.
+> We are building a framework that other might extend - lets minimise our
+> problems from the beginning.  Make everything as tight as possible, use
+> features such as Bundle's ability not to export packages, and later we
+> can explicitly publicise (exactly the right word here!) the stuff we
+> want people to code against.
+>
+> 4. Review of Ted's DefaultEditor changes
+> * A few minor specifics - look for REVIEW_CHANGE
+> * Major one - DefaultEditorConetntPane is still doing its own
+> reflection. Is there a reason it is not using the IDomainClass stuff?
+> This will impact the contract of IFieldBuilder.
+>
+> Tomorrow : session tree view
+>
+> Mike E.
+>
+>
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From mike.evans at incremental.eu.com  Fri Jul  1 16:59:56 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 01 Jul 2005 15:59:56 +0100
+Subject: [Rcpviewer-contributors] Progress 20050701
+Message-ID: <42C55A6C.2070607@incremental.eu.com>
+
+Session Tree view added.
+Some changes to DefaultEditor.
+Note the comment in the wiki:
+'The session tree view opens once there are objects attached to the 
+default session.  It can be closed but will annoyingly re-open every 
+time an object is added to the session.  This will be corrected once I 
+add some GUI preferences.  Note that there is currently a single session 
+so a single session tree view.'
+
+Mike E.
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Mon Jul  4 09:49:35 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 04 Jul 2005 08:49:35 +0100
+Subject: [Rcpviewer-contributors] Re: domainclass plugin not working???
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKEEILDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKEEILDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42C8EA0F.2020506@incremental.eu.com>
+
+Hmmm - Subclipse and, more believably, Tortoise both think everything is 
+sync'd.   I wonder if it is an Eclipse version issue?
+
+I am downloading the official 3.1 Eclipse release (available sinece last 
+week) & will use this.  Will let you know if I find anything.
+
+Oh, one (more) bit of faff with Subclipse.  Before commiting I did a 
+sync which told me about a single change Dan made in a class I have now 
+deleted.  Hence I did a full cmmit.  AFTER the commit (which I did in 
+Subclipse and Tortoise), Subclipse decided to tell me that 
+Domain-related classes had updates to apply.  Basically using the 
+RuntimeDomain singelton rather than the Domain singleton.  Of course, 
+having committed with Tortoise, I had overwritten those changes.  Let me 
+know how/why/if f'd up.
+
+Mike E.
+
+PS : and another thing - there were several classes deleted in the last 
+commit, which I know can be a subclipse weakness. If you see ANY '*Part' 
+classes apart from ...gui.editors.FieldPart then we have commit issues.
+
+
+
+Dan Haywood wrote:
+> Hi Mike
+> 
+> Just got around to trying out your latest commits.  Having problems getting
+> the domainclasses extension point (as read in DefaultDomainBootstrap) to
+> return anything.
+> 
+> Have looked at your schema/*.exsd and they look wrong (copy and paste), but
+> I'm afraid my Eclipse knowledge ain't quite up to scratch to fix.  (I tried
+> commenting out the schema attribute in your plugin.xml since I know that the
+> .exsd are optional, but still no joy).
+> 
+> I'm guessing that the plugin.xml / .exsd are fine in your local workspace,
+> but just not committed?  Could you check?
+> 
+> Thanks
+> 
+> Dan
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Mon Jul  4 10:05:56 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 04 Jul 2005 09:05:56 +0100
+Subject: [Rcpviewer-contributors] progress 20050704
+Message-ID: <42C8EDE4.7070003@incremental.eu.com>
+
+Actually Today taken up with Subclipse commit faff & installing Eclipse 
+3.1.  However over the weekend...
+
+Large Changes to DefaultEditor Processing:
+* It now uses Domain info rather than its own reflection
+* IFieldBuilders is once again a simple contract, rather than having 
+lots of implied requirements due to impls having to create managed 
+parts.  Basically I wrapped all the managed form stuff into a generic 
+FieldPart class which uses IFieldBuilder only for the gui generation.
+* This required two sub-types - IField & IFieldListener but I hope these 
+are straight-forward enough.
+* As all the update & dirty state is now in one place the aforementioned 
+FieldPart) and is tied to Job's, I can easily move on to job-based stuff 
+(undo/redo manager, macros and test harness scripting stuff).
+* However an implication of this is that the DefaultEditor is not quite 
+as generic as it was.  In fact I have completly removed the 
+IEditorContent factory stuff as it really does not fit.  I will 
+re-introduce it at a later stage but probably in a different form - once 
+I know how the DefauyltEditor implementttaion pans out.
+* Finally, as IFieldBuilders are specific to DefaultEditor, having their 
+factories in the GuiPlugin seemed like code leakage to me.  So all gui 
+factories (well - the one  - as I have deleted the 
+EditorContentBuilderFactory) are noe lazily instantiated statics on the 
+DefaultEditor itself.
+
+Keen to get on with Job-based functionality however, sigh, Dan the boss, 
+wants the action view.  Dan - where was that screenshot of QuickBooks?
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Tue Jul  5 10:15:15 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 05 Jul 2005 09:15:15 +0100
+Subject: [Rcpviewer-contributors] progress 20050705
+Message-ID: <42CA4193.4020800@incremental.eu.com>
+
+Nothing checked in today.
+
+Looking at how to do the action view.
+Thought initially that an implementation of IPropertyPage on the default 
+PropertyView would work.  This gives 'out-of-the-box' context switching; 
+i.e every time you focus on an editor it could show the operations for 
+the editor's IDomainObject.  However it is too damn sensitive - 
+everytime you switch to a view it reverts to the default property page. 
+  Not much good for (later) DnD ops.
+Hence back to the drawing board.
+
+Mike E.
+
+PS : Dan - if you wanna see the eclipse code as a learning experience 
+I'll check it in.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Tue Jul  5 11:10:44 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 5 Jul 2005 09:10:44 GMT
+Subject: [Rcpviewer-contributors] progress 20050705
+Message-ID: <Zen-1DpjS0-0001sf-9J@pythagoras.zen.co.uk>
+
+Mike,
+
+Could the code be reworked as a different view on just the attributes of a domain object?  Even though it repeats the information in the main editor, and isn't as pretty, it is something that (some) users will be used to seeing.
+
+If so, prhaps upload it into a corner of your own spike workspace to gather dust for a while; otherwise, happy to scrub it.
+
+Dan
+--------
+
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> Nothing checked in today.
+> 
+> Looking at how to do the action view.
+> Thought initially that an implementation of IPropertyPage on the default 
+> PropertyView would work.  This gives 'out-of-the-box' context switching; 
+> i.e every time you focus on an editor it could show the operations for 
+> the editor's IDomainObject.  However it is too damn sensitive - 
+> everytime you switch to a view it reverts to the default property page. 
+>   Not much good for (later) DnD ops.
+> Hence back to the drawing board.
+> 
+> Mike E.
+> 
+> PS : Dan - if you wanna see the eclipse code as a learning experience 
+> I'll check it in.
+> 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Thu Jul  7 10:51:16 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 07 Jul 2005 09:51:16 +0100
+Subject: [Rcpviewer-contributors] progress 20050707
+Message-ID: <42CCED04.20806@incremental.eu.com>
+
+No progress yesterday - bogged down on own stuff (hibernate 
+cross-session stale object problems - yuk!).
+
+Today:
+Added framework ActionsView - essentially an emulation of 
+PropertiesSheet but specific to IDomainObjects and IEditorParts.
+
+Tomorrow:
+Add the actual operations from the IDomainObject to the ActionsView.
+
+Notes:
+* Corrected ...gui project manifest - it should NOT be dependent on 
+...persistence.gui project as this result in cyclic dependencies.  Just 
+add the later to the runtime path rather than as a dependency if you 
+want the search functionality.
+
+Questions:
+1) Should everything in the gui be in terms of IRunTimeDomainObjects 
+rather than IDomainObjects?  If so some methods I am currently using 
+are not type-safe.
+2) Dan - can you point me at a decent example of a domain object with 
+real operations?  Currently the ...acme project supplies only beans.  I 
+would rather use something that you have thought up than something I 
+create which simply validates my own assumptions.
+
+Worries:
+* Drag'n'drop soon - oh gawd...
+
+Mike E.
+
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Thu Jul  7 11:39:41 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 7 Jul 2005 09:39:41 GMT
+Subject: [Rcpviewer-contributors] progress 20050707
+Message-ID: <Zen-1DqSr7-0000O4-JW@pythagoras.zen.co.uk>
+
+I have to say your new way of working definitely agrees - getting quite spoilt with (near) daily updates of progress.
+
+To your questions:
+
+1. you said IRuntimeDomainObject vs IDomainObject - I think you meant IRuntimeDomainClass vs IDomainClass.  To which the answer is "yes", you should be using IRuntimeDomainClass.  (If you want, we could rename IDomainObject to IRuntimeDomainObject, however there is no such thing as an ICompileTimeDomainObject).  Regarding type-safety, I think we should be exploiting Java 5's covariance of return types, but I'm still coming up to speed on the idioms for that so for now I just add a TODO and do the downcast.
+
+2. Decent examples of a domain object: I was going to implement JPetstore.  If you go to xpetstore.sourceforge.net there's a couple of implementations, one of which is a lightweight version using Tomcat, servlets and Hibernate.  I was gonna hijack the domain model there - there's about 8 classes or so.  But otherwise I'm happy to do this, will help me validate the programming model.
+
+Dan
+
+
+---
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> No progress yesterday - bogged down on own stuff (hibernate 
+> cross-session stale object problems - yuk!).
+> 
+> Today:
+> Added framework ActionsView - essentially an emulation of 
+> PropertiesSheet but specific to IDomainObjects and IEditorParts.
+> 
+> Tomorrow:
+> Add the actual operations from the IDomainObject to the ActionsView.
+> 
+> Notes:
+> * Corrected ...gui project manifest - it should NOT be dependent on 
+> ...persistence.gui project as this result in cyclic dependencies.  Just 
+> add the later to the runtime path rather than as a dependency if you 
+> want the search functionality.
+> 
+> Questions:
+> 1) Should everything in the gui be in terms of IRunTimeDomainObjects 
+> rather than IDomainObjects?  If so some methods I am currently using 
+> are not type-safe.
+> 2) Dan - can you point me at a decent example of a domain object with 
+> real operations?  Currently the ...acme project supplies only beans.  I 
+> would rather use something that you have thought up than something I 
+> create which simply validates my own assumptions.
+> 
+> Worries:
+> * Drag'n'drop soon - oh gawd...
+> 
+> Mike E.
+> 
+> 
+> 
+> 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+From dan at haywood-associates.co.uk  Thu Jul  7 11:50:38 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 7 Jul 2005 09:50:38 GMT
+Subject: [Rcpviewer-contributors] Eclipse RCP community
+Message-ID: <Zen-1DqT1i-000725-JQ@pythagoras.zen.co.uk>
+
+I subscribe to Stavros' blog - do you know him?  It's at http://tools.osmosis.gr/blog/.
+
+Anyway, he just posted up the following link: http://www.eclipse.org/community/RCPApplications.pdf.  It has screenshots of your (Mike's and Ted's) respective (commercial) applications.
+
+I'm thinking of approaching Stavros in a coupla months, either to contribute or to reimpliment his SchoolClipse app using rcpviewer as a way of validating completeness.  And looks like there's quite a few other guys who might be worth approaching.
+
+Dan
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Thu Jul  7 14:03:33 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 07 Jul 2005 13:03:33 +0100
+Subject: [Fwd: Re: [Rcpviewer-contributors] progress 20050707]
+Message-ID: <42CD1A15.2000207@incremental.eu.com>
+
+
+-------- Original Message --------
+Subject: Re: [Rcpviewer-contributors] progress 20050707
+Date: Thu, 07 Jul 2005 13:03:04 +0100
+From: Mike Evans <mike.evans at incremental.eu.com>
+To: Dan Haywood <dan at haywood-associates.co.uk>
+References: <Zen-1DqSr7-0000O4-JW at pythagoras.zen.co.uk>
+
+let's see how long it lasts...
+
+In response:
+1. I did - OK
+2. Actually since asking i think I'll just extend EasyBean as I can see
+it becoming a test-domain object.
+
+Regarding the new Java 5 type-safety stuff.
+I most definitely do not have a hang on it yet.
+ From now on I'll use a 'JAVA_5_FIXME' task tag for wherever it should
+be used I dunno how.
+
+Mike E.
+
+
+
+
+
+
+Dan Haywood wrote:
+> I have to say your new way of working definitely agrees - getting quite spoilt with (near) daily updates of progress.
+> 
+> To your questions:
+> 
+> 1. you said IRuntimeDomainObject vs IDomainObject - I think you meant IRuntimeDomainClass vs IDomainClass.  To which the answer is "yes", you should be using IRuntimeDomainClass.  (If you want, we could rename IDomainObject to IRuntimeDomainObject, however there is no such thing as an ICompileTimeDomainObject).  Regarding type-safety, I think we should be exploiting Java 5's covariance of return types, but I'm still coming up to speed on the idioms for that so for now I just add a TODO and do the downcast.
+> 
+> 2. Decent examples of a domain object: I was going to implement JPetstore.  If you go to xpetstore.sourceforge.net there's a couple of implementations, one of which is a lightweight version using Tomcat, servlets and Hibernate.  I was gonna hijack the domain model there - there's about 8 classes or so.  But otherwise I'm happy to do this, will help me validate the programming model.
+> 
+> Dan
+> 
+> 
+> ---
+> Mike Evans <mike.evans at incremental.eu.com> wrote :
+> 
+> 
+>>No progress yesterday - bogged down on own stuff (hibernate 
+>>cross-session stale object problems - yuk!).
+>>
+>>Today:
+>>Added framework ActionsView - essentially an emulation of 
+>>PropertiesSheet but specific to IDomainObjects and IEditorParts.
+>>
+>>Tomorrow:
+>>Add the actual operations from the IDomainObject to the ActionsView.
+>>
+>>Notes:
+>>* Corrected ...gui project manifest - it should NOT be dependent on 
+>>...persistence.gui project as this result in cyclic dependencies.  Just 
+>>add the later to the runtime path rather than as a dependency if you 
+>>want the search functionality.
+>>
+>>Questions:
+>>1) Should everything in the gui be in terms of IRunTimeDomainObjects 
+>>rather than IDomainObjects?  If so some methods I am currently using 
+>>are not type-safe.
+>>2) Dan - can you point me at a decent example of a domain object with 
+>>real operations?  Currently the ...acme project supplies only beans.  I 
+>>would rather use something that you have thought up than something I 
+>>create which simply validates my own assumptions.
+>>
+>>Worries:
+>>* Drag'n'drop soon - oh gawd...
+>>
+>>Mike E.
+>>
+>>
+>>
+>>
+>>
+>>-- 
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+>>
+>>_______________________________________________
+>>Rcpviewer-contributors mailing list
+>>Rcpviewer-contributors at lists.berlios.de
+>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+> 
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Fri Jul  8 10:35:50 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 08 Jul 2005 09:35:50 +0100
+Subject: [Rcpviewer-contributors] progress 20050708
+Message-ID: <42CE3AE6.70409@incremental.eu.com>
+
+Ok - unproblematic stuff first:
+1. Have moved field builder stuff into separate ...gui.fields package as 
+I am going to be using field builders outside of the DefaultEditor 
+(notably for an operation parameters dialog).
+2. Hence also FieldBuilderFactory is a singleton so is globally 
+accessible rather than a private class for DefaultEditor.
+3. TODO - just as I write this I realise of course that it should be put 
+back in the GuiPlugin - will do.
+4. Have added an integer field builder.
+5. Have added int fields to the existing beans and added a new domain 
+object in ...acme - Counter.  This will be used for basic operations 
+development.
+
+Now - the problem stuff:
+* The raison d'etre behind Counter is to have a class with operations 
+that affect its publicly accessible state.
+* I want the GUI to automatically pick up such changes.
+* Hence I have added an IDomainObjectListener on every FieldPart within 
+the DefaultEditor which updates the field on reception of an attribute 
+changed event.
+* The theory was that an operation would be triggered, and the open 
+DefaultEditor would automagically display the new values.
+* Alas firing a (non-setter) operation that affects a domain object's 
+attribute does not cause an attribute-change event to be fired.  On 
+hindsight this is obvious - how can Dan's introspection know how an 
+operation affects its parent object?
+* So what can we do?
+* Option 1 : The sledgehammer : Dan add's an operation-fired event to 
+IDomainObjectListener and I completlely refresh the DefaultEditor every 
+time.
+* Option 2 : an 'Affects' attribute : more metadata on every operation 
+that lets me know what external state might be changed
+* Option 3 : ???
+
+Dan?
+
+Mike E.
+
+
+
+
+
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Sat Jul  9 08:20:51 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 9 Jul 2005 07:20:51 +0100
+Subject: [Rcpviewer-contributors] RE: progress 20050708
+In-Reply-To: <42CE3AE6.70409@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKOEKADDAA.dan@haywood-associates.co.uk>
+
+Looking forward to trying this out.
+
+To your question:  "how can my introspection know how an operation affects
+its parent object?"
+
+In fact, it's worse than that (Jim - he's dead).  Not only might an
+operation affect various attributes of its parent object, it could affect
+other objects also.  There could potentially be a whole graph of objects
+that might have been instantiated in a user's session and are being
+displayed, all of which need updating.
+
+So option 1 (sledgehammer) doesn't go far enough, and option 2 (affects
+attribute) is a non-starter for me (far too fragile).
+
+I have an option 3: use an aspect with a percflowbelow and picking up set()
+joinpoints on @InDomain objects.  It constructs a list of objects then uses
+the ISession to do a reverse lookup of the IDomainObjects for each affected
+pojo and its IDomainClass to determine the affected attribute.  In fact I
+already have an aspect that does some of this because I wanted to see if an
+in-memory transaction manager could be developed.  If the aspect keeps track
+of the before and after state then it each change can be wrapped into a
+command and thus a rollback can be affected.  So it should help our
+undo/redo functionality too.
+
+So, I suggest that you keep your design of IFieldParts listening to their
+respective IDomainObjects, and I fish out this aspect and try to get it
+working in a plugin environment.  I knew we'd need 'em eventually!
+
+Dan
+
+
+> -----Original Message-----
+> From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> Sent: 08 July 2005 09:36
+> To: rcpviewer-contributors at lists.berlios.de; dan Haywood
+> Subject: progress 20050708
+>
+>
+> Ok - unproblematic stuff first:
+> 1. Have moved field builder stuff into separate ...gui.fields package as
+> I am going to be using field builders outside of the DefaultEditor
+> (notably for an operation parameters dialog).
+> 2. Hence also FieldBuilderFactory is a singleton so is globally
+> accessible rather than a private class for DefaultEditor.
+> 3. TODO - just as I write this I realise of course that it should be put
+> back in the GuiPlugin - will do.
+> 4. Have added an integer field builder.
+> 5. Have added int fields to the existing beans and added a new domain
+> object in ...acme - Counter.  This will be used for basic operations
+> development.
+>
+> Now - the problem stuff:
+> * The raison d'etre behind Counter is to have a class with operations
+> that affect its publicly accessible state.
+> * I want the GUI to automatically pick up such changes.
+> * Hence I have added an IDomainObjectListener on every FieldPart within
+> the DefaultEditor which updates the field on reception of an attribute
+> changed event.
+> * The theory was that an operation would be triggered, and the open
+> DefaultEditor would automagically display the new values.
+> * Alas firing a (non-setter) operation that affects a domain object's
+> attribute does not cause an attribute-change event to be fired.  On
+> hindsight this is obvious - how can Dan's introspection know how an
+> operation affects its parent object?
+> * So what can we do?
+> * Option 1 : The sledgehammer : Dan add's an operation-fired event to
+> IDomainObjectListener and I completlely refresh the DefaultEditor every
+> time.
+> * Option 2 : an 'Affects' attribute : more metadata on every operation
+> that lets me know what external state might be changed
+> * Option 3 : ???
+>
+> Dan?
+>
+> Mike E.
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+>
+
+
+
+
+From mike.evans at incremental.eu.com  Mon Jul 11 11:09:27 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 11 Jul 2005 10:09:27 +0100
+Subject: [Rcpviewer-contributors] progress 20050711
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKOEKADDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKOEKADDAA.dan@haywood-associates.co.uk>
+Message-ID: <42D23747.9000106@incremental.eu.com>
+
+No progress at the weekend - far too sunny.
+
+ From Dan's comments below, I realise that GUI 'liveness' (i.e. 
+automagically reflecting all changes to the domain objects) is going to 
+be fun indeed.  Perhaps we'll need a global repository of all gui 
+elements tied to each object / attribute rather than the simpler 
+encapsulated listener model I was trying to go for.  Ah well.
+
+As a start I have added an 'orrible global refresh action that knows all 
+about the different gui elements and hunts them down and refreshes them 
+(and hence requires loads of public refresh() methods everywhere).  It 
+is exactly the opposite of what I want to do but might provoke thought 
+on what a better solution might look like.
+
+Other than that, little functional change today - have been preparing 
+the ground for a non-modal 'ActionArgumentDialog' linked to the 
+ActionsView to be started tomorrow.
+
+Oh - and if you you do a 'Type Hierarchy' on UIJob you might get an 
+inkling of how I intend to use Job Families for clever(ish) undo/redo. 
+More later on that.
+
+Mike E.
+
+
+
+Dan Haywood wrote:
+> Looking forward to trying this out.
+> 
+> To your question:  "how can my introspection know how an operation affects
+> its parent object?"
+> 
+> In fact, it's worse than that (Jim - he's dead).  Not only might an
+> operation affect various attributes of its parent object, it could affect
+> other objects also.  There could potentially be a whole graph of objects
+> that might have been instantiated in a user's session and are being
+> displayed, all of which need updating.
+> 
+> So option 1 (sledgehammer) doesn't go far enough, and option 2 (affects
+> attribute) is a non-starter for me (far too fragile).
+> 
+> I have an option 3: use an aspect with a percflowbelow and picking up set()
+> joinpoints on @InDomain objects.  It constructs a list of objects then uses
+> the ISession to do a reverse lookup of the IDomainObjects for each affected
+> pojo and its IDomainClass to determine the affected attribute.  In fact I
+> already have an aspect that does some of this because I wanted to see if an
+> in-memory transaction manager could be developed.  If the aspect keeps track
+> of the before and after state then it each change can be wrapped into a
+> command and thus a rollback can be affected.  So it should help our
+> undo/redo functionality too.
+> 
+> So, I suggest that you keep your design of IFieldParts listening to their
+> respective IDomainObjects, and I fish out this aspect and try to get it
+> working in a plugin environment.  I knew we'd need 'em eventually!
+> 
+> Dan
+> 
+> 
+> 
+>>-----Original Message-----
+>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+>>Sent: 08 July 2005 09:36
+>>To: rcpviewer-contributors at lists.berlios.de; dan Haywood
+>>Subject: progress 20050708
+>>
+>>
+>>Ok - unproblematic stuff first:
+>>1. Have moved field builder stuff into separate ...gui.fields package as
+>>I am going to be using field builders outside of the DefaultEditor
+>>(notably for an operation parameters dialog).
+>>2. Hence also FieldBuilderFactory is a singleton so is globally
+>>accessible rather than a private class for DefaultEditor.
+>>3. TODO - just as I write this I realise of course that it should be put
+>>back in the GuiPlugin - will do.
+>>4. Have added an integer field builder.
+>>5. Have added int fields to the existing beans and added a new domain
+>>object in ...acme - Counter.  This will be used for basic operations
+>>development.
+>>
+>>Now - the problem stuff:
+>>* The raison d'etre behind Counter is to have a class with operations
+>>that affect its publicly accessible state.
+>>* I want the GUI to automatically pick up such changes.
+>>* Hence I have added an IDomainObjectListener on every FieldPart within
+>>the DefaultEditor which updates the field on reception of an attribute
+>>changed event.
+>>* The theory was that an operation would be triggered, and the open
+>>DefaultEditor would automagically display the new values.
+>>* Alas firing a (non-setter) operation that affects a domain object's
+>>attribute does not cause an attribute-change event to be fired.  On
+>>hindsight this is obvious - how can Dan's introspection know how an
+>>operation affects its parent object?
+>>* So what can we do?
+>>* Option 1 : The sledgehammer : Dan add's an operation-fired event to
+>>IDomainObjectListener and I completlely refresh the DefaultEditor every
+>>time.
+>>* Option 2 : an 'Affects' attribute : more metadata on every operation
+>>that lets me know what external state might be changed
+>>* Option 3 : ???
+>>
+>>Dan?
+>>
+>>Mike E.
+>>
+>>
+>>
+>>
+>>
+>>
+>>
+>>
+>>
+>>--
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+>>
+>>
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Tue Jul 12 01:51:24 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 12 Jul 2005 00:51:24 +0100
+Subject: [Rcpviewer-contributors] progress 20050711
+In-Reply-To: <42D23747.9000106@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEKHDDAA.dan@haywood-associates.co.uk>
+
+>> within
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Subject: [Rcpviewer-contributors] progress 20050711
+>
+>
+>  From Dan's comments below, I realise that GUI 'liveness' (i.e.
+> automagically reflecting all changes to the domain objects) is going to
+> be fun indeed.  Perhaps we'll need a global repository of all gui
+> elements tied to each object / attribute rather than the simpler
+> encapsulated listener model I was trying to go for.  Ah well.
+
+I've been making good progress with my aspect approach - can correctly pick
+up the pojos and detect changes to them.  Should be able to check in
+something in the day or two.
+
+What that means (I hope) is that the listener model ought to work ok.  The
+aspect will collate the changes and will then ask the IDomainObject to
+notify its listeners just for the bits of it that have changed.  So I think
+there won't be any need for a global repository.
+
+(Separately, I do think that an IDomainObject should be able to return
+IOperation objects that are themselves observable.  This is so that the UI
+can listen as to whether the operation's OK button should be enabled or not
+dependent on any IPrerequisites associated with the IOperation.  But that's
+for the future...)
+
+
+> As a start I have added an 'orrible global refresh action that knows all
+> about the different gui elements and hunts them down and refreshes them
+> (and hence requires loads of public refresh() methods everywhere).  It
+> is exactly the opposite of what I want to do but might provoke thought
+> on what a better solution might look like.
+
+I suspect it'll never get taken out...  but then again belt and braces is
+sometimes best.
+
+
+> Other than that, little functional change today - have been preparing
+> the ground for a non-modal 'ActionArgumentDialog' linked to the
+> ActionsView to be started tomorrow.
+
+Glad to see its non-modal!  Hopefully a future version will be able to get
+rid of the dialog and just put the parameters inline with the action view,
+cf Windows Explorer action bar.  But as usual I'm talking about running
+before we can walk.
+
+
+>
+> Oh - and if you you do a 'Type Hierarchy' on UIJob you might get an
+> inkling of how I intend to use Job Families for clever(ish) undo/redo.
+> More later on that.
+
+Will give that a pass for the moment since I'm in the middle of my aspects.
+However, we should decide whether jobs are a UI responsibility or a domain
+responsibility.  My suspicion is that there's an element of both (especially
+with the IOperation object I alluded to above).
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Jul 12 10:55:50 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 12 Jul 2005 09:55:50 +0100
+Subject: [Rcpviewer-contributors] progress 20050712
+Message-ID: <42D38596.8060005@incremental.eu.com>
+
+OK - I'm spending too long on this stuff now so the deliverables will be 
+slowing a bit from now on.
+
+However significant progress today.
+
+1. Action Argument Display
+If an operation requires arguments this now pops up.  It is not a dialog 
+as it is a non-modal, stay-on-top shell.  As it is, it looks weird and 
+is not movable, so needs re-working.
+However it is the first alternative to a parameter tree in the actions view.
+It is non-modal to allow arguments to be ...
+
+2. Drag'n'Drop
+... drag and dropped across fields.
+I have started DnD at the field level - so far only String and int 's 
+can be DND'd but at least it is started.  Ted - DnD has always been my 
+code bete noir so please review and improve if I have got it wrong.
+
+3. FieldBuilders
+As the Action Arguement display uses field builders too, these have been 
+made slightly more generic by operating on ETypeElement's, not ETattributes.
+
+So immediate next stages...
+1) add DnD for Date and Boolean
+2) make actions view a tree displaying params
+3) add DnD functionality to actions view
+
+Further off stages:
+1) Stop being a wimp and working only with primitives. Switch to fields 
+referencing objects.
+2) back to Job stuff.
+
+One question : Dan - can we gain access to the name of an operation's 
+parameters?
+ie. op( int first, int second) > extract "first" and "second"
+This would make a lot more sense as field labels in the actions view and 
+arguments display.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Wed Jul 13 00:31:13 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 12 Jul 2005 23:31:13 +0100
+Subject: [Rcpviewer-contributors] progress 20050712
+In-Reply-To: <42D38596.8060005@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKGEKJDDAA.dan@haywood-associates.co.uk>
+
+>> Mike: within
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+>
+>
+> OK - I'm spending too long on this stuff now so the deliverables will be
+> slowing a bit from now on.
+
+First priority has to be the day job.  Glad you've been able to devote so
+much time recently - the UI is starting to take shape.
+
+
+> One question : Dan - can we gain access to the name of an operation's
+> parameters?
+> ie. op( int first, int second) > extract "first" and "second"
+> This would make a lot more sense as field labels in the actions view and
+> arguments display.
+
+That's supported, though using annotations rather than vanilla Java
+reflection (which doesn't/can't give access to the formal parameter names).
+See
+TestExplicitNamesAndDescriptions#testOperationParameterThatIsExplicitlyNamed
+(in ...domain.tests plugin).   The fixture this works on is:
+
+@InDomain
+public class Appointment {
+	public void moveTo(
+			@Named("newPeriod")
+			@DescribedAs("The time when the appointment should now be scheduled")
+			TimePeriod newPeriod,
+			@Named("rationale")
+			@DescribedAs("The reasoning for moving the appointment")
+			String rationale) {
+	}
+	public static void createAt(
+			@Named("timePeriod")
+			@DescribedAs("When the appointment is to run to and from")
+			TimePeriod timePeriod,
+			@Named("agenda")
+			@DescribedAs("The agenda for this appointment")
+			String agenda) {
+	}
+}
+
+
+--
+Also, a couple of annoyances...
+1. can the GUI remember its initial size across invocations?  It always
+starts by taking up the whole screen (which on my widescreen laptop, is
+rather a lot...)
+
+2. can you add the accelerator for File menu?
+
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Wed Jul 13 10:48:00 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 13 Jul 2005 09:48:00 +0100
+Subject: [Rcpviewer-contributors] progress 20050713
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKGEKJDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKGEKJDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42D4D540.5040406@incremental.eu.com>
+
+Journeyman stuff today.
+Both ...gui and ...gui.acme projects updated.
+
+* add further DnD types - Date and even Boolean (the latter is pointless 
+but at least consistent)
+* using platform functionality for restoring gui state - one gotcha - I 
+have to close all editors on application close as the objects they're 
+displaying do not (yet) live across application sessions
+* using using annotations for parameter display
+
+Have not addded keyboard accelerators yet.
+I think the platform key bindings functionality has got all clever since 
+I last looked at it so will have to gen up on it.
+
+So next stages - as the last progress mail!
+
+Mike E.
+
+
+
+
+
+Dan Haywood wrote:
+
+>>>Mike: within
+> 
+> 
+>>-----Original Message-----
+>>From: rcpviewer-contributors-admin at berlios.de
+>>[mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+>>
+>>
+>>OK - I'm spending too long on this stuff now so the deliverables will be
+>>slowing a bit from now on.
+> 
+> 
+> First priority has to be the day job.  Glad you've been able to devote so
+> much time recently - the UI is starting to take shape.
+> 
+> 
+> 
+>>One question : Dan - can we gain access to the name of an operation's
+>>parameters?
+>>ie. op( int first, int second) > extract "first" and "second"
+>>This would make a lot more sense as field labels in the actions view and
+>>arguments display.
+> 
+> 
+> That's supported, though using annotations rather than vanilla Java
+> reflection (which doesn't/can't give access to the formal parameter names).
+> See
+> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExplicitlyNamed
+> (in ...domain.tests plugin).   The fixture this works on is:
+> 
+> @InDomain
+> public class Appointment {
+> 	public void moveTo(
+> 			@Named("newPeriod")
+> 			@DescribedAs("The time when the appointment should now be scheduled")
+> 			TimePeriod newPeriod,
+> 			@Named("rationale")
+> 			@DescribedAs("The reasoning for moving the appointment")
+> 			String rationale) {
+> 	}
+> 	public static void createAt(
+> 			@Named("timePeriod")
+> 			@DescribedAs("When the appointment is to run to and from")
+> 			TimePeriod timePeriod,
+> 			@Named("agenda")
+> 			@DescribedAs("The agenda for this appointment")
+> 			String agenda) {
+> 	}
+> }
+> 
+> 
+> --
+> Also, a couple of annoyances...
+> 1. can the GUI remember its initial size across invocations?  It always
+> starts by taking up the whole screen (which on my widescreen laptop, is
+> rather a lot...)
+> 
+> 2. can you add the accelerator for File menu?
+> 
+> 
+> Dan
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Wed Jul 13 10:59:19 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 13 Jul 2005 08:59:19 GMT
+Subject: [Rcpviewer-contributors] progress 20050713
+Message-ID: <Zen-1Dsd5L-0007CR-9c@pythagoras.zen.co.uk>
+
+Mike / (everyone):
+
+I have my aspect going that picks up modifications to attributes on a pojo, and then uses the IDomainObject to notify any listeners of those attributes.  In other words, invoking increment() on the CounterBean causes the field to be updated.  Unsurprisingly, it didn't take that much code - will check in later today.
+
+What I've now been thinking about is transactions, commands and jobs.  It seems to me that my little aspect can easily grab the before and after values of any change to any field, and hence wrap it up into a Command that has an undo.  In other words, the aspect can capture the *effects* of invoking an operation such that it might be undone.
+
+Meanwhile, your (Mike's) job stuff effectively is encapsulating those operations such that they can be invoked - in other words, they represent the *cause* of a change.
+
+What I'm mulling on is how to combine this cause (UI job) and effect (domain object command built dynamically via aspects) such that an invoking Undo on the UI job just delegates to the corresponding undo on the command.  Any suggestions?  My best idea at the moment is that the UI job creates an ICommand that is defined by a domain package, and then binds it to a threadlocal.  The aspect would then pick this up and append the mutations to it.  The Job/ICommand pair would be managed by the UI layer.
+
+Something to think about...
+Dan
+
+---
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> Journeyman stuff today.
+> Both ...gui and ...gui.acme projects updated.
+> 
+> * add further DnD types - Date and even Boolean (the latter is pointless 
+> but at least consistent)
+> * using platform functionality for restoring gui state - one gotcha - I 
+> have to close all editors on application close as the objects they're 
+> displaying do not (yet) live across application sessions
+> * using using annotations for parameter display
+> 
+> Have not addded keyboard accelerators yet.
+> I think the platform key bindings functionality has got all clever since 
+> I last looked at it so will have to gen up on it.
+> 
+> So next stages - as the last progress mail!
+> 
+> Mike E.
+> 
+> 
+> 
+> 
+> 
+> Dan Haywood wrote:
+> 
+> >>>Mike: within
+> > 
+> > 
+> >>-----Original Message-----
+> >>From: rcpviewer-contributors-admin at berlios.de
+> >>[mailto:rcpviewer-contributors-admin at berlios.de]On
+> Behalf Of Mike Evans
+> >>
+> >>
+> >>OK - I'm spending too long on this stuff now so the deliverables will be
+> >>slowing a bit from now on.
+> > 
+> > 
+> > First priority has to be the day job.  Glad you've been able to devote so
+> > much time recently - the UI is starting to take shape.
+> > 
+> > 
+> > 
+> >>One question : Dan - can we gain access to the name of an operation's
+> >>parameters?
+> >>ie. op( int first, int second) > extract "first" and "second"
+> >>This would make a lot more sense as field labels in the actions view and
+> >>arguments display.
+> > 
+> > 
+> > That's supported, though using annotations rather than vanilla Java
+> > reflection (which doesn't/can't give access to the formal parameter
+> names).
+> > See
+> >
+> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExplicitlyNamed
+> > (in ...domain.tests plugin).   The fixture this works on is:
+> > 
+> > @InDomain
+> > public class Appointment {
+> > 	public void moveTo(
+> > 			@Named("newPeriod")
+> > 			@DescribedAs("The time when the appointment should now be scheduled")
+> > 			TimePeriod newPeriod,
+> > 			@Named("rationale")
+> > 			@DescribedAs("The reasoning for moving the appointment")
+> > 			String rationale) {
+> > 	}
+> > 	public static void createAt(
+> > 			@Named("timePeriod")
+> > 			@DescribedAs("When the appointment is to run to and from")
+> > 			TimePeriod timePeriod,
+> > 			@Named("agenda")
+> > 			@DescribedAs("The agenda for this appointment")
+> > 			String agenda) {
+> > 	}
+> > }
+> > 
+> > 
+> > --
+> > Also, a couple of annoyances...
+> > 1. can the GUI remember its initial size across invocations?  It always
+> > starts by taking up the whole screen (which on my widescreen laptop, is
+> > rather a lot...)
+> > 
+> > 2. can you add the accelerator for File menu?
+> > 
+> > 
+> > Dan
+> > 
+> > 
+> > _______________________________________________
+> > Rcpviewer-contributors mailing list
+> > Rcpviewer-contributors at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > 
+> > 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+From dan at haywood-associates.co.uk  Thu Jul 14 00:25:23 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 13 Jul 2005 23:25:23 +0100
+Subject: [Rcpviewer-contributors] return of the aspects (and other news)
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEKNDDAA.dan@haywood-associates.co.uk>
+
+... as promised, just committed (rev 401) an aspect (actually two: an
+abstract IPojoAspect and a subaspect NotifyListenersAspect) that detect
+changes to pojos (eg as a result of invoking an operation) and then - using
+IDomainObject - notify any listeners.  In other words, the
+CounterBean#increment() operation actually changes the value of the display
+field.
+
+So you'll need to add the AspectJ 1.2.1xxxx as a plugin to your Eclipse
+installation.
+
+Two other things to update you on:
+
+1. Checkstyle
+
+I've added a checkstyle builder to a number of the projects.  This is using
+an externally configured rcpviewer_checks.xml that lives in a '00 project
+control' project in the main workspace.  You'll notice that virtually all of
+the checks are commented out, but I've put my vote against each one.  I
+invite you to either vote for each one, and I'll do a review.
+Alternatively, if there's a check that you feel passionately should be in,
+and no-one has voted against it, then try adding it in and see what how much
+code is in violation.  I suggest we use this mailing list as a way of
+tracking this.  But we should only add in checks one-by-one.
+
+What all that means though is that you should also add checkstyle 4.0.0b
+plugin (3.1 compatible) to your Eclipse installation.
+
+2. Petstore
+
+I've started to develop a more realistic project, namely petstore.  As of
+now it's basically just the "domain" classes from xpetstore.sourceforge.net
+project - though they need some behaviour adding to 'em.  It was nice to see
+I only had to add a couple of @TypeOf() annotations to get the metamodel to
+build okay.
+
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Thu Jul 14 12:04:12 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 14 Jul 2005 11:04:12 +0100
+Subject: [Rcpviewer-contributors] progress 20050713
+In-Reply-To: <Zen-1Dsd5L-0007CR-9c@pythagoras.zen.co.uk>
+References: <Zen-1Dsd5L-0007CR-9c@pythagoras.zen.co.uk>
+Message-ID: <42D6389C.9010503@incremental.eu.com>
+
+Wow!  Sounds extremely sexy.  A good showcase for aspects methinks...
+
+As to the redo/undo issue - thinking aloud:
+
+Assumptions / Constraints / Enablers (in no particular order)
+* Dan's aspect can pick up all internal state changes, not just public state
+* the gui knows about the model, not vice versa
+* the gui code is targeted at RCP developers, hence on the principle of
+least surprises, the gui code does not use aspects
+* all Jobs are run through the platform's JobManager - hence we have the
+IJobChangeListener interface at our disposal
+* do not want
+
+So how about extending AbstractDomainObjectJob to:
+* have an isUndoable() property
+* if this is true it adds an IJobChangeListener to itself
+* this picks up events aboutToRun() and done() to start & stop 'domain 
+listening'
+* whilst 'domain listening' (using some as-yet-unspec'd contract) all 
+domain change events are recorded by the listener (this is tricky as it 
+would have to pick up all events on all domain objects)
+* the undo() method could then step through these reversing them
+
+Several problems with this, notably:
+* the super-duper domain listener for all objects - how do this?
+* on an undo() or a redo() what about objects that have gone out of 
+scope / been deleted etc.
+
+Bit fuzzy but its a start.  Will think more about this once I have got 
+the Aspect stuff working here and understand Dan's aspect implementations.
+
+Mike E.
+
+
+
+
+
+Dan Haywood wrote:
+
+> Mike / (everyone):
+> 
+> I have my aspect going that picks up modifications to attributes on a
+> pojo, and then uses the IDomainObject to notify any listeners of
+> those attributes.  In other words, invoking increment() on the
+> CounterBean causes the field to be updated.  Unsurprisingly, it
+> didn't take that much code - will check in later today.
+> 
+> What I've now been thinking about is transactions, commands and jobs.
+> It seems to me that my little aspect can easily grab the before and
+> after values of any change to any field, and hence wrap it up into a
+> Command that has an undo.  In other words, the aspect can capture the
+> *effects* of invoking an operation such that it might be undone.
+> 
+> Meanwhile, your (Mike's) job stuff effectively is encapsulating those
+> operations such that they can be invoked - in other words, they
+> represent the *cause* of a change.
+> 
+> What I'm mulling on is how to combine this cause (UI job) and effect
+> (domain object command built dynamically via aspects) such that an
+> invoking Undo on the UI job just delegates to the corresponding undo
+> on the command.  Any suggestions?  My best idea at the moment is that
+> the UI job creates an ICommand that is defined by a domain package,
+> and then binds it to a threadlocal.  The aspect would then pick this
+> up and append the mutations to it.  The Job/ICommand pair would be
+> managed by the UI layer.
+> 
+> Something to think about... Dan
+> 
+> --- Mike Evans <mike.evans at incremental.eu.com> wrote :
+> 
+> 
+>> Journeyman stuff today. Both ...gui and ...gui.acme projects
+>> updated.
+>> 
+>> * add further DnD types - Date and even Boolean (the latter is
+>> pointless but at least consistent) * using platform functionality
+>> for restoring gui state - one gotcha - I have to close all editors
+>> on application close as the objects they're displaying do not (yet)
+>> live across application sessions * using using annotations for
+>> parameter display
+>> 
+>> Have not addded keyboard accelerators yet. I think the platform key
+>> bindings functionality has got all clever since I last looked at it
+>> so will have to gen up on it.
+>> 
+>> So next stages - as the last progress mail!
+>> 
+>> Mike E.
+>> 
+>> 
+>> 
+>> 
+>> 
+>> Dan Haywood wrote:
+>> 
+>> 
+>>>>> Mike: within
+>>> 
+>>> 
+>>>> -----Original Message----- From:
+>>>> rcpviewer-contributors-admin at berlios.de 
+>>>> [mailto:rcpviewer-contributors-admin at berlios.de]On
+>> 
+>> Behalf Of Mike Evans
+>> 
+>>>> 
+>>>> OK - I'm spending too long on this stuff now so the
+>>>> deliverables will be slowing a bit from now on.
+>>> 
+>>> 
+>>> First priority has to be the day job.  Glad you've been able to
+>>> devote so much time recently - the UI is starting to take shape.
+>>> 
+>>> 
+>>> 
+>>> 
+>>>> One question : Dan - can we gain access to the name of an
+>>>> operation's parameters? ie. op( int first, int second) >
+>>>> extract "first" and "second" This would make a lot more sense
+>>>> as field labels in the actions view and arguments display.
+>>> 
+>>> 
+>>> That's supported, though using annotations rather than vanilla
+>>> Java reflection (which doesn't/can't give access to the formal
+>>> parameter
+>> 
+>> names).
+>> 
+>>> See
+>>> 
+>> 
+>> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExplicitlyNamed
+>> 
+>> 
+>>> (in ...domain.tests plugin).   The fixture this works on is:
+>>> 
+>>> @InDomain public class Appointment { public void moveTo( 
+>>> @Named("newPeriod") @DescribedAs("The time when the appointment
+>>> should now be scheduled") TimePeriod newPeriod, 
+>>> @Named("rationale") @DescribedAs("The reasoning for moving the
+>>> appointment") String rationale) { } public static void createAt( 
+>>> @Named("timePeriod") @DescribedAs("When the appointment is to run
+>>> to and from") TimePeriod timePeriod, @Named("agenda") 
+>>> @DescribedAs("The agenda for this appointment") String agenda) { 
+>>> } }
+>>> 
+>>> 
+>>> -- Also, a couple of annoyances... 1. can the GUI remember its
+>>> initial size across invocations?  It always starts by taking up
+>>> the whole screen (which on my widescreen laptop, is rather a
+>>> lot...)
+>>> 
+>>> 2. can you add the accelerator for File menu?
+>>> 
+>>> 
+>>> Dan
+>>> 
+>>> 
+>>> _______________________________________________ 
+>>> Rcpviewer-contributors mailing list 
+>>> Rcpviewer-contributors at lists.berlios.de 
+>>> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>> 
+>>> 
+>> 
+>> -- Mike Evans Incremental Ltd. www.incremental.eu.com
+>> 
+>> _______________________________________________ 
+>> Rcpviewer-contributors mailing list 
+>> Rcpviewer-contributors at lists.berlios.de 
+>> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+> 
+> 
+> 
+> 
+> _______________________________________________ 
+> Rcpviewer-contributors mailing list 
+> Rcpviewer-contributors at lists.berlios.de 
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+From dan at haywood-associates.co.uk  Thu Jul 14 15:23:05 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 14 Jul 2005 14:23:05 +0100
+Subject: [Rcpviewer-contributors] progress 20050713
+In-Reply-To: <42D6389C.9010503@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKMELCDDAA.dan@haywood-associates.co.uk>
+
+> * the super-duper domain listener for all objects - how do this?
+
+PojoAspect is the baby to hang all this sort of functionality from.  In
+addition to NotifyListenersAspect, there is another subaspect of it already
+checked in in domain.runtime, namely
+de.berlios.rcpviewer.session.TracingAspect.  It's currently disabled but
+picks up the same pointcuts, all inherited from aforementioned PojoAspect.
+
+
+> * on an undo() or a redo() what about objects that have gone out of
+> scope / been deleted etc.
+
+Yes, definitely trickier.
+
+Modifications to attributes of existing objects are trivial, and I think
+that tracking the adding/removing of objects from a collection is also
+reasonably do-able.  As the aspect shows, we can also pick up instantiation
+of new objects.  However deletion is tricky.
+
+One idea is that we could state that objects that can be deleted must
+provide a well defined method, eg "deleted()"?    The Command can hold onto
+these deleted objects so that they are available to be resurrected (I guess
+that means an "undeleted()" command for objects that actually do something
+in their "deleted()" method.
+
+
+
+> -----Original Message-----
+> From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> Sent: 14 July 2005 11:04
+> To: Dan Haywood; rcpviewer-contributors at lists.berlios.de
+> Subject: Re: [Rcpviewer-contributors] progress 20050713
+>
+>
+> Wow!  Sounds extremely sexy.  A good showcase for aspects methinks...
+>
+> As to the redo/undo issue - thinking aloud:
+>
+> Assumptions / Constraints / Enablers (in no particular order)
+> * Dan's aspect can pick up all internal state changes, not just
+> public state
+> * the gui knows about the model, not vice versa
+> * the gui code is targeted at RCP developers, hence on the principle of
+> least surprises, the gui code does not use aspects
+> * all Jobs are run through the platform's JobManager - hence we have the
+> IJobChangeListener interface at our disposal
+> * do not want
+>
+> So how about extending AbstractDomainObjectJob to:
+> * have an isUndoable() property
+> * if this is true it adds an IJobChangeListener to itself
+> * this picks up events aboutToRun() and done() to start & stop 'domain
+> listening'
+> * whilst 'domain listening' (using some as-yet-unspec'd contract) all
+> domain change events are recorded by the listener (this is tricky as it
+> would have to pick up all events on all domain objects)
+> * the undo() method could then step through these reversing them
+>
+> Several problems with this, notably:
+> * the super-duper domain listener for all objects - how do this?
+> * on an undo() or a redo() what about objects that have gone out of
+> scope / been deleted etc.
+>
+> Bit fuzzy but its a start.  Will think more about this once I have got
+> the Aspect stuff working here and understand Dan's aspect implementations.
+>
+> Mike E.
+>
+>
+>
+>
+>
+> Dan Haywood wrote:
+>
+> > Mike / (everyone):
+> >
+> > I have my aspect going that picks up modifications to attributes on a
+> > pojo, and then uses the IDomainObject to notify any listeners of
+> > those attributes.  In other words, invoking increment() on the
+> > CounterBean causes the field to be updated.  Unsurprisingly, it
+> > didn't take that much code - will check in later today.
+> >
+> > What I've now been thinking about is transactions, commands and jobs.
+> > It seems to me that my little aspect can easily grab the before and
+> > after values of any change to any field, and hence wrap it up into a
+> > Command that has an undo.  In other words, the aspect can capture the
+> > *effects* of invoking an operation such that it might be undone.
+> >
+> > Meanwhile, your (Mike's) job stuff effectively is encapsulating those
+> > operations such that they can be invoked - in other words, they
+> > represent the *cause* of a change.
+> >
+> > What I'm mulling on is how to combine this cause (UI job) and effect
+> > (domain object command built dynamically via aspects) such that an
+> > invoking Undo on the UI job just delegates to the corresponding undo
+> > on the command.  Any suggestions?  My best idea at the moment is that
+> > the UI job creates an ICommand that is defined by a domain package,
+> > and then binds it to a threadlocal.  The aspect would then pick this
+> > up and append the mutations to it.  The Job/ICommand pair would be
+> > managed by the UI layer.
+> >
+> > Something to think about... Dan
+> >
+> > --- Mike Evans <mike.evans at incremental.eu.com> wrote :
+> >
+> >
+> >> Journeyman stuff today. Both ...gui and ...gui.acme projects
+> >> updated.
+> >>
+> >> * add further DnD types - Date and even Boolean (the latter is
+> >> pointless but at least consistent) * using platform functionality
+> >> for restoring gui state - one gotcha - I have to close all editors
+> >> on application close as the objects they're displaying do not (yet)
+> >> live across application sessions * using using annotations for
+> >> parameter display
+> >>
+> >> Have not addded keyboard accelerators yet. I think the platform key
+> >> bindings functionality has got all clever since I last looked at it
+> >> so will have to gen up on it.
+> >>
+> >> So next stages - as the last progress mail!
+> >>
+> >> Mike E.
+> >>
+> >>
+> >>
+> >>
+> >>
+> >> Dan Haywood wrote:
+> >>
+> >>
+> >>>>> Mike: within
+> >>>
+> >>>
+> >>>> -----Original Message----- From:
+> >>>> rcpviewer-contributors-admin at berlios.de
+> >>>> [mailto:rcpviewer-contributors-admin at berlios.de]On
+> >>
+> >> Behalf Of Mike Evans
+> >>
+> >>>>
+> >>>> OK - I'm spending too long on this stuff now so the
+> >>>> deliverables will be slowing a bit from now on.
+> >>>
+> >>>
+> >>> First priority has to be the day job.  Glad you've been able to
+> >>> devote so much time recently - the UI is starting to take shape.
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>> One question : Dan - can we gain access to the name of an
+> >>>> operation's parameters? ie. op( int first, int second) >
+> >>>> extract "first" and "second" This would make a lot more sense
+> >>>> as field labels in the actions view and arguments display.
+> >>>
+> >>>
+> >>> That's supported, though using annotations rather than vanilla
+> >>> Java reflection (which doesn't/can't give access to the formal
+> >>> parameter
+> >>
+> >> names).
+> >>
+> >>> See
+> >>>
+> >>
+> >>
+> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExpli
+> citlyNamed
+> >>
+> >>
+> >>> (in ...domain.tests plugin).   The fixture this works on is:
+> >>>
+> >>> @InDomain public class Appointment { public void moveTo(
+> >>> @Named("newPeriod") @DescribedAs("The time when the appointment
+> >>> should now be scheduled") TimePeriod newPeriod,
+> >>> @Named("rationale") @DescribedAs("The reasoning for moving the
+> >>> appointment") String rationale) { } public static void createAt(
+> >>> @Named("timePeriod") @DescribedAs("When the appointment is to run
+> >>> to and from") TimePeriod timePeriod, @Named("agenda")
+> >>> @DescribedAs("The agenda for this appointment") String agenda) {
+> >>> } }
+> >>>
+> >>>
+> >>> -- Also, a couple of annoyances... 1. can the GUI remember its
+> >>> initial size across invocations?  It always starts by taking up
+> >>> the whole screen (which on my widescreen laptop, is rather a
+> >>> lot...)
+> >>>
+> >>> 2. can you add the accelerator for File menu?
+> >>>
+> >>>
+> >>> Dan
+> >>>
+> >>>
+> >>> _______________________________________________
+> >>> Rcpviewer-contributors mailing list
+> >>> Rcpviewer-contributors at lists.berlios.de
+> >>> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>
+> >>>
+> >>
+> >> -- Mike Evans Incremental Ltd. www.incremental.eu.com
+> >>
+> >> _______________________________________________
+> >> Rcpviewer-contributors mailing list
+> >> Rcpviewer-contributors at lists.berlios.de
+> >> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >
+> >
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > Rcpviewer-contributors mailing list
+> > Rcpviewer-contributors at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >
+> >
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+>
+>
+
+
+
+
+From mike.evans at incremental.eu.com  Mon Jul 18 10:38:37 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 18 Jul 2005 09:38:37 +0100
+Subject: [Rcpviewer-contributors] progress 20050718
+Message-ID: <42DB6A8D.3060203@incremental.eu.com>
+
+Big week this week as I go off to a shipyard to see whether Incremental 
+gets the money to continue past September.  Hence I'll be doing no more 
+on RcpViewer this week.
+
+So progress - over the weekend.  In summary much faff - with 'faff' 
+defined as little progress for much effort.  I knew I'd hate DnD.
+
+DnD:
+We now have DnD for DomainObjects which is 'type-safe' - e.g. you can't 
+drop a EasyBean instance on an AnotherEasyBean field.  You can see this 
+if you open the action arguments dialog for the Counter.increment( 
+EasyBean bean1, AnotherEasyBean bean2) method, and drag instances from 
+the session tree onto it.
+The impl smells so I'd ask Ted to have a look; in particular:
+
+DnD Serialisation:
+DnD should work by converting the dragged objects to platform bytes and 
+converting back.  This is how all the primitive xxxTransfer classes in 
+the dnd package work.  However IDomainObject's, and the pojo's they wrap 
+are not necessarily serializable.  Hence I cannot use the standard 
+approach of serialising/deserialising to/from byte arrays.
+Moreover, with our intention to have a 'live' gui that automagically 
+picks up changes to domain objects, we really do not want multiple 
+instances relating to the same domain pojo.
+Hence instead my DomainObjectTransfer class simply records the 
+IDomainObject reference and 'emulates' all the to/from platform bytes 
+stuff.  This is a hack.
+I think better would be to use an id/proxy object that can be 
+serialised/deserialised and on the drop operation allows us to obtain 
+the appropriate IDomainObject from the session.  Any thoughts as to 
+this?  Do you need some sort of key for objects in the session for any 
+other purpose?
+
+Other Stuff: LabelProvider
+I have added an additional extension point (IDomainObjectLabelProvider) 
+to allow users to specialise the display text and icon for instances of 
+particular IDomainClass's.  This is used by the DefaultEditor, 
+FieldBuilders etc.
+Field builder and label provider factories are back in the base gui 
+package as I take any opportunity I can to decrease scope of objects. 
+Sorry for all this package juggling.  Just to confuse SVN...
+
+AAAARGGHH! Stuff : SVN
+... which brings me to SVN.
+I have attached a screenshot of the error(s) I get everytime I try to 
+sync the ...gui project. Any ideas?
+Hence I had to sync / commit at (almost) file level this time.  I think 
+everything is OK.  Let me know if you have any problems.  When i get 
+back, I'll export the project afresh from the repository to see if this 
+gets rid of my problems.
+
+
+Finally: AspectJ
+Dan - Though I have AspectJ in and the ...acme and ...runtime.domain 
+projects dutifully have aspectJ natures, it does not seem to actually 
+change anythign when I run.  Something else for me to look at on my return.
+
+Mike E.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: AAARGGH.PNG
+Type: image/png
+Size: 14752 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/rcpviewer-contributors/attachments/20050718/d4799d55/attachment.png>
+
+From dan at haywood-associates.co.uk  Wed Jul 20 23:46:29 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 20 Jul 2005 22:46:29 +0100
+Subject: [Rcpviewer-contributors] progress 20050718
+In-Reply-To: <42DB6A8D.3060203@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEMPDDAA.dan@haywood-associates.co.uk>
+
+Mike, within..
+
+
+> DnD:
+> We now have DnD for DomainObjects which is 'type-safe' - e.g. you can't
+> drop a EasyBean instance on an AnotherEasyBean field.  You can see this
+> if you open the action arguments dialog for the Counter.increment(
+> EasyBean bean1, AnotherEasyBean bean2) method, and drag instances from
+> the session tree onto it.
+> The impl smells so I'd ask Ted to have a look; in particular:
+
+Still, it seems to work ok for me.  Thanks.
+
+
+> Other Stuff: LabelProvider
+> I have added an additional extension point (IDomainObjectLabelProvider)
+> to allow users to specialise the display text and icon for instances of
+> particular IDomainClass's.  This is used by the DefaultEditor,
+> FieldBuilders etc.
+
+Ooh. - we might be about to have a rare disagreement here.  The UI should be
+able to obtain *all* of its information from the IDomainObject and
+associated IDomainClass.  So it shouldn't be going to some other repository
+(ie the manifest) to pick up this extra information.
+
+For example, a domain object an Order might want to have different icons (or
+perhaps different overlays of icons) to represent its state.  Even though
+this is rendered on the UI, it is still business logic and so belongs in the
+domain object.
+
+Of course, the way in which an icon is described in domain objects (using an
+annotation) will introduce a coupling to Eclipse itself.  (Then again,
+putting this information into a manifest is also a dependency).  At any
+rate, that's why I introduced the idea of IDomainBuilder.  If you
+Navigate>Open Type for RcpViewerProgModelBuilder (in ...domain.runtime) then
+you can see the code for picking up an @ImageUrlAt annotation.  This later
+annotation is defined in the ...progmodel.rcpviewer package.  And you can
+see an example usage in ProspectiveSale fixture (...domain.fixture) with
+test in TestImageDescriptor (...domain.tests).
+
+So I'm hoping the above is persuasive enough, because I know that Ted
+doesn't really agree with me on this sort of use of annotations.  I just
+think its an easier binding than putting this info into (what is basically)
+a deployment descriptor.
+
+
+
+> Field builder and label provider factories are back in the base gui
+> package as I take any opportunity I can to decrease scope of objects.
+> Sorry for all this package juggling.
+
+I have some package juggling to do myself, but I'll leave it till it becomes
+too painful.
+
+
+> AAAARGGHH! Stuff : SVN
+> ... which brings me to SVN.
+> I have attached a screenshot of the error(s) I get everytime I try to
+> sync the ...gui project. Any ideas?
+> Hence I had to sync / commit at (almost) file level this time.  I think
+> everything is OK.  Let me know if you have any problems.  When i get
+> back, I'll export the project afresh from the repository to see if this
+> gets rid of my problems.
+
+That really shouldn't be necessary - but no ideas as to what's going on in
+your sync view.
+
+That said, I've now taken to using TSVN for all updates and all commits, and
+I just do them on SVN/trunk/workspace.  It's a bit of a sledgehammer, and of
+course it isn't as pretty as the Eclipse sync view, but it *is* reliable.
+But of course I am using Subclipse implicitly every time I do a refactoring
+(move or rename), because it is calling the appropriate SVN APIs.  And
+that's worth a lot to me.  I definitely don't want this to be the first OSS
+project that moves from SVN to CVS!
+
+
+
+> Finally: AspectJ
+> Dan - Though I have AspectJ in and the ...acme and ...runtime.domain
+> projects dutifully have aspectJ natures, it does not seem to actually
+> change anythign when I run.  Something else for me to look at on
+> my return.
+
+Dunno - I've done a complete update (I move the old trunk to one side now
+and again after I've committed) and seems okay.
+
+Try opening up the cross references view and see if the dummy
+de.berlios.rcpviewer.progmodel.standard.aspects.Customer class (in
+...domain.runtime) is annotated with at all.  So far as the gui.acme plugin
+is concerned, all I had to do in the end was to expose the classes to the
+aspect: Project > Properties > AspectJ Aspect Path > Libraries > Add Class
+Folder > de.berlios.rcpviewer.domain.runtime/bin.  This info doesn't seem to
+get put into the manifest, I guess its in .project?
+
+Last thing: since there was that issue a while back regarding extension
+point metadata being cached, I now have my run configuration to always flush
+the runtime workspace.  Perhaps that's worth a try?
+
+And last last thing: you could also try enabling the trace aspect to see if
+that gives you any joy (either directly against the ...aspects.Customer as
+(a) regular project, (b) plugin project, then same again against the
+...gui.acme classes).
+
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Thu Jul 21 16:36:43 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 21 Jul 2005 15:36:43 +0100
+Subject: [Rcpviewer-contributors] progress 20050718
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKCEMPDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKCEMPDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42DFB2FB.9080508@incremental.eu.com>
+
+Dan, within...
+
+Dan Haywood wrote:
+
+> Mike, within..
+> 
+> 
+> 
+>>DnD:
+>>We now have DnD for DomainObjects which is 'type-safe' - e.g. you can't
+>>drop a EasyBean instance on an AnotherEasyBean field.  You can see this
+>>if you open the action arguments dialog for the Counter.increment(
+>>EasyBean bean1, AnotherEasyBean bean2) method, and drag instances from
+>>the session tree onto it.
+>>The impl smells so I'd ask Ted to have a look; in particular:
+> 
+> 
+> Still, it seems to work ok for me.  Thanks.
+> 
+
+Yuh - it works, but ...
+
+> 
+> 
+>>Other Stuff: LabelProvider
+>>I have added an additional extension point (IDomainObjectLabelProvider)
+>>to allow users to specialise the display text and icon for instances of
+>>particular IDomainClass's.  This is used by the DefaultEditor,
+>>FieldBuilders etc.
+> 
+> 
+> Ooh. - we might be about to have a rare disagreement here.  The UI should be
+> able to obtain *all* of its information from the IDomainObject and
+> associated IDomainClass.  So it shouldn't be going to some other repository
+> (ie the manifest) to pick up this extra information.
+> 
+> For example, a domain object an Order might want to have different icons (or
+> perhaps different overlays of icons) to represent its state.  Even though
+> this is rendered on the UI, it is still business logic and so belongs in the
+> domain object.
+> 
+> Of course, the way in which an icon is described in domain objects (using an
+> annotation) will introduce a coupling to Eclipse itself.  (Then again,
+> putting this information into a manifest is also a dependency).  At any
+> rate, that's why I introduced the idea of IDomainBuilder.  If you
+> Navigate>Open Type for RcpViewerProgModelBuilder (in ...domain.runtime) then
+> you can see the code for picking up an @ImageUrlAt annotation.  This later
+> annotation is defined in the ...progmodel.rcpviewer package.  And you can
+> see an example usage in ProspectiveSale fixture (...domain.fixture) with
+> test in TestImageDescriptor (...domain.tests).
+> 
+> So I'm hoping the above is persuasive enough, because I know that Ted
+> doesn't really agree with me on this sort of use of annotations.  I just
+> think its an easier binding than putting this info into (what is basically)
+> a deployment descriptor.
+> 
+Yup - I expected comments on these lines.  Having spectated at your 
+discussions with Ted, I am trying to keep both camps happy.
+
+As per FieldBuilders, standard behavior is to look for a specialist 
+extension and if none found, use a default LabelProvider.  I intend to 
+build all the annotation-based logic into this default implementation, 
+obviously in some sort of fail-safe way if the annotations aren't 
+present.  This I could call DansDefaultLabelProvider.
+Ted can then choose to override this behaviour with his own 
+IDomainObjectLabelProvider extension which can be configured any way he 
+wishes.
+Then we can release both and see which the user community favours.
+This is clearly favouritism to Dan as his will be the default and Ted's 
+the extension, so next time there's a disagreemet I'll side with Ted.
+
+
+
+> 
+> 
+>>Field builder and label provider factories are back in the base gui
+>>package as I take any opportunity I can to decrease scope of objects.
+>>Sorry for all this package juggling.
+> 
+> 
+> I have some package juggling to do myself, but I'll leave it till it becomes
+> too painful.
+> 
+> 
+> 
+>>AAAARGGHH! Stuff : SVN
+>>... which brings me to SVN.
+>>I have attached a screenshot of the error(s) I get everytime I try to
+>>sync the ...gui project. Any ideas?
+>>Hence I had to sync / commit at (almost) file level this time.  I think
+>>everything is OK.  Let me know if you have any problems.  When i get
+>>back, I'll export the project afresh from the repository to see if this
+>>gets rid of my problems.
+> 
+> 
+> That really shouldn't be necessary - but no ideas as to what's going on in
+> your sync view.
+> 
+> That said, I've now taken to using TSVN for all updates and all commits, and
+> I just do them on SVN/trunk/workspace.  It's a bit of a sledgehammer, and of
+> course it isn't as pretty as the Eclipse sync view, but it *is* reliable.
+> But of course I am using Subclipse implicitly every time I do a refactoring
+> (move or rename), because it is calling the appropriate SVN APIs.  And
+> that's worth a lot to me.  I definitely don't want this to be the first OSS
+> project that moves from SVN to CVS!
+> 
+> 
+> 
+> 
+>>Finally: AspectJ
+>>Dan - Though I have AspectJ in and the ...acme and ...runtime.domain
+>>projects dutifully have aspectJ natures, it does not seem to actually
+>>change anythign when I run.  Something else for me to look at on
+>>my return.
+> 
+> 
+> Dunno - I've done a complete update (I move the old trunk to one side now
+> and again after I've committed) and seems okay.
+> 
+> Try opening up the cross references view and see if the dummy
+> de.berlios.rcpviewer.progmodel.standard.aspects.Customer class (in
+> ...domain.runtime) is annotated with at all.  So far as the gui.acme plugin
+> is concerned, all I had to do in the end was to expose the classes to the
+> aspect: Project > Properties > AspectJ Aspect Path > Libraries > Add Class
+> Folder > de.berlios.rcpviewer.domain.runtime/bin.  This info doesn't seem to
+> get put into the manifest, I guess its in .project?
+> 
+> Last thing: since there was that issue a while back regarding extension
+> point metadata being cached, I now have my run configuration to always flush
+> the runtime workspace.  Perhaps that's worth a try?
+> 
+> And last last thing: you could also try enabling the trace aspect to see if
+> that gives you any joy (either directly against the ...aspects.Customer as
+> (a) regular project, (b) plugin project, then same again against the
+> ...gui.acme classes).
+> 
+
+I'll sort out the aspcet stuff - I have not really looked very hard now.
+Any lessons learnt I'll add to the wiki ... if I can rememeber where to 
+go ... ;-)
+
+> 
+> Dan
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Fri Jul 22 02:28:05 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 22 Jul 2005 01:28:05 +0100
+Subject: [Rcpviewer-contributors] XPetStore - first look.
+Message-ID: <LGEELLOAEBMLCOGIKLMKGENHDDAA.dan@haywood-associates.co.uk>
+
+Been developing the xpetstore application.  Although not finished by any
+means, it is starting to look like what I think an rcpviewer application
+will look like "in real life".  It is certainly reminiscent of the DSFA
+business objects I've been coding up this last year.
+
+The comments are not complete, and those that are have been written in the
+style of a tutorial in explaining things that - well - aren't written yet.
+But hopefully it will act as a useful focus for ongoing development.
+
+For example, I found myself inventing quite a stack of new annotations, all
+of which I've put into the extended programming model plugin package:
+* Optional
+* MinLengthOf
+* MaxLengthOf
+* Mask
+* Lookup
+* Invisible
+* ImmutableOncePersisted
+* FieldLengthOf
+* BusinessKey
+So I need to expose all of these and write tests for 'em.  That'll keep me
+out of mischief.
+
+I've also introduced the IAppContainer interface, as described in
+[features/app-container].  Just enough to get a clean compile for now.
+Eventually want to integrate this stuff with Ted's forthcoming Spring-y
+stuff.
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Mon Jul 25 10:26:38 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 25 Jul 2005 09:26:38 +0100
+Subject: [Rcpviewer-contributors] Progress 20050725
+Message-ID: <42E4A23E.9030604@incremental.eu.com>
+
+Hullo All,
+
+PROGRESS
+The actions view is now a DnD-enabled tree.
+You should be able to drag domain object instances from the session tree 
+onto action view branches representing the appropriate parameter.  The 
+DnD implementation is I believe optimal - just don't look at what your 
+preocessor is doing during the drag operation!
+The major drawback is handling primitive params - it doesn't.  Next step 
+is to change it to a TableTree with CellEditors for manually entering 
+these.  In the meantime the Argument Dialog is used.
+BTW : let me know if occasionally (i.e. across runs of the app) one or 
+more of the domain classes appears not be DnD'able - I have had a couple 
+of funnies that I cannot reproduce.
+
+Thereafter one of:
+1) Key bindings
+2) Graphics
+3) Commands / Jobs - redo / undo
+4) Representing collections in the DefaultEditor.
+
+I think I'll do 4) unless there other priorities?
+
+ASPECTJ
+Got it working - the build settings required are in '.settings' off the 
+project root and I had not picked these up via SVN.  A complete refresh 
+of the project from the repository, plus some faffing, got everything in 
+sync.
+
+
+CHECKSTYLE
+... grumble mumble.... checkstyle enforcement ... police state ..... 
+fascim .... will do .... soonish....
+
+
+DOMAIN NAME
+At this stage we need a '.org' or a '.net'.
+The name 'ubiquity' is used by commecial biggies (eg. 
+http://www.ubiquitysoftware.com/home.php) so perhaps we should avoid the 
+direct name 'uniquity' attached to any suffix ( 'platform', 'solutions' 
+etc.)
+Hence I like the made up or abbrieviated options.
+Alas I think 'oo'... is too clever.
+Hence ubiqty, ubqty, ubqwerty would be best.
+Perhaps also www.ubiquitous.org.uk?
+
+Mike E.
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Mon Jul 25 18:11:12 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Mon, 25 Jul 2005 17:11:12 +0100
+Subject: [Rcpviewer-contributors] Progress 20050725
+In-Reply-To: <42E4A23E.9030604@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEOFDDAA.dan@haywood-associates.co.uk>
+
+> BTW : let me know if occasionally (i.e. across runs of the app) one or 
+> more of the domain classes appears not be DnD'able - I have had a couple 
+> of funnies that I cannot reproduce.
+
+Ok, will be on the lookout.
+
+> 
+> Thereafter one of:
+> 1) Key bindings
+> 2) Graphics
+> 3) Commands / Jobs - redo / undo
+> 4) Representing collections in the DefaultEditor.
+> 
+> I think I'll do 4) unless there other priorities?
+
+
+Agreed, (4) makes a lot of sense to do next.
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Jul 26 09:47:03 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 26 Jul 2005 08:47:03 +0100
+Subject: [Rcpviewer-contributors] SWTUtil
+Message-ID: <42E5EA77.6070408@incremental.eu.com>
+
+Ted,
+
+What are your plans for the net.sf.plugins.utils?
+The reason that I ask is that I would like to use and extend (er.. 
+actually am doing so) some of their functionality.
+However currently they are fairly raw:
+1) no error checking
+2) no javadoc
+3) plugin relies on 'compatability' layer
+So I would wish to tidy them up a bit before use.
+
+Hence at the moment I have cheekily taken a copy of SWTUtils and plonked 
+it into the de.berlios.rcpviewer.gui.util package, and then modifed as I 
+  have needed.
+
+So, various questions:
+1) Are you happy for me to start playing with the net.sf... plugins?
+2) Would you like me to add any of the other util classes within the 
+de.berlios.rcpviewer.gui.util package?
+3) Are you happy to remove the compatability layer?
+4) Or should I continue as now and extract the bits I want into the main 
+gui plugin?
+I suggest the latter not because of 'not-invented-here' syndrom but 
+because if I  modify the net.sf... packages it might screw up your real 
+code.
+
+Mike E.
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Tue Jul 26 11:14:24 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 26 Jul 2005 10:14:24 +0100
+Subject: [Rcpviewer-contributors] Progress 20050726
+Message-ID: <42E5FEF0.7030900@incremental.eu.com>
+
+No new functionality checked in today - partway through converting 
+ActionsView to an editable tree.  Loyts of clever CellEditors to write ...
+
+Had my 'Doh!' moment for the day whilst investigating the 'intermittent' 
+bug which prevents some Domain classess from being DnD'd.  The actions 
+view was only picking up domain classes that had been instantiated. 
+Doh!  So until the fix is committed just ensure you create an instance 
+of each dragable class first.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Wed Jul 27 11:18:28 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 27 Jul 2005 10:18:28 +0100
+Subject: [Rcpviewer-contributors] Progress 20050727
+Message-ID: <42E75164.4070207@incremental.eu.com>
+
+Continuing converting actions tree to accept direct text entry.
+Underestimated faff with CellEditors so this will take the rest of the 
+week (!)
+Partly this is because I want to extend to handle all primitive types, 
+and arrays, and wrapped primitives etc..  so there is a fair bit of 
+boilerplate to create.  And then there is extending DnD for these.
+
+Away tomorrow at Tall Ships race in Newcastle.  More on Friday.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From emorning at yahoo.com  Wed Jul 27 14:34:02 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Wed, 27 Jul 2005 07:34:02 -0500
+Subject: [Rcpviewer-contributors] Re: SWTUtil
+In-Reply-To: <42E5EA77.6070408@incremental.eu.com>
+References: <42E5EA77.6070408@incremental.eu.com>
+Message-ID: <42E77F3A.3050307@yahoo.com>
+
+Hi guys,
+
+Sorry for having gone dark on you the last couple of weeks.  I got 
+hammered by work when I got back from vacation.
+
+
+Mike Evans wrote:
+
+> Ted,
+>
+> What are your plans for the net.sf.plugins.utils?
+> The reason that I ask is that I would like to use and extend (er.. 
+> actually am doing so) some of their functionality.
+> However currently they are fairly raw:
+> 1) no error checking
+> 2) no javadoc
+> 3) plugin relies on 'compatability' layer
+> So I would wish to tidy them up a bit before use.
+>
+> Hence at the moment I have cheekily taken a copy of SWTUtils and 
+> plonked it into the de.berlios.rcpviewer.gui.util package, and then 
+> modifed as I  have needed.
+>
+> So, various questions:
+> 1) Are you happy for me to start playing with the net.sf... plugins?
+
+No problem, play away.
+That's why I was interested in making them public, so others might be 
+motivated to help me improve them.
+
+> 2) Would you like me to add any of the other util classes within the 
+> de.berlios.rcpviewer.gui.util package?
+
+
+Feel free.
+
+> 3) Are you happy to remove the compatability layer?
+
+
+No problem.  I just used to automatically adding that plugin but I don't 
+think it's needed anymore.
+
+> 4) Or should I continue as now and extract the bits I want into the 
+> main gui plugin?
+> I suggest the latter not because of 'not-invented-here' syndrom but 
+> because if I  modify the net.sf... packages it might screw up your 
+> real code.
+
+
+That's why we test, right?
+
+
+
+
+From mike.evans at incremental.eu.com  Fri Jul 29 10:38:26 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 29 Jul 2005 09:38:26 +0100
+Subject: [Rcpviewer-contributors] Progress 20050729
+Message-ID: <42E9EB02.5080108@incremental.eu.com>
+
+Actions tree view now has in-place editing via CellEditors.
+Note that this only works with the types you find in the ...celleditors 
+package - ie. domain objects and int's, as I have yet to code any other 
+cell editors (or DnD adapters).
+I have added some new beans to the .acme project so that I can next 
+cover all primitive types.
+Then I'll think about better null handling.
+Then I'll think about arrays.
+The I'll think about Collections (as promised earlier this week!).
+Sigh - boilerplate faff must must be done.
+
+Note a project dependecy change.  I have started using and editing Ted's 
+net.sf.plugins.utils package so you'll need to update that and add it to 
+the .gui project dependency list.
+
+Finally - Ted you'll note that I do quite a bit of manipulation of the 
+default JFace object behaviours:
+* dynamically changing the viewer's cell editors - see ActionsViewPage
+* overriding default CellEditor behaviour - all of .celleditors package.
+Let me know if you are uncomfortable with anything I am doing and/or 
+have better ideas...
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Sun Jul 31 11:01:40 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sun, 31 Jul 2005 10:01:40 +0100
+Subject: [Rcpviewer-contributors] action view + prerequisites
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEPHDDAA.dan@haywood-associates.co.uk>
+
+Hi Mike,
+
+Thanks for all the work on the action view.  I know you've still got a bunch
+more boilerplate to do, so before you go do that I wanted to feedback some
+thoughts 'cos I'm not sure the treeview approach will be quite rich enough.
+
+To make this concrete, let's just consider one of operations in the Petstore
+app (though actually I paraphrase cos it isn't implemented quite like this
+at the moment).  One is:
+
+public OrderItem addOrderLine(
+      @DescribedAs("Item to be purchased")
+      Item item,
+      @Named("Quantity")
+      @DescribedAs("Number of the item to be purchased; if not specified
+then assume 1")
+      @Optional
+      int quantity)
+
+which returns an OrderItem (an order line of an Order) for purchasing said
+quantity of said Item.
+
+Now there are two prerequisites to this.  The first is declarative in the
+parameter list in that the Item is not @Optional (though the quantity is).
+If this prerequisite is not met then the operation should be disabled.  I
+imagined this being rendered as an OK button being greyed out.  Your earlier
+dialog box had something a little like this.
+
+The second prerequisite is programmatic to specify says that an order lines
+can only be added provided that the order has not already have shipped.
+This would be coded something like:
+
+public IPrerequisites addOrderLinePre(Item item, int quantity) {
+  return Prerequisites
+         .require(getOrder().getStatus() == Order.State.NOT_SHIPPED, "Cannot
+have been shipped")
+         .andRequire(quantity >= 0, "Quantity cannot be negative");
+}
+
+If this prereq is not satisfied, then again the operation should be
+disabled.  I envisaged that the error message (accessible from the returned
+IPrerequisites) would appear as a tooltip over a disabled OK button.
+
+So I'm thinking that the action view will at least need to have an OK button
+for each operation, even those that take no parameters.
+
+My suggestion then is would it be possible to reimplement the action view in
+a style similar to the default editors for the domain objects themselves?  I
+had a vision that each operation would still be listed but then when
+clicking on the operation name would reveal the parameter list (if any)
+along with an OK button that would initially be disabled if prerequisites
+have not been met?
+
+Another benefit is that it should make it easier to be able to group related
+operations together.
+
+Something else related: I've been mulling over these operations with the
+prerequisites and it seems to me that the metamodel (IDomain et al) should
+work harder on behalf of the UI layer.  In particular, I think that each
+IDomainObject should be able to return an IOperation for each of the (EMF)
+EOperations.  This IOperation should then provide listeners so that the UI
+can be told directly when to enable or disable the OK button, rather than
+continually have to poll the metamodel.  So, if another operation were
+invoked that shipped the Order, then any pending "addOrderLine" operation
+would be notified that it should now be disabled out.
+
+Similarly, I think that the IDomainObject should be able to return an
+IAttribute, because there are prerequisites for the editability of
+attributes also.
+
+Just wanted to say all this before you spend ages doing boring boilerplate
+code.  If you agree, it might be worthwhile leaving the action view as it is
+until I've worked on these IOperations etc and turn to something else (eg
+collections).  Alternatively, carry on to get the action view working as a
+first-cut, knowing we'll need to go round the loop to get prerequisites
+functionality working.
+
+Let me know what you think...
+
+Dan
+
+
+
+
+
+From mike.evans at incremental.eu.com  Sun Jul 31 13:38:34 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sun, 31 Jul 2005 12:38:34 +0100
+Subject: [Rcpviewer-contributors] Progress 20050731 & Re: action view + prerequisites
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKAEPHDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKAEPHDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42ECB83A.7060507@incremental.eu.com>
+
+Latest, greatest action view impl committed.
+Two major changes:
+
+1. Primitives
+There are field builders and DnD transfer adapters for all primitive 
+types and their wrappers.  No units tests yet as I still consider myself 
+to be 'catching up'.
+Once the impl's settle down a bit and Dan has enough of a GUI to work on 
+I'll go back to test these.
+
+2. Actions View
+In response to Dan's mail below I have offered a partial solution whilst 
+retaining the tree.  The core idea is the use of an IColorProvider to 
+indicate whether a tree item is valid, and dynamic tooltip to offer more 
+info.  At the moment the logic is pretty dumb, simply preventing nulls, 
+but can easily be extended once Dan's meta model provides more info. 
+Really all I am doing is demonstrating possible GUI behaviour.  Issues 
+arising:
+* is it not bad GUI practice to rely on colous alone?
+* I find the tooltip thing really annoying - would it be better to have 
+a context-sensitive text field below the main tree?
+* currently if an action is not valid (i..e params are null) it will not 
+fire - hence making redundant the 'ActionArg's dialog.  However perhaps 
+we could still use this to offer more friendly user feedback if the user 
+does try to execute an invalid operation..?
+
+
+Still to do [and when I'll do it]:
+* Cell editors for all primitive types (realised I had not done these as 
+typing this mail!) [tomorrow]
+* ARRAYS - more faff - [leave for the moment and get on with collections]
+* DnD type safety is currently too tight - cannot drag a short onto an 
+int [the future].
+
+Dan - there are further comments below on your mail.
+
+Mike E.
+
+
+Dan Haywood wrote:
+> Hi Mike,
+> 
+> Thanks for all the work on the action view.  I know you've still got a bunch
+> more boilerplate to do, so before you go do that I wanted to feedback some
+> thoughts 'cos I'm not sure the treeview approach will be quite rich enough.
+> 
+> To make this concrete, let's just consider one of operations in the Petstore
+> app (though actually I paraphrase cos it isn't implemented quite like this
+> at the moment).  One is:
+> 
+> public OrderItem addOrderLine(
+>       @DescribedAs("Item to be purchased")
+>       Item item,
+>       @Named("Quantity")
+>       @DescribedAs("Number of the item to be purchased; if not specified
+> then assume 1")
+>       @Optional
+>       int quantity)
+> 
+> which returns an OrderItem (an order line of an Order) for purchasing said
+> quantity of said Item.
+> 
+> Now there are two prerequisites to this.  The first is declarative in the
+> parameter list in that the Item is not @Optional (though the quantity is).
+> If this prerequisite is not met then the operation should be disabled.  I
+> imagined this being rendered as an OK button being greyed out.  Your earlier
+> dialog box had something a little like this.
+> 
+> The second prerequisite is programmatic to specify says that an order lines
+> can only be added provided that the order has not already have shipped.
+> This would be coded something like:
+> 
+> public IPrerequisites addOrderLinePre(Item item, int quantity) {
+>   return Prerequisites
+>          .require(getOrder().getStatus() == Order.State.NOT_SHIPPED, "Cannot
+> have been shipped")
+>          .andRequire(quantity >= 0, "Quantity cannot be negative");
+> }
+> 
+> If this prereq is not satisfied, then again the operation should be
+> disabled.  I envisaged that the error message (accessible from the returned
+> IPrerequisites) would appear as a tooltip over a disabled OK button.
+> 
+> So I'm thinking that the action view will at least need to have an OK button
+> for each operation, even those that take no parameters.
+> 
+> My suggestion then is would it be possible to reimplement the action view in
+> a style similar to the default editors for the domain objects themselves?  I
+> had a vision that each operation would still be listed but then when
+> clicking on the operation name would reveal the parameter list (if any)
+> along with an OK button that would initially be disabled if prerequisites
+> have not been met?
+> 
+> Another benefit is that it should make it easier to be able to group related
+> operations together.
+> 
+> Something else related: I've been mulling over these operations with the
+> prerequisites and it seems to me that the metamodel (IDomain et al) should
+> work harder on behalf of the UI layer.  In particular, I think that each
+> IDomainObject should be able to return an IOperation for each of the (EMF)
+> EOperations.  This IOperation should then provide listeners so that the UI
+> can be told directly when to enable or disable the OK button, rather than
+> continually have to poll the metamodel.  So, if another operation were
+> invoked that shipped the Order, then any pending "addOrderLine" operation
+> would be notified that it should now be disabled out.
+> 
+
+Much of a muchness really.  I'll put all metamodel polling into utility 
+methods anyway so the code will not be much clearer one way or the 
+other.  Go for whatever you think is easiest form a maintainability 
+point of view.
+
+> Similarly, I think that the IDomainObject should be able to return an
+> IAttribute, because there are prerequisites for the editability of
+> attributes also.
+> 
+> Just wanted to say all this before you spend ages doing boring boilerplate
+> code.  If you agree, it might be worthwhile leaving the action view as it is
+> until I've worked on these IOperations etc and turn to something else (eg
+> collections).  Alternatively, carry on to get the action view working as a
+> first-cut, knowing we'll need to go round the loop to get prerequisites
+> functionality working.
+> 
+
+I avoided boring boilerplate by super-duper generic parent classes. 
+Time will only tell if this was sensible...
+
+> Let me know what you think...
+> 
+> Dan
+> 
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+

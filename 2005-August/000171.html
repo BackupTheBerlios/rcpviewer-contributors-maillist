@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: running petstore against current gui...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20running%20petstore%20against%20current%0A%20gui...&In-Reply-To=%3C42EF2C29.9060301%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000170.html">
+   <LINK REL="Next"  HREF="000173.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: running petstore against current gui...</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20running%20petstore%20against%20current%0A%20gui...&In-Reply-To=%3C42EF2C29.9060301%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: running petstore against current gui...">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Tue Aug  2 10:17:45 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000170.html">[Rcpviewer-contributors] Re: running petstore against current gui...
+</A></li>
+        <LI>Next message: <A HREF="000173.html">[Rcpviewer-contributors] Re: running petstore against current gui...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#171">[ date ]</a>
+              <a href="thread.html#171">[ thread ]</a>
+              <a href="subject.html#171">[ subject ]</a>
+              <a href="author.html#171">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok.
+Well I have just blithely started to add an iterateRegisteredClasses() 
+method to the DomainRegistryUtil which would simply return all classes 
+defined by the extension point.
+HOWEVER...
+The extension point is designed as only one means by which the gui could 
+be made aware of domain clasess.  Ultimately the domain might be 
+populated other ways (especially for testing) -  hence all the 
+DomainBootstrapFactory faff.
+Hence the GUI should not distinguish classes due to the extension point, 
+nor by any attributes on the extension point.
+Does the model have any concept of first class/second class objects? 
+(e.g for persistence those with their own lifecycles v. dependent 
+objects).  If so could we use this to filter the objects to be displayed 
+on the class bar?
+
+Mike E.
+
+Dan Haywood wrote:
+
+&gt;&gt;&gt;<i>2. I'm only registering 4 classes, but all domain classes appear in the
+</I>&gt;&gt;&gt;<i>classbar view.  Could you show only the 4 classes in this view?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Err... it being early I may be being dumb but aren't domain classes by 
+</I>&gt;&gt;<i>definition those that are registered?  Have a look at 
+</I>&gt;&gt;<i>DomainRegistryUtil.iterateAllClasses() - I basically get all domains 
+</I>&gt;&gt;<i>from the domain registry and then iteratte through domain.classes() on 
+</I>&gt;&gt;<i>each.  What ought I be doing?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Sorry, I'm overloading the word &quot;register&quot;.  So we need to distinguish two different sets of domain classes.  The first is the set make up the IDomain.  We find these by traversing all references, so in principal it should only be necessary to &quot;register&quot; one or two central classes and the rest should be navigable from them.
+</I>&gt;<i> 
+</I>&gt;<i> The second is a subset of the first, representing the starting points for a user to interact with the application.  These are what should be in the classbar.
+</I>&gt;<i> 
+</I>&gt;<i> I'm hoping that we can use the extension point to represent the second set.  Since the classes in the class bar are pretty central, this should be enough to ensure that the first set is built up correctly.  If it isn't, then we could always add a boolean attribute (showInClassBar) to the plugin point?
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -------
+</I>&gt;<i> Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>Responses below...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Dan Haywood wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>... thrown up a couple of things, dead easy to fix I'm sure.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>1. if you instantiate an Order then fails to build the editor:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>DateFieldBuilder:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>		public void setGuiValue(Object obj) {
+</I>&gt;&gt;&gt;<i>			if ( !(obj instanceof Date) ) throw new IllegalArgumentException();
+</I>&gt;&gt;&gt;<i>			_text.setText( FORMATTER.format( (Date)obj ) );
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>		}
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>because obj is null.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Might just need a guard against null?  But I remember you saying that null
+</I>&gt;&gt;&gt;<i>handling was on your todo list.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Ooops - null check indeed required - added and committed.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>2. I'm only registering 4 classes, but all domain classes appear in the
+</I>&gt;&gt;&gt;<i>classbar view.  Could you show only the 4 classes in this view?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Err... it being early I may be being dumb but aren't domain classes by 
+</I>&gt;&gt;<i>definition those that are registered?  Have a look at 
+</I>&gt;&gt;<i>DomainRegistryUtil.iterateAllClasses() - I basically get all domains 
+</I>&gt;&gt;<i>from the domain registry and then iteratte through domain.classes() on 
+</I>&gt;&gt;<i>each.  What ought I be doing?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>By the way, now had a chance to look at the latest version of the action
+</I>&gt;&gt;&gt;<i>view (could we rename this to operation view to be consistent with the
+</I>&gt;&gt;&gt;<i>metamodel?)  
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>&quot;Operation view&quot; it is.  Another chance for SVN to screw up...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>I have to say that it works rather better than I thought, which
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>is nice.  I still think a slightly prettier version will be needed at some
+</I>&gt;&gt;&gt;<i>stage - one that *doesn't* rely on colours - but its more than good enough
+</I>&gt;&gt;&gt;<i>for now.  Thanks.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>I'm thinking of decorated icons which indicate:
+</I>&gt;&gt;<i>- nullability
+</I>&gt;&gt;<i>- validity
+</I>&gt;&gt;<i>- anything else you can think of.
+</I>&gt;&gt;<i>These icons would be used by FieldBuilders too.
+</I>&gt;&gt;<i>However that's for later.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>One other thing it needs to do (though this is a bit of a nice-to-have) is
+</I>&gt;&gt;&gt;<i>to remember any values for parameters when switching between editors.
+</I>&gt;&gt;&gt;<i>Otherwise the view is effectively modal because the user cannot leave what
+</I>&gt;&gt;&gt;<i>they were doing and come back to it.  But add that to the &quot;to-do&quot; list if
+</I>&gt;&gt;&gt;<i>its not easy to implement - I'd rather see collections next.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>A-ha!  I had it in my head that you wanted the ops view to remember 
+</I>&gt;&gt;<i>values per instance - which is what it currently does.  At first glance 
+</I>&gt;&gt;<i>to make its state essentially static should be trivial.  However...
+</I>&gt;&gt;<i>How do we handle validation of values across instances?
+</I>&gt;&gt;<i>Coupla examples:
+</I>&gt;&gt;<i>An op becomes invalid because the new focus instance has a different 
+</I>&gt;&gt;<i>state - easy - just disable.
+</I>&gt;&gt;<i>But what about an inapplicable parameter value?  Disable / clear?
+</I>&gt;&gt;<i>I'll have a think about how best to do this.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Cheers
+</I>&gt;&gt;&gt;<i>Dan
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>-- 
+</I>&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000170.html">[Rcpviewer-contributors] Re: running petstore against current gui...
+</A></li>
+	<LI>Next message: <A HREF="000173.html">[Rcpviewer-contributors] Re: running petstore against current gui...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#171">[ date ]</a>
+              <a href="thread.html#171">[ thread ]</a>
+              <a href="subject.html#171">[ subject ]</a>
+              <a href="author.html#171">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

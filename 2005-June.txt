@@ -1,0 +1,3121 @@
+From dan at haywood-associates.co.uk  Wed Jun  1 02:24:46 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 1 Jun 2005 01:24:46 +0100
+Subject: [Rcpviewer-contributors] More features
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEPDDCAA.dan@haywood-associates.co.uk>
+
+As promised, been tidying up the features page on the wiki a little more.
+Still need to add some detail, and (I've just realized) that some of the
+obvious stuff like distribution is missing, but I could spend all night on
+it and not finish - so instead I'm off to bed.
+
+See http://www.haywood-associates.co.uk/rcpviewer/space/features.
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Fri Jun  3 13:50:20 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 03 Jun 2005 12:50:20 +0100
+Subject: [Rcpviewer-contributors] starting up the domain
+Message-ID: <42A043FC.7050200@incremental.eu.com>
+
+Help!
+I am struggling to get started with Dan's model.
+This is not helped by the test not compiling but my main problem is 
+probably not looking at this stuff earlier.
+So two simple questions:
+1) how does the GUI know what classes to query the domain about?
+2) How can I set these up (and change them to ensure the gui responds) 
+in a  test harness?
+
+Hopefully I'll have worked this out before you read this but maybe not...
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Fri Jun  3 13:59:12 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 03 Jun 2005 12:59:12 +0100
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <42A043FC.7050200@incremental.eu.com>
+References: <42A043FC.7050200@incremental.eu.com>
+Message-ID: <42A04610.1050408@incremental.eu.com>
+
+OK - sods law - the instance I sent the previous mail I read Dan's wiki 
+comments about implicitly/explicitly setting up domain model.  RTFW.
+However the first question still stands.  Are we going to:
+a) have some sort of declarative approach for telling the runtime what 
+classes to add to the domain?
+b) expect each domain to be built up by a startup plugin developed by 
+each client?
+c) have I got completly the wrong end of the stick?
+
+Mike E.
+
+Mike Evans wrote:
+
+> Help!
+> I am struggling to get started with Dan's model.
+> This is not helped by the test not compiling but my main problem is 
+> probably not looking at this stuff earlier.
+> So two simple questions:
+> 1) how does the GUI know what classes to query the domain about?
+> 2) How can I set these up (and change them to ensure the gui responds) 
+> in a  test harness?
+> 
+> Hopefully I'll have worked this out before you read this but maybe not...
+> 
+> Mike E.
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Fri Jun  3 15:16:40 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 03 Jun 2005 14:16:40 +0100
+Subject: [Rcpviewer-contributors] Eclipse House Rules
+Message-ID: <42A05838.5020307@incremental.eu.com>
+
+Spot the main doing RcpViewer work today!
+I have started to take liberties and define standards without discussion 
+- see 
+http://www.haywood-associates.co.uk/rcpviewer/space/project-standards 
+and fight back.
+
+Mike E.
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Fri Jun  3 18:35:16 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 03 Jun 2005 17:35:16 +0100
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+Message-ID: <42A086C4.5050907@incremental.eu.com>
+
+Dan,
+
+I saw your confession about stripping aspects out of your projects.
+Can I confirm your reasons?
+Was it because you could not get aspects running in a plugin environment 
+or because you think we are excluding people by doing so?
+The reason I ask is that almost at the start of the main GUI I am having 
+to introduce some test-harness specifics into the main code so that I 
+can test properly (e.g making sure modal dialogs are not opened).  This 
+is an obvious case for using an aspect but I do not want to waste my 
+time learning how to do this if you have found it not to work in our 
+intended environment.
+
+Mike E.
+
+PS : to give you an example, my here's a test-aware class i have:
+
+/**
+  * Static methods that decorate base Eclipse dialog functionality.
+  * @author Mike
+  *
+  */
+public class DialogUtil {
+	
+     /**
+      * Exactly as MessageDialog.openError() but aware of test sessions
+      * @link MessageDialog
+      */
+     public static void openError(Shell parent, String title, String 
+message) {
+		if ( TestSession.isActive() ) {
+	        MessageDialog dialog = new MessageDialog(
+					parent,
+					title,
+					null,
+	                message,
+					MessageDialog.ERROR,
+	                new String[] { IDialogConstants.OK_LABEL },
+	                0);
+			TestSession.recordEvent( dialog );
+		}
+		else {
+			MessageDialog.openError( parent, title, message );
+		}
+     }
+
+}
+
+A clear case for an aspect..?
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From emorning at yahoo.com  Fri Jun  3 17:19:46 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Fri, 03 Jun 2005 10:19:46 -0500
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <42A04610.1050408@incremental.eu.com>
+References: <42A043FC.7050200@incremental.eu.com> <42A04610.1050408@incremental.eu.com>
+Message-ID: <42A07512.4080900@yahoo.com>
+
+Mike Evans wrote:
+
+> OK - sods law - the instance I sent the previous mail I read Dan's 
+> wiki comments about implicitly/explicitly setting up domain model.  RTFW.
+> However the first question still stands.  Are we going to:
+> a) have some sort of declarative approach for telling the runtime what 
+> classes to add to the domain?
+> b) expect each domain to be built up by a startup plugin developed by 
+> each client?
+> c) have I got completly the wrong end of the stick?
+>
+
+I vote for a)...
+
+Per the 'Eclipse House Rules'....
+
+Contribution Rule: Everything is a contribution
+Conformance Rule: Contributions must conform to expected interfaces
+
+----------------------
+
+That is, I think that classes should be 'contibuted' via an 
+rcpviewer-defined extension point (the Contribution Rule).
+
+The extension point could be simply a way to identify classes that 
+implement an 'IModelProvider' interface (The Conformance Rule).
+The viewer will instantaite instance of the contribution classes and 
+then call appropriate methods on the instance to get contribute class info.
+
+
+
+
+
+
+From emorning at yahoo.com  Fri Jun  3 19:58:13 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Fri, 03 Jun 2005 12:58:13 -0500
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+In-Reply-To: <42A086C4.5050907@incremental.eu.com>
+References: <42A086C4.5050907@incremental.eu.com>
+Message-ID: <42A09A35.4050202@yahoo.com>
+
+This could be handled cleanly by Spring however it would require a bit 
+of refactoring...
+
+class DialogUtil {
+    public static void openError(Shell parent, String title, String 
+message) {
+            MessageDialog.openError( parent, title, message );
+     }
+}
+class TestSessionDialogUtil extends DialogUtil {
+    public static void openError(Shell parent, String title, String 
+message) {
+            MessageDialog dialog = new MessageDialog(
+                    parent,
+                    title,
+                    null,
+                    message,
+                    MessageDialog.ERROR,
+                    new String[] { IDialogConstants.OK_LABEL },
+                    0);
+            TestSession.recordEvent( dialog );
+     }
+}
+class PoJo {
+    private DialogUtil _dialogUtil;
+   
+    public void someMethod() {
+       _dialogUtil.openError(...);
+    }
+    public void setDialogUtil(DialogUtil value) {
+       _dialogUtil= value;
+    }
+}
+
+Then, by configuring and using different Spring 'application contexts' 
+for the standard runtime environment versus the testing environment, 
+PoJo instances will given a DialogUtils instance that is appropriate for 
+the environment in which it is running.
+
+
+Mike Evans wrote:
+
+> Dan,
+>
+> I saw your confession about stripping aspects out of your projects.
+> Can I confirm your reasons?
+> Was it because you could not get aspects running in a plugin 
+> environment or because you think we are excluding people by doing so?
+> The reason I ask is that almost at the start of the main GUI I am 
+> having to introduce some test-harness specifics into the main code so 
+> that I can test properly (e.g making sure modal dialogs are not 
+> opened).  This is an obvious case for using an aspect but I do not 
+> want to waste my time learning how to do this if you have found it not 
+> to work in our intended environment.
+>
+> Mike E.
+>
+> PS : to give you an example, my here's a test-aware class i have:
+>
+> /**
+>  * Static methods that decorate base Eclipse dialog functionality.
+>  * @author Mike
+>  *
+>  */
+> public class DialogUtil {
+>     
+>     /**
+>      * Exactly as MessageDialog.openError() but aware of test sessions
+>      * @link MessageDialog
+>      */
+>     public static void openError(Shell parent, String title, String 
+> message) {
+>         if ( TestSession.isActive() ) {
+>             MessageDialog dialog = new MessageDialog(
+>                     parent,
+>                     title,
+>                     null,
+>                     message,
+>                     MessageDialog.ERROR,
+>                     new String[] { IDialogConstants.OK_LABEL },
+>                     0);
+>             TestSession.recordEvent( dialog );
+>         }
+>         else {
+>             MessageDialog.openError( parent, title, message );
+>         }
+>     }
+>
+> }
+>
+> A clear case for an aspect..?
+>
+>
+>
+
+
+
+From emorning at yahoo.com  Fri Jun  3 20:00:56 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Fri, 03 Jun 2005 13:00:56 -0500
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+In-Reply-To: <42A09A35.4050202@yahoo.com>
+References: <42A086C4.5050907@incremental.eu.com> <42A09A35.4050202@yahoo.com>
+Message-ID: <42A09AD8.2010307@yahoo.com>
+
+ted stockwell wrote:
+
+> This could be handled cleanly by Spring however it would require a bit 
+> of refactoring...
+>
+> class DialogUtil {
+>    public static void openError(Shell parent, String title, String 
+> message) {
+>            MessageDialog.openError( parent, title, message );
+>     }
+> }
+> class TestSessionDialogUtil extends DialogUtil {
+>    public static void openError(Shell parent, String title, String 
+> message) {
+>            MessageDialog dialog = new MessageDialog(
+>                    parent,
+>                    title,
+>                    null,
+>                    message,
+>                    MessageDialog.ERROR,
+>                    new String[] { IDialogConstants.OK_LABEL },
+>                    0);
+>            TestSession.recordEvent( dialog );
+>     }
+> }
+
+
+
+Oops, the openError methods on the DialogUtil and TestSessionDialogUtil 
+classes should not be static...
+
+
+From dan at haywood-associates.co.uk  Fri Jun  3 20:57:14 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 3 Jun 2005 19:57:14 +0100
+Subject: [Rcpviewer-contributors] RE: SVN errors?
+In-Reply-To: <42A0156E.7090101@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEPLDCAA.dan@haywood-associates.co.uk>
+
+Hi Mike,
+sorry, hope this didn't hold you up too much.
+
+Have added 3 missing files, including IDeploymentSpecifics.  I think that
+AbstractTestCase was ok, though - I tend to put my fields along with the
+accessors/mutators.  Not conventional, I know, but it keeps object
+responsibilities together.  I've brought down the files down from SVN myself
+to double check, seems to compile okay.
+
+Much as subclipse is a little flaky, I'd still like to stay with SVN rather
+than CVS.  Notwithstanding me missing out those files :-(, Subclipse +
+Tortoise to pick up on the things that Subclipse misses is workable, I
+think.  The real benefit that SVN gives us is not having to worry about
+where we put files/packages in the first place.  It's an agility thing for
+me - deferring the decision until when it needs to be made.
+
+Dan
+
+-----Original Message-----
+From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+Sent: 03 June 2005 09:32
+To: Dan Haywood
+Cc: rcpviewer-contributors at lists.berlios.de
+Subject: SVN errors?
+
+
+Hi Dan,
+
+Just taken the latest from the main workspace in SVN and have compile
+problems in the domain.tests and domain.runtime.tests projects.  I think
+these can be narrowed down to
+* AbstractTestCase is missing the fields it uses
+* interface IDeploymentSpecifics is not defined anywhere
+Could you take a look.
+Note I used Tortoise to fetch the projects so this is probably a commit
+problem.
+Which makes me wonder whether we should not just revert to CVS that at
+least works within Eclipse.
+
+Mike E.
+
+
+--
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+
+From dan at haywood-associates.co.uk  Fri Jun  3 21:07:26 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 3 Jun 2005 20:07:26 +0100
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <42A07512.4080900@yahoo.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk>
+
+I think (a) is good enough too.  Let's go down that route and if we feel it
+is clunky, we could try a different approach.  I think I need you and Ted to
+take the lead here, since I'm still learning the Eclipse idioms and what the
+"house rules" mean in practice.
+
+Could you document - somewhere - what the domain programmer would need to
+do?
+
+Dan
+
+-----Original Message-----
+From: rcpviewer-contributors-admin at berlios.de
+[mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of ted
+stockwell
+Sent: 03 June 2005 16:20
+To: rcpviewer-contributors at lists.berlios.de
+Subject: Re: [Rcpviewer-contributors] Re: starting up the domain
+
+
+Mike Evans wrote:
+
+> OK - sods law - the instance I sent the previous mail I read Dan's
+> wiki comments about implicitly/explicitly setting up domain model.  RTFW.
+> However the first question still stands.  Are we going to:
+> a) have some sort of declarative approach for telling the runtime what
+> classes to add to the domain?
+> b) expect each domain to be built up by a startup plugin developed by
+> each client?
+> c) have I got completly the wrong end of the stick?
+>
+
+I vote for a)...
+
+Per the 'Eclipse House Rules'....
+
+Contribution Rule: Everything is a contribution
+Conformance Rule: Contributions must conform to expected interfaces
+
+----------------------
+
+That is, I think that classes should be 'contibuted' via an
+rcpviewer-defined extension point (the Contribution Rule).
+
+The extension point could be simply a way to identify classes that
+implement an 'IModelProvider' interface (The Conformance Rule).
+The viewer will instantaite instance of the contribution classes and
+then call appropriate methods on the instance to get contribute class info.
+
+
+
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+Rcpviewer-contributors at lists.berlios.de
+http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+From dan at haywood-associates.co.uk  Fri Jun  3 21:07:27 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 3 Jun 2005 20:07:27 +0100
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+In-Reply-To: <42A086C4.5050907@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEPMDCAA.dan@haywood-associates.co.uk>
+
+Hi Mike,
+
+I stripped out the aspects mostly cause I was frustrated at getting them
+working cross-project.  And the reason for having aspects possibly reducing
+our target audience was a sop to me to not feel so bad for having failed.
+
+I contacted Martin Lippert (google him) and he came back with a suggestion
+on what I was doing wrong, but I wanted to make some progress on getting the
+old emf-builder project divvied up into plugin projects, so simplifying the
+problem I was trying to solve seemed the most pragmatic approach.
+
+So ... if you can get Aspects working cross-project (Martin said to
+configure the ASPECTPATH of the project to be aspectized was probably the
+solution), then go for it.  But please don't let it distract you too much
+from making progress which was what my problem ultimately was about.
+
+Dan
+
+-----Original Message-----
+From: rcpviewer-contributors-admin at berlios.de
+[mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+Sent: 03 June 2005 17:35
+To: Dan Haywood; rcpviewer-contributors at lists.berlios.de
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+
+
+Dan,
+
+I saw your confession about stripping aspects out of your projects.
+Can I confirm your reasons?
+Was it because you could not get aspects running in a plugin environment
+or because you think we are excluding people by doing so?
+The reason I ask is that almost at the start of the main GUI I am having
+to introduce some test-harness specifics into the main code so that I
+can test properly (e.g making sure modal dialogs are not opened).  This
+is an obvious case for using an aspect but I do not want to waste my
+time learning how to do this if you have found it not to work in our
+intended environment.
+
+Mike E.
+
+PS : to give you an example, my here's a test-aware class i have:
+
+/**
+  * Static methods that decorate base Eclipse dialog functionality.
+  * @author Mike
+  *
+  */
+public class DialogUtil {
+
+     /**
+      * Exactly as MessageDialog.openError() but aware of test sessions
+      * @link MessageDialog
+      */
+     public static void openError(Shell parent, String title, String
+message) {
+		if ( TestSession.isActive() ) {
+	        MessageDialog dialog = new MessageDialog(
+					parent,
+					title,
+					null,
+	                message,
+					MessageDialog.ERROR,
+	                new String[] { IDialogConstants.OK_LABEL },
+	                0);
+			TestSession.recordEvent( dialog );
+		}
+		else {
+			MessageDialog.openError( parent, title, message );
+		}
+     }
+
+}
+
+A clear case for an aspect..?
+
+
+
+--
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+Rcpviewer-contributors at lists.berlios.de
+http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+From dan at haywood-associates.co.uk  Fri Jun  3 21:07:27 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 3 Jun 2005 20:07:27 +0100
+Subject: [Rcpviewer-contributors] aspects in runtime plugin tests
+In-Reply-To: <42A09A35.4050202@yahoo.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEPMDCAA.dan@haywood-associates.co.uk>
+
+Per injecting DialogUtil's into a Pojo, not sure I follow.  We should be
+finding way to define this sort of behaviour in terms of a programming
+model, eg:
+
+public class Customer {
+
+  @ShowAsDialog
+  public void someActionMethod(...) { }
+
+}
+
+Though I would have thought that a dialog would be only one way of rendering
+an action method.
+
+Dan
+
+
+-----Original Message-----
+From: rcpviewer-contributors-admin at berlios.de
+[mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of ted
+stockwell
+Sent: 03 June 2005 18:58
+To: rcpviewer-contributors at lists.berlios.de
+Subject: Re: [Rcpviewer-contributors] aspects in runtime plugin tests
+
+
+This could be handled cleanly by Spring however it would require a bit
+of refactoring...
+
+class DialogUtil {
+    public static void openError(Shell parent, String title, String
+message) {
+            MessageDialog.openError( parent, title, message );
+     }
+}
+class TestSessionDialogUtil extends DialogUtil {
+    public static void openError(Shell parent, String title, String
+message) {
+            MessageDialog dialog = new MessageDialog(
+                    parent,
+                    title,
+                    null,
+                    message,
+                    MessageDialog.ERROR,
+                    new String[] { IDialogConstants.OK_LABEL },
+                    0);
+            TestSession.recordEvent( dialog );
+     }
+}
+class PoJo {
+    private DialogUtil _dialogUtil;
+
+    public void someMethod() {
+       _dialogUtil.openError(...);
+    }
+    public void setDialogUtil(DialogUtil value) {
+       _dialogUtil= value;
+    }
+}
+
+Then, by configuring and using different Spring 'application contexts'
+for the standard runtime environment versus the testing environment,
+PoJo instances will given a DialogUtils instance that is appropriate for
+the environment in which it is running.
+
+
+Mike Evans wrote:
+
+> Dan,
+>
+> I saw your confession about stripping aspects out of your projects.
+> Can I confirm your reasons?
+> Was it because you could not get aspects running in a plugin
+> environment or because you think we are excluding people by doing so?
+> The reason I ask is that almost at the start of the main GUI I am
+> having to introduce some test-harness specifics into the main code so
+> that I can test properly (e.g making sure modal dialogs are not
+> opened).  This is an obvious case for using an aspect but I do not
+> want to waste my time learning how to do this if you have found it not
+> to work in our intended environment.
+>
+> Mike E.
+>
+> PS : to give you an example, my here's a test-aware class i have:
+>
+> /**
+>  * Static methods that decorate base Eclipse dialog functionality.
+>  * @author Mike
+>  *
+>  */
+> public class DialogUtil {
+>
+>     /**
+>      * Exactly as MessageDialog.openError() but aware of test sessions
+>      * @link MessageDialog
+>      */
+>     public static void openError(Shell parent, String title, String
+> message) {
+>         if ( TestSession.isActive() ) {
+>             MessageDialog dialog = new MessageDialog(
+>                     parent,
+>                     title,
+>                     null,
+>                     message,
+>                     MessageDialog.ERROR,
+>                     new String[] { IDialogConstants.OK_LABEL },
+>                     0);
+>             TestSession.recordEvent( dialog );
+>         }
+>         else {
+>             MessageDialog.openError( parent, title, message );
+>         }
+>     }
+>
+> }
+>
+> A clear case for an aspect..?
+>
+>
+>
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+Rcpviewer-contributors at lists.berlios.de
+http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+From mike.evans at incremental.eu.com  Sat Jun  4 11:19:00 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sat, 04 Jun 2005 10:19:00 +0100
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk>
+Message-ID: <42A17204.4020709@incremental.eu.com>
+
+Okey dokey
+Declarative it is
+However, just to note one downside.
+PDEUnit speeds things up by running up a single application in which all 
+tests in the suite are run.
+Unless Ted knows differently I have no idea how to change the Eclipse 
+metadata at runtime (well actually, I looked and it would be ugly - 
+using internal API's etc).
+Hence testing any declarative extensions will be difficult - where these 
+are Eclipse ones I am not concerned as I have no interest in testing the 
+base platform.  However where these are extensions created by ourselves 
+testing will be limited.
+
+Mike E.
+
+Dan Haywood wrote:
+> I think (a) is good enough too.  Let's go down that route and if we feel it
+> is clunky, we could try a different approach.  I think I need you and Ted to
+> take the lead here, since I'm still learning the Eclipse idioms and what the
+> "house rules" mean in practice.
+> 
+> Could you document - somewhere - what the domain programmer would need to
+> do?
+> 
+> Dan
+> 
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of ted
+> stockwell
+> Sent: 03 June 2005 16:20
+> To: rcpviewer-contributors at lists.berlios.de
+> Subject: Re: [Rcpviewer-contributors] Re: starting up the domain
+> 
+> 
+> Mike Evans wrote:
+> 
+> 
+>>OK - sods law - the instance I sent the previous mail I read Dan's
+>>wiki comments about implicitly/explicitly setting up domain model.  RTFW.
+>>However the first question still stands.  Are we going to:
+>>a) have some sort of declarative approach for telling the runtime what
+>>classes to add to the domain?
+>>b) expect each domain to be built up by a startup plugin developed by
+>>each client?
+>>c) have I got completly the wrong end of the stick?
+>>
+> 
+> 
+> I vote for a)...
+> 
+> Per the 'Eclipse House Rules'....
+> 
+> Contribution Rule: Everything is a contribution
+> Conformance Rule: Contributions must conform to expected interfaces
+> 
+> ----------------------
+> 
+> That is, I think that classes should be 'contibuted' via an
+> rcpviewer-defined extension point (the Contribution Rule).
+> 
+> The extension point could be simply a way to identify classes that
+> implement an 'IModelProvider' interface (The Conformance Rule).
+> The viewer will instantaite instance of the contribution classes and
+> then call appropriate methods on the instance to get contribute class info.
+> 
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Sat Jun  4 11:23:36 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sat, 04 Jun 2005 10:23:36 +0100
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk>
+Message-ID: <42A17318.9040708@incremental.eu.com>
+
+Will add a section on the wiki on extension points.
+And (eventually0 a guid on how to start the runtime with one's own domain.
+
+Mike E.
+
+Dan Haywood wrote:
+
+> I think (a) is good enough too.  Let's go down that route and if we feel it
+> is clunky, we could try a different approach.  I think I need you and Ted to
+> take the lead here, since I'm still learning the Eclipse idioms and what the
+> "house rules" mean in practice.
+> 
+> Could you document - somewhere - what the domain programmer would need to
+> do?
+> 
+> Dan
+> 
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of ted
+> stockwell
+> Sent: 03 June 2005 16:20
+> To: rcpviewer-contributors at lists.berlios.de
+> Subject: Re: [Rcpviewer-contributors] Re: starting up the domain
+> 
+> 
+> Mike Evans wrote:
+> 
+> 
+>>OK - sods law - the instance I sent the previous mail I read Dan's
+>>wiki comments about implicitly/explicitly setting up domain model.  RTFW.
+>>However the first question still stands.  Are we going to:
+>>a) have some sort of declarative approach for telling the runtime what
+>>classes to add to the domain?
+>>b) expect each domain to be built up by a startup plugin developed by
+>>each client?
+>>c) have I got completly the wrong end of the stick?
+>>
+> 
+> 
+> I vote for a)...
+> 
+> Per the 'Eclipse House Rules'....
+> 
+> Contribution Rule: Everything is a contribution
+> Conformance Rule: Contributions must conform to expected interfaces
+> 
+> ----------------------
+> 
+> That is, I think that classes should be 'contibuted' via an
+> rcpviewer-defined extension point (the Contribution Rule).
+> 
+> The extension point could be simply a way to identify classes that
+> implement an 'IModelProvider' interface (The Conformance Rule).
+> The viewer will instantaite instance of the contribution classes and
+> then call appropriate methods on the instance to get contribute class info.
+> 
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From emorning at yahoo.com  Sun Jun  5 16:32:33 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 05 Jun 2005 09:32:33 -0500
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <42A17204.4020709@incremental.eu.com>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk> <42A17204.4020709@incremental.eu.com>
+Message-ID: <42A30D01.3030209@yahoo.com>
+
+Mike Evans wrote:
+
+> Okey dokey
+> Declarative it is
+> However, just to note one downside.
+> PDEUnit speeds things up by running up a single application in which 
+> all tests in the suite are run.
+> Unless Ted knows differently I have no idea how to change the Eclipse 
+> metadata at runtime (well actually, I looked and it would be ugly - 
+> using internal API's etc).
+> Hence testing any declarative extensions will be difficult - where 
+> these are Eclipse ones I am not concerned as I have no interest in 
+> testing the base platform.  However where these are extensions created 
+> by ourselves testing will be limited.
+>
+
+
+Sorry, I don't follow you here. I don't really understand why the 
+metadata would have to change.
+Can you elaborate?
+
+---------------------
+
+BTW, I have been thinking about domains, object stores, sessions, and 
+associated UI since I have been working on my 2nd attempt to create a 
+spike.
+My goal is create a spike that does persistence.
+Of course, that means that I have to use Dan's API. And that of course 
+means that I have to create a Domain, and an ObjectStore, and a Session.
+And that I have to get Mike's viewer to use a session, or sessions.
+
+I can imagine an application that would allow the use to add new 
+sessions (imagine an application like a newsreader, where you can add 
+connections to new newsgroups at runtime).
+Therefore, defining sessions declaratively is definitely not sufficient 
+for all applications.
+However, I can't (yet) imagine an application that allows the user to 
+add new Domains to the application except by extending the application 
+by adding plugins.
+Therefore, defining domains declaratively seems sufficient.
+
+----------------------------------
+Back to my spike...
+
+So far I have managed to segregate Mikes's viewer code into a plugin of 
+it's own named de.berlios.rcpviewer.rcp.
+I have create a plugin for my example name 
+de.berlios.rcpviewer.easybean.  Mike's model classes are in this plugin.
+I have imported all of Dan's plugins into my project 
+(de.berlios.rcpviewer.domain, de.berlios.rcpviewer.domain.runtime, etc).
+
+
+So far, here is what I have done...
+I added an extension point to the de.berlios.rcpviewer.domain.runtime 
+plugin named 'domains'.
+The de.berlios.rcpviewer.easybean plugin declaritively exports a domain, 
+like so...
+   <extension point="de.berlios.rcpviewer.runtime.domains">
+      <domain id="domain" class="mikespike3.model.EasyBeanDomain" />
+   </extension>
+Notice that I am simply registering a class that implements the IDomain 
+interface.
+My mikespike3.model.EasyBeanDomain class subclasses the 
+de.berlios.rcpviewer.domain.Domain.
+I added a 'DomainRegistry' class to the 
+de.berlios.rcpviewer.domain.runtime plugin.  The 
+de.berlios.rcpviewer.rcp plugin uses this class to get a list of all 
+available domains and thus to build the UI (initially, just create the 
+'New' menu).
+I added a getDomainRegistry() method to the 
+de.berlios.rcpviewer.domain.runtime.RuntimePlugin class.  I also added a 
+method for getting the ISessionManager.
+
+---------------------------
+That's where I'm at right now.  My next step is to get the RCPViewer to 
+create a new object and load it into the editor. 
+Which brings up my next point...
+...the de.berlios.rcpviewer.rcp plugin creates the UI for creating new 
+objects.  When the user selects the File | New | EasyBean menu item to 
+create a new EasyBean the associated action needs a Session to actually 
+create the object.
+How does the action get a Session to use?
+
+For now what I have done is I have added addSession, getCurrentSession 
+and setCurrentSession methods to the ISessionManager interface.
+When the EasyBean application starts up it creates a session, adds it to 
+the SessionManager and then makes the session the current session.
+I imagine each RPCViewer application having it's own method of creating 
+new sessions and switching between them.
+------------------------
+
+
+
+
+
+
+From emorning at yahoo.com  Sun Jun  5 16:45:39 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 05 Jun 2005 09:45:39 -0500
+Subject: [Rcpviewer-contributors] Reviewing changes to plugins
+In-Reply-To: <42A17318.9040708@incremental.eu.com>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk> <42A17318.9040708@incremental.eu.com>
+Message-ID: <42A31013.7000202@yahoo.com>
+
+Hi All,
+
+As I noted in a previous message, while working on my spike I am finding 
+it neccessary to add minor enhancements to some of the API in Dan's plugins.
+
+When I am done with my spike I intend to commit my changes.
+Howerver, here is what I intend to do to make my changes easily 
+reviewable by the 'owner' of the plugin...
+
+I have marked all my changes with a 'Task Tag' named REVIEW_CHANGE.
+For example, here is such a tag that I added to the 
+de.berlios.rcpviewer.domain.Domain class:
+    //REVIEW_CHANGE Removed final from the class to allow subclassing.  tws
+
+After I commit my changes the owner of the plugin will be able to easily 
+review the changes that I have made by consulting the Eclipse Task list.
+If any change is not acceptable then undo it or post alternatives to the 
+list or whatever.
+Remove the tag after the change has been accepted.
+
+To make the tags show up in the Eclipse Task list go to Preferences | 
+Java | Compiler | Task Tags.
+
+---------------------------------
+
+Is everyone down with this procedure? 
+Are there better alternatives?
+
+
+From mike.evans at incremental.eu.com  Sun Jun  5 18:50:08 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sun, 05 Jun 2005 17:50:08 +0100
+Subject: [Rcpviewer-contributors] Re: starting up the domain
+In-Reply-To: <42A30D01.3030209@yahoo.com>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk> <42A17204.4020709@incremental.eu.com> <42A30D01.3030209@yahoo.com>
+Message-ID: <42A32D40.7040101@incremental.eu.com>
+
+Hi Ted,
+
+I have just got stuck at the very stage you are asking me about - 
+basically manipulating the domain model (as RcpViewer sees it) during tests.
+Here's my logic:
+* I do not see a runtime RcpViewer app having to deal with a changing 
+domain (as I think, do you).  This simplifies things as we have no 
+listening and GUI-regenerating mechanisms to deal with.
+* However for test-driven development I need to test the various 
+permutations on start-up.  This is particularly the case for a generic 
+viewer such as RcpViewer that must be able to deal with any domain it is 
+passed.
+* Hence I want to programatically change the start-up conditions; i.e. 
+change the domain, change the declared classes etc.
+* Hence, between tests, I want to change whatever data RcpViewer uses to 
+generate its GUI.  If this is based on our own extension points, I thus 
+need to change Eclipse's extension registry.  This is what I meant by 
+the 'metadata'.
+
+Which is a bummer.
+
+Actually I have a larger bummer at the moment.  I am trying to start the 
+  main gui development with a basic window with a class bar (as per 
+Dan's wiki) down the left-hand side. With an empty domain, everything is 
+fine - I test for (and get) an error message as expected.  But the next 
+step, i.e. the next test, requires the domain to be populated. I am 
+struggling on how to do this when:
+1) PDEUnit runs up a single instance for all tests
+2) declarative stuff in extension points is handled on the plugin 
+startup - well before PDEUnit calls setup() on any test.
+
+Which is where I am at the moment.
+
+I am very keen not to have to move to event listening on Dan's Domain 
+object but currently other options I have explored (command line args, 
+separate PDEUnit tests for each condition) are all worse ideas.
+
+As to your issues.
+Your extension point implementation for domains/classes seems fine 
+(praise indeed eh?).
+As for sessions I was thinking there would be one automatically started 
+with the app (as you suggest) and some sort of mechanism for allowing 
+the user to explicitly start others - and serviced with the types of 
+API's you're developing,
+
+As for representing multiple sessions visually my thoughts were along 
+these lines:
+* on the left-hand side of the screen is a session-independent 
+'Outlook'-style class bas as Dan and yourself have suggested
+* in the middle is the editor area
+* on the right hand side are one or more of Dan's 'class explorer' 
+views.  Each is a multi-root tree (one root per class) listing all 
+instantiated instances within a session.  If there are multiple 
+sessions, there are multiple views.
+* the classbar and class explorer have similar context menus for 
+new/find/list options only the classbar has to ask the user which 
+session to use if more than one is available.  Ditto for File / New 
+menus etc.
+* this multi-session complexity would be hidden away unless unlocked via 
+preferences.
+
+
+
+Good luck with persistence - rather you than I!
+
+Mike E.
+
+
+
+
+
+
+ted stockwell wrote:
+> Mike Evans wrote:
+> 
+>> Okey dokey
+>> Declarative it is
+>> However, just to note one downside.
+>> PDEUnit speeds things up by running up a single application in which 
+>> all tests in the suite are run.
+>> Unless Ted knows differently I have no idea how to change the Eclipse 
+>> metadata at runtime (well actually, I looked and it would be ugly - 
+>> using internal API's etc).
+>> Hence testing any declarative extensions will be difficult - where 
+>> these are Eclipse ones I am not concerned as I have no interest in 
+>> testing the base platform.  However where these are extensions created 
+>> by ourselves testing will be limited.
+>>
+> 
+> 
+> Sorry, I don't follow you here. I don't really understand why the 
+> metadata would have to change.
+> Can you elaborate?
+> 
+> ---------------------
+> 
+> BTW, I have been thinking about domains, object stores, sessions, and 
+> associated UI since I have been working on my 2nd attempt to create a 
+> spike.
+> My goal is create a spike that does persistence.
+> Of course, that means that I have to use Dan's API. And that of course 
+> means that I have to create a Domain, and an ObjectStore, and a Session.
+> And that I have to get Mike's viewer to use a session, or sessions.
+> 
+> I can imagine an application that would allow the use to add new 
+> sessions (imagine an application like a newsreader, where you can add 
+> connections to new newsgroups at runtime).
+> Therefore, defining sessions declaratively is definitely not sufficient 
+> for all applications.
+> However, I can't (yet) imagine an application that allows the user to 
+> add new Domains to the application except by extending the application 
+> by adding plugins.
+> Therefore, defining domains declaratively seems sufficient.
+> 
+> ----------------------------------
+> Back to my spike...
+> 
+> So far I have managed to segregate Mikes's viewer code into a plugin of 
+> it's own named de.berlios.rcpviewer.rcp.
+> I have create a plugin for my example name 
+> de.berlios.rcpviewer.easybean.  Mike's model classes are in this plugin.
+> I have imported all of Dan's plugins into my project 
+> (de.berlios.rcpviewer.domain, de.berlios.rcpviewer.domain.runtime, etc).
+> 
+> 
+> So far, here is what I have done...
+> I added an extension point to the de.berlios.rcpviewer.domain.runtime 
+> plugin named 'domains'.
+> The de.berlios.rcpviewer.easybean plugin declaritively exports a domain, 
+> like so...
+>   <extension point="de.berlios.rcpviewer.runtime.domains">
+>      <domain id="domain" class="mikespike3.model.EasyBeanDomain" />
+>   </extension>
+> Notice that I am simply registering a class that implements the IDomain 
+> interface.
+> My mikespike3.model.EasyBeanDomain class subclasses the 
+> de.berlios.rcpviewer.domain.Domain.
+> I added a 'DomainRegistry' class to the 
+> de.berlios.rcpviewer.domain.runtime plugin.  The 
+> de.berlios.rcpviewer.rcp plugin uses this class to get a list of all 
+> available domains and thus to build the UI (initially, just create the 
+> 'New' menu).
+> I added a getDomainRegistry() method to the 
+> de.berlios.rcpviewer.domain.runtime.RuntimePlugin class.  I also added a 
+> method for getting the ISessionManager.
+> 
+> ---------------------------
+> That's where I'm at right now.  My next step is to get the RCPViewer to 
+> create a new object and load it into the editor. Which brings up my next 
+> point...
+> ...the de.berlios.rcpviewer.rcp plugin creates the UI for creating new 
+> objects.  When the user selects the File | New | EasyBean menu item to 
+> create a new EasyBean the associated action needs a Session to actually 
+> create the object.
+> How does the action get a Session to use?
+> 
+> For now what I have done is I have added addSession, getCurrentSession 
+> and setCurrentSession methods to the ISessionManager interface.
+> When the EasyBean application starts up it creates a session, adds it to 
+> the SessionManager and then makes the session the current session.
+> I imagine each RPCViewer application having it's own method of creating 
+> new sessions and switching between them.
+> ------------------------
+> 
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Sun Jun  5 18:53:03 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sun, 05 Jun 2005 17:53:03 +0100
+Subject: [Rcpviewer-contributors] Reviewing changes to plugins
+In-Reply-To: <42A31013.7000202@yahoo.com>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk> <42A17318.9040708@incremental.eu.com> <42A31013.7000202@yahoo.com>
+Message-ID: <42A32DEF.5090905@incremental.eu.com>
+
+Seems fair.
+I must say I am avoiding any changes to other people's work as I simply 
+do not trust Subclipse.
+If updating is working OK for you I'll take a risk and try this approach 
+  out.
+
+Mike E.
+
+ted stockwell wrote:
+
+> Hi All,
+> 
+> As I noted in a previous message, while working on my spike I am finding 
+> it neccessary to add minor enhancements to some of the API in Dan's 
+> plugins.
+> 
+> When I am done with my spike I intend to commit my changes.
+> Howerver, here is what I intend to do to make my changes easily 
+> reviewable by the 'owner' of the plugin...
+> 
+> I have marked all my changes with a 'Task Tag' named REVIEW_CHANGE.
+> For example, here is such a tag that I added to the 
+> de.berlios.rcpviewer.domain.Domain class:
+>    //REVIEW_CHANGE Removed final from the class to allow subclassing.  tws
+> 
+> After I commit my changes the owner of the plugin will be able to easily 
+> review the changes that I have made by consulting the Eclipse Task list.
+> If any change is not acceptable then undo it or post alternatives to the 
+> list or whatever.
+> Remove the tag after the change has been accepted.
+> 
+> To make the tags show up in the Eclipse Task list go to Preferences | 
+> Java | Compiler | Task Tags.
+> 
+> ---------------------------------
+> 
+> Is everyone down with this procedure? Are there better alternatives?
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Fri Jun 10 14:29:11 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 10 Jun 2005 13:29:11 +0100
+Subject: [Rcpviewer-contributors] Update on gui development
+Message-ID: <42A98797.6010500@incremental.eu.com>
+
+Hi All,
+
+Just a quick update on my progress.
+I covered some of the issues I was dealing with in an earlier mail.
+In summary I am having fun trying to fit the square peg of start-up 
+domain instantiation with the round hole of PDE JUnit tests because:
+a) all app startup occurs BEFORE JUnit's setup() method is called
+b) a single app instance is opened for all tests within a test class
+
+I think I now have a workable solution for a) - I use the platform's Job 
+mechanism and put domain-related startup jobs to sleep if in test mode - 
+letting setup() do its thing and then waking up these jobs.
+For b) I do not wish to subvert the PDE testing mechanisms so am instead 
+looking at an additional GUI option that would run each test class 
+within a suite in a seperate app.
+
+Sorry if this all appears off the main stream of development but I 
+really do not want to start this until I have an effective test harness 
+in place.
+
+Will upload code for review once I am convinced it works!
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From emorning at yahoo.com  Fri Jun 10 15:41:24 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Fri, 10 Jun 2005 08:41:24 -0500
+Subject: [Rcpviewer-contributors] Update on gui development
+In-Reply-To: <42A98797.6010500@incremental.eu.com>
+References: <42A98797.6010500@incremental.eu.com>
+Message-ID: <42A99884.5040605@yahoo.com>
+
+Mike Evans wrote:
+
+> Hi All,
+>
+> Just a quick update on my progress.
+> I covered some of the issues I was dealing with in an earlier mail.
+> In summary I am having fun trying to fit the square peg of start-up 
+> domain instantiation with the round hole of PDE JUnit tests because:
+> a) all app startup occurs BEFORE JUnit's setup() method is called
+> b) a single app instance is opened for all tests within a test class
+>
+> I think I now have a workable solution for a) - I use the platform's 
+> Job mechanism and put domain-related startup jobs to sleep if in test 
+> mode - letting setup() do its thing and then waking up these jobs.
+> For b) I do not wish to subvert the PDE testing mechanisms so am 
+> instead looking at an additional GUI option that would run each test 
+> class within a suite in a seperate app.
+>
+> Sorry if this all appears off the main stream of development but I 
+> really do not want to start this until I have an effective test 
+> harness in place.
+>
+> Will upload code for review once I am convinced it works!
+>
+> Mike E.
+>
+
+I think that b) will be problematic because the platform's design kinda 
+assumes that there is one and only one, globally available, workbench.
+I have run into problems trying to run more than one workbench within 
+the same VM (part of some work I did for RSWT where I tried to run 
+several RCP applications as server-side applications with thin-client 
+front-ends;  never got it to work :-(,  but maybe some day.....
+
+Anyway, in terms of a testing framework, maybe a good approach would be 
+to create a 'test runner' that can run just a single test and then 
+develop a test harness that can run many tests in separate VMs and 
+aggregate the results.
+
+-------------
+
+Is there maybe anything in the Eclipse Testing Tools project that can 
+help you here?  (I've looked at Haydes in the past but found the 
+documentation not sufficient for my meager cognitive abilities ;-)).
+
+
+
+From emorning at yahoo.com  Sun Jun 12 17:04:16 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 12 Jun 2005 10:04:16 -0500
+Subject: [Rcpviewer-contributors] Finally, I make a contribution...
+In-Reply-To: <42A99884.5040605@yahoo.com>
+References: <42A98797.6010500@incremental.eu.com> <42A99884.5040605@yahoo.com>
+Message-ID: <42AC4EF0.7070505@yahoo.com>
+
+Hi all,
+
+I have committed an example program and associated changes to plugins 
+that adds persistence to Mike's previous example application.
+
+You will need the following plugins to run this example application...
+
+PLUGIN                                            REPOSITORY LOCATION
+---------                                            
+-------------------------------
+de.berlios.rcpviewer.mikespike3         
+workspace/spikes/teds-workspace/de.berlios.rcpviewer
+net.sf.plugins.utils                                
+workspace/spikes/teds-workspace/net.sf.plugins.utils
+net.sf.plugins.commons                        
+workspace/spikes/teds-workspace/net.sf.plugins.commons
+net.sf.plugins.springframework             
+workspace/spikes/teds-workspace/net.sf.plugins.springframework
+net.sf.plugins.acegisecurity                    
+workspace/spikes/teds-workspace/net.sf.plugins.acegisecurity
+de.berlios.rcpviewer.rcp                     
+workspace/de.berlios.rcpviewer.rcp
+de.berlios.rcpviewer.domain                
+workspace/de.berlios.rcpviewer.domain
+de.berlios.rcpviewer.domain.compiletime         
+workspace/de.berlios.rcpviewer.domain.compiletime
+de.berlios.rcpviewer.persistence.inmemory.ui         
+workspace/de.berlios.rcpviewer.persistence.inmemory.ui
+de.berlios.rcpviewer.progmodel.extended    
+workspace/de.berlios.rcpviewer.progmodel.extended
+de.berlios.rcpviewer.progmodel.rcpviewer    
+workspace/de.berlios.rcpviewer.progmodel.rcpviewer
+de.berlios.rcpviewer.progmodel.standard    
+workspace/de.berlios.rcpviewer.progmodel.standard
+
+
+-------------------------------------------------
+
+I created this example application by taking Mike's previous spike and 
+moving it to a new plugin, teds-spike/de.berlios.rcpviewer.mikespike3.
+The de.berlios.rcpviewer.mikespike3 makes a domain known to the editor 
+by declaring the domain in an extension point...
+    <extension
+          point="de.berlios.rcpviewer.domain.runtime.domains">
+       <domain
+             class="mikespike3.model.EasyBeanDomain"
+             id="domain"/>
+    </extension>
+
+The domain contains just one class, mikespike3.EasyBean.
+When the application starts the de.berlios.rcpviewer.rcp (which contains 
+all the RCPViewer editor code) adds the File | New | EasyBean menu item 
+to the main menu.  Select this menu item to create a new EasyBean 
+instance and open it in an editor.
+The save button on the toolbar will be enabled when the editor is 
+opened.  Select the SAVE button to save the new EasyBean instance.
+
+Notice that the editor has been extended with 'dirty' support.  So if 
+you make a change to the editor then the Save button is reenabled.
+I extended Mike's Builder component by making the form that the builder 
+creates an instance of org.eclipse.ui.forms.IManagedForms and changing 
+all the field builders so that they add instances of 
+org.eclipse.ui.forms.IFormPart to the main form.
+In this way the main form can track changes to the fields and notify the 
+editor when the dirty property changes.
+
+I am using the In-Memory object store.  A future spike will extend this 
+application to use Hibernate.
+
+Now close the editor window that you previously opened.
+I have added a 'Search Page' to the Eclipse Search Dialog for finding 
+objects that are in the In-Memory Object Store.
+Choose Search | Search... | In-Memory Object Store and then hit the 
+'Finish' button to open a search result page that displays all objects 
+in the in-memory object store.
+Double-click the one and only one item to reopen the previously created 
+EasyBean.
+
+That's all!.  We created a new object, persisted it, searched an object 
+store for objects, and opened an object in a object store.
+
+-------------------------------------
+
+Notice that I use Spring and ACEGI in this application.  They are not 
+relevant to the application, I am just exploring how to use these 
+frameworks.  Only the mikespike3 plugin requires these plugins.
+BTW, security is not being applied yet, just hit the 'Finish' button on 
+the login screen to proceed to the example.
+
+-------------------------------------
+
+I have taken the liberty of committing the de.berlios.rcpviewer.rcp and 
+de.berlios.rcpviewer.persistence.inmemory.ui plugins to the workspace 
+folder in Subversion and comitting some changes to the domain plugins.
+I have marked all my changes with the REVIEW_CHANGE task tag, as 
+detailed in a previous post.
+
+--------------------------
+
+You may notice that I have named some plugins with the prefix 
+'sf.net.plugins'. 
+I have for a while thought about having a project where Eclipse plugins 
+for commonly used framework may be obtained. 
+I am the adminstrator of the 'plugins'  project on SF and I am 
+considering releasing some of these plugins there.
+
+
+
+
+-ted
+
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Jun 14 08:24:29 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 14 Jun 2005 07:24:29 +0100
+Subject: [Rcpviewer-contributors] Update on gui development
+In-Reply-To: <42A99884.5040605@yahoo.com>
+References: <42A98797.6010500@incremental.eu.com> <42A99884.5040605@yahoo.com>
+Message-ID: <42AE781D.9070102@incremental.eu.com>
+
+The testing framework option is what I ma looking at.
+You're right - I'll have a look at the Eclipse Testing Project.
+
+Mike E.
+
+ted stockwell wrote:
+> Mike Evans wrote:
+> 
+>> Hi All,
+>>
+>> Just a quick update on my progress.
+>> I covered some of the issues I was dealing with in an earlier mail.
+>> In summary I am having fun trying to fit the square peg of start-up 
+>> domain instantiation with the round hole of PDE JUnit tests because:
+>> a) all app startup occurs BEFORE JUnit's setup() method is called
+>> b) a single app instance is opened for all tests within a test class
+>>
+>> I think I now have a workable solution for a) - I use the platform's 
+>> Job mechanism and put domain-related startup jobs to sleep if in test 
+>> mode - letting setup() do its thing and then waking up these jobs.
+>> For b) I do not wish to subvert the PDE testing mechanisms so am 
+>> instead looking at an additional GUI option that would run each test 
+>> class within a suite in a seperate app.
+>>
+>> Sorry if this all appears off the main stream of development but I 
+>> really do not want to start this until I have an effective test 
+>> harness in place.
+>>
+>> Will upload code for review once I am convinced it works!
+>>
+>> Mike E.
+>>
+> 
+> I think that b) will be problematic because the platform's design kinda 
+> assumes that there is one and only one, globally available, workbench.
+> I have run into problems trying to run more than one workbench within 
+> the same VM (part of some work I did for RSWT where I tried to run 
+> several RCP applications as server-side applications with thin-client 
+> front-ends;  never got it to work :-(,  but maybe some day.....
+> 
+> Anyway, in terms of a testing framework, maybe a good approach would be 
+> to create a 'test runner' that can run just a single test and then 
+> develop a test harness that can run many tests in separate VMs and 
+> aggregate the results.
+> 
+> -------------
+> 
+> Is there maybe anything in the Eclipse Testing Tools project that can 
+> help you here?  (I've looked at Haydes in the past but found the 
+> documentation not sufficient for my meager cognitive abilities ;-)).
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Tue Jun 14 08:39:08 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 14 Jun 2005 07:39:08 +0100
+Subject: [Rcpviewer-contributors] Re: IDomainBuilder?
+In-Reply-To: <42AC45CC.7040507@yahoo.com>
+References: <LGEELLOAEBMLCOGIKLMKAEPMDCAA.dan@haywood-associates.co.uk> <42A17204.4020709@incremental.eu.com> <42A30D01.3030209@yahoo.com> <42A32D40.7040101@incremental.eu.com> <42AC45A9.4030102@yahoo.com> <42AC45CC.7040507@yahoo.com>
+Message-ID: <42AE7B8C.7090003@incremental.eu.com>
+
+Not me!  I have not touched Dan's stuff.
+When I extracted everything via Tortoise (rather than via Subclipse) I 
+got the correct stuff.
+
+Mike E.
+
+ted stockwell wrote:
+
+> Same for StandardProgModelDomainBuilder.
+> 
+> 
+> ted stockwell wrote:
+> 
+>> Hi Mike,
+>>
+>> I just synced up with Subversion and now I have some compile errors... 
+>> 'IDomainBuilder connot be resolved'.
+>>
+>> I figured that this must be a change that you made.  Did you forget to 
+>> commit IDomainBuilder?  I cannot find it.
+>>
+>> thanks,
+>> -ted
+>>
+>>
+>>
+>>
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Tue Jun 14 08:57:33 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 14 Jun 2005 07:57:33 +0100
+Subject: [Rcpviewer-contributors] Finally, I make a contribution...
+In-Reply-To: <42AC4EF0.7070505@yahoo.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKIECIDDAA.dan@haywood-associates.co.uk>
+
+Ted:
+thanks for all this.  Still looking over what you've done, but your
+REVIEW_CHANGES tag is very helpful.  Will come back with something more
+constructive after I've looked in more detail this evening.
+
+Mike:
+presumably you'll be doing an update against this.  I found that Domain.java
+was missing an import, so I've updated (revision 303 should be okay).  Also,
+the list of plugins that Ted gave is slightly incorrect; here's the
+corrected list:
+
+PLUGIN                                         REPOSITORY LOCATION
+---------                                      -----------------------------
+--
+de.berlios.rcpviewer.mikespike3
+workspace/spikes/teds-workspace/de.berlios.rcpviewer.mikespike3
+net.sf.plugins.utils
+workspace/spikes/teds-workspace/net.sf.plugins.utils
+net.sf.plugins.commons
+workspace/spikes/teds-workspace/net.sf.plugins.commons
+net.sf.plugins.springframework
+workspace/spikes/teds-workspace/net.sf.plugins.springframework
+net.sf.plugins.acegisecurity
+workspace/spikes/teds-workspace/net.sf.plugins.acegisecurity
+de.berlios.rcpviewer.rcp
+workspace/de.berlios.rcpviewer.rcp
+de.berlios.rcpviewer.domain
+workspace/de.berlios.rcpviewer.domain
+de.berlios.rcpviewer.domain.runtime
+workspace/de.berlios.rcpviewer.domain.runtime
+de.berlios.rcpviewer.persistence.inmemory.ui
+workspace/de.berlios.rcpviewer.persistence.inmemory.ui
+de.berlios.rcpviewer.progmodel.extended
+workspace/de.berlios.rcpviewer.progmodel.extended
+de.berlios.rcpviewer.progmodel.rcpviewer
+workspace/de.berlios.rcpviewer.progmodel.rcpviewer
+de.berlios.rcpviewer.progmodel.standard
+workspace/de.berlios.rcpviewer.progmodel.standard
+
+ie: it is de.berlios.rcpviewer.mikespike3, not de.berlios.rcpviewer in Ted's
+workspace; also need ...domain.runtime rather than ...domain.compiletime.
+
+I also found it necessary to run with all installed plugins, rather than
+just the minimum necessary, for the search menu to appear.  Ted: perhaps
+there's a missing dependency in a manifest?
+
+Also, Mike - if you're still getting your test environment up and running
+and haven't done any work on mikespike3 per se, then you might want to use
+Ted's version since his now interfaces with my plugins.  You guys liaise and
+decide on a plan.
+
+Cheers
+Dan
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of ted
+> stockwell
+> Sent: 12 June 2005 16:04
+> To: rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Finally, I make a contribution...
+>
+>
+> Hi all,
+>
+> I have committed an example program and associated changes to plugins
+> that adds persistence to Mike's previous example application.
+>
+> You will need the following plugins to run this example application...
+>
+> PLUGIN                                            REPOSITORY LOCATION
+> ---------
+> -------------------------------
+> de.berlios.rcpviewer.mikespike3
+> workspace/spikes/teds-workspace/de.berlios.rcpviewer
+> net.sf.plugins.utils
+> workspace/spikes/teds-workspace/net.sf.plugins.utils
+> net.sf.plugins.commons
+> workspace/spikes/teds-workspace/net.sf.plugins.commons
+> net.sf.plugins.springframework
+> workspace/spikes/teds-workspace/net.sf.plugins.springframework
+> net.sf.plugins.acegisecurity
+> workspace/spikes/teds-workspace/net.sf.plugins.acegisecurity
+> de.berlios.rcpviewer.rcp
+> workspace/de.berlios.rcpviewer.rcp
+> de.berlios.rcpviewer.domain
+> workspace/de.berlios.rcpviewer.domain
+> de.berlios.rcpviewer.domain.compiletime
+> workspace/de.berlios.rcpviewer.domain.compiletime
+> de.berlios.rcpviewer.persistence.inmemory.ui
+> workspace/de.berlios.rcpviewer.persistence.inmemory.ui
+> de.berlios.rcpviewer.progmodel.extended
+> workspace/de.berlios.rcpviewer.progmodel.extended
+> de.berlios.rcpviewer.progmodel.rcpviewer
+> workspace/de.berlios.rcpviewer.progmodel.rcpviewer
+> de.berlios.rcpviewer.progmodel.standard
+> workspace/de.berlios.rcpviewer.progmodel.standard
+>
+>
+> -------------------------------------------------
+>
+> I created this example application by taking Mike's previous spike and
+> moving it to a new plugin, teds-spike/de.berlios.rcpviewer.mikespike3.
+> The de.berlios.rcpviewer.mikespike3 makes a domain known to the editor
+> by declaring the domain in an extension point...
+>     <extension
+>           point="de.berlios.rcpviewer.domain.runtime.domains">
+>        <domain
+>              class="mikespike3.model.EasyBeanDomain"
+>              id="domain"/>
+>     </extension>
+>
+> The domain contains just one class, mikespike3.EasyBean.
+> When the application starts the de.berlios.rcpviewer.rcp (which contains
+> all the RCPViewer editor code) adds the File | New | EasyBean menu item
+> to the main menu.  Select this menu item to create a new EasyBean
+> instance and open it in an editor.
+> The save button on the toolbar will be enabled when the editor is
+> opened.  Select the SAVE button to save the new EasyBean instance.
+>
+> Notice that the editor has been extended with 'dirty' support.  So if
+> you make a change to the editor then the Save button is reenabled.
+> I extended Mike's Builder component by making the form that the builder
+> creates an instance of org.eclipse.ui.forms.IManagedForms and changing
+> all the field builders so that they add instances of
+> org.eclipse.ui.forms.IFormPart to the main form.
+> In this way the main form can track changes to the fields and notify the
+> editor when the dirty property changes.
+>
+> I am using the In-Memory object store.  A future spike will extend this
+> application to use Hibernate.
+>
+> Now close the editor window that you previously opened.
+> I have added a 'Search Page' to the Eclipse Search Dialog for finding
+> objects that are in the In-Memory Object Store.
+> Choose Search | Search... | In-Memory Object Store and then hit the
+> 'Finish' button to open a search result page that displays all objects
+> in the in-memory object store.
+> Double-click the one and only one item to reopen the previously created
+> EasyBean.
+>
+> That's all!.  We created a new object, persisted it, searched an object
+> store for objects, and opened an object in a object store.
+>
+> -------------------------------------
+>
+> Notice that I use Spring and ACEGI in this application.  They are not
+> relevant to the application, I am just exploring how to use these
+> frameworks.  Only the mikespike3 plugin requires these plugins.
+> BTW, security is not being applied yet, just hit the 'Finish' button on
+> the login screen to proceed to the example.
+>
+> -------------------------------------
+>
+> I have taken the liberty of committing the de.berlios.rcpviewer.rcp and
+> de.berlios.rcpviewer.persistence.inmemory.ui plugins to the workspace
+> folder in Subversion and comitting some changes to the domain plugins.
+> I have marked all my changes with the REVIEW_CHANGE task tag, as
+> detailed in a previous post.
+>
+> --------------------------
+>
+> You may notice that I have named some plugins with the prefix
+> 'sf.net.plugins'.
+> I have for a while thought about having a project where Eclipse plugins
+> for commonly used framework may be obtained.
+> I am the adminstrator of the 'plugins'  project on SF and I am
+> considering releasing some of these plugins there.
+>
+>
+>
+>
+> -ted
+>
+>
+>
+>
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From dan at haywood-associates.co.uk  Tue Jun 14 08:58:19 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 14 Jun 2005 07:58:19 +0100
+Subject: [Rcpviewer-contributors] Re: IDomainBuilder?
+In-Reply-To: <42AE7B8C.7090003@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKMECIDDAA.dan@haywood-associates.co.uk>
+
+I just did a complete update of rev 302, found an error with Domain.java
+(missing import of StandardProgModelDomainBuilder) and fixed in rev 303.
+
+The IDomainBuilder was commited in rev 282, it's in
+trunk/workspace/de.berlios.rcpviewer.domain/src/de/berlios/rcpviewer/domain.
+
+I feel an anti-subclipse rant from Ted coming on to join Mike.  Do what I do
+and do a commit in TortoiseSVN after committing in subclipse.  It's a bit
+tedious, but I think the +ves outweigh the -ves.
+
+Dan
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Sent: 14 June 2005 07:39
+> To: ted stockwell
+> Cc: rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Re: IDomainBuilder?
+>
+>
+> Not me!  I have not touched Dan's stuff.
+> When I extracted everything via Tortoise (rather than via Subclipse) I
+> got the correct stuff.
+>
+> Mike E.
+>
+> ted stockwell wrote:
+>
+> > Same for StandardProgModelDomainBuilder.
+> >
+> >
+> > ted stockwell wrote:
+> >
+> >> Hi Mike,
+> >>
+> >> I just synced up with Subversion and now I have some compile errors...
+> >> 'IDomainBuilder connot be resolved'.
+> >>
+> >> I figured that this must be a change that you made.  Did you forget to
+> >> commit IDomainBuilder?  I cannot find it.
+> >>
+> >> thanks,
+> >> -ted
+> >>
+> >>
+> >>
+> >>
+> >
+> >
+> >
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From emorning at yahoo.com  Tue Jun 14 14:43:03 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Tue, 14 Jun 2005 07:43:03 -0500
+Subject: [Rcpviewer-contributors] Re: IDomainBuilder?
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKMECIDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKMECIDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42AED0D7.4090509@yahoo.com>
+
+Dan Haywood wrote:
+
+>I feel an anti-subclipse rant from Ted coming on to join Mike.  
+>
+
+Yeah, it's too bad about Subclipse because Subversion seems like a good 
+revision manager.
+
+BTW, I upgraded my Subclipse, Subclipse Extension, and SVNLibrary to the 
+latest versions and that totally hosed up Subclipse.  I could no longer 
+do anythingwith Subclipse (got some error about a missing file).
+
+I reverted back to the following versions, rebuilt my workspace, and now 
+things are much better, my build problems are resolved....
+JavaSVN 0.8.7
+JavaSVN Subclipse Extension 0.8.7
+Subclipse 0.9.28
+
+
+
+
+From dan at haywood-associates.co.uk  Tue Jun 14 15:22:10 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 14 Jun 2005 13:22:10 GMT
+Subject: [Rcpviewer-contributors] Subclipse versions (was: IDomainBuilder)
+Message-ID: <Zen-1DiBMo-00015h-M3@rutherford.zen.co.uk>
+
+I'm running Subclipse 0.9.30 with JavaSVN 0.8.8, and that also runs okay.  But if you discover the release notes for 0.9.31 (they're not that easy to find), you'll see it says that it's only for use against Subversion 1.2, though (at least the way I read it) is that 0.9.31 should be able to run against Subversion 1.1 as and when the JavaSVN guys release a new version to support it.
+
+I'll monitor this on everyone's behalf and let you know.
+
+Dan
+
+---
+Ted Stockwell <emorning at yahoo.com> wrote :
+
+> Dan Haywood wrote:
+> 
+> >I feel an anti-subclipse rant from Ted coming on to join Mike.  
+> >
+> 
+> Yeah, it's too bad about Subclipse because Subversion seems like a good 
+> revision manager.
+> 
+> BTW, I upgraded my Subclipse, Subclipse Extension, and SVNLibrary to the 
+> latest versions and that totally hosed up Subclipse.  I could no longer 
+> do anythingwith Subclipse (got some error about a missing file).
+> 
+> I reverted back to the following versions, rebuilt my workspace, and now 
+> things are much better, my build problems are resolved....
+> JavaSVN 0.8.7
+> JavaSVN Subclipse Extension 0.8.7
+> Subclipse 0.9.28
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+From emorning at yahoo.com  Wed Jun 15 13:00:33 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Wed, 15 Jun 2005 06:00:33 -0500
+Subject: [Rcpviewer-contributors] Re: Reviewing your changes
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKAECNDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKAECNDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42B00A51.6060005@yahoo.com>
+
+Dan Haywood wrote:
+
+>Ted,
+>
+>Going through your changes.   (Mike: I've cc'ed you only in case your using
+>Ted's update of your spike for inspiration, otherwise I think you'll pick
+>this up when you come to look at the code yourself).
+>
+>1. DomainObject#persist()
+>
+>	public void persist() {
+>		//REVIEW_CHANGE There's no 'save' method on IDomainObject, so it seems\
+>		// like this method needs to be called whenever we want to save the
+>object.
+>		// tws
+>//		if (isPersistent()) {
+>//			throw new IllegalStateException("Already persisted.");
+>//		}
+>		if (getSession() == null) {
+>			throw new IllegalStateException("Not attached to a session");
+>		}
+>		getSession().persist(this);
+>		persistent = true;
+>	}
+>
+>There isn't an IDomainObject#save, but there is an IDomainObject#persist.
+>I'm using persist (a) cos isPersistent() is a better than isSaved() and (b)
+>that's what the NOF uses for this concept.  Presumably that's ok?
+>
+>Can you tell me why did you comment out the isPersistent() test?  Did it
+>break something to have that check in?
+>
+>  
+>
+
+Here's the problem I ran into... in the example app I chose File | New | 
+EasyBean to create a new instance of na EasyBean.
+Initally the EasyBean is not persisted, and it is marked as 'dirty', 
+therefore the Save button is enabled on the toolbar.
+I saved the EasyBean, and the editor calls domainObject.persist().
+
+Then I make a change to the EasyBean and the state of the object once 
+changes to 'dirty' and the Save button becomes enabled.
+Hitting the Save button invokes domainObject.persist() a second time. 
+PROBLEM: the domain object checked to see if it has already been 
+persisted, which it was, and it threw up.
+
+I could see having BOTH a persist method AND a save method on an 
+IDomainObject but I was not sure what you meant to do.
+In a way similar to Hibernate, the  persist method would make an object 
+persistent while the save method would cause changes to the object to be 
+flushed to the store when the associated transaction is committed.
+
+OR, what I did, the persist method makes the object peristent on the 
+first call AND saves the object, and just saves the object on all 
+subsequent calls.
+
+
+
+-------------------------------------------
+
+>Also, could I gently nag you to run any unit tests before finally
+>committing, please: keep the bar green and all that.  The commenting out of
+>isPersistent() actually broke one of the tests.  I suspect though that it
+>might not be clear which is the root test suite is to run, since I can't
+>remember ever saying; for the record it is:
+>de.berlios.rcpviewer.tests/src/de.berlios.rcpviewer.tests/AllRcpViewerTests.
+>
+>
+>  
+>
+
+Oops, sorry, will do.  I was not aware that there were tests available. 
+
+
+-------------------------------------------
+
+>2. DomainRegistry & Domain subclasses vs a final Domain
+>
+>Ok, I understand what you've done, it is different from what I had in mind,
+>but I *think* I prefer your approach.  Let me go through the alternatives
+>and tell me if you wildly disagree.
+>
+>My original idea was that Domain was final and acted as its own static hash
+>(see Domain#instance(String)).  When (somehow) a domain class is looked up
+>(= registered), then an owning Domain would be lazily instantiated.
+>
+>Your design inverts this - you make the Domain itself (or rather a subclass)
+>responsible for registering the domain classes that it owns.  Since the
+>Domain already exists, it makes sense that it is given to a hash; rather
+>than having a static hash within Domain, you instead have DomainRegistry.
+>
+>The question to me is: where does the responsibility for knowing which
+>classes make up a domain reside?  I have remained mute on the answer, while
+>you've decided that the domain itself should know this.  I can't see an
+>argument against that position to be honest, so what I think I'll do is to
+>go with your design: I'll remove the static hash from Domain and refactor my
+>tests to use the DomainRegistry that you introduced.
+>
+>  
+>
+
+One other issue here is how the Domain should register classes.  The  
+EasyBeanDomain class  is forced to  'trick'  the Domain  class into  
+registering  classes by calling the lookup method....
+
+public class EasyBeanDomain
+extends Domain
+{
+
+    public EasyBeanDomain()
+    throws CoreException
+    {
+        super(EasyBeanExample.PLUGIN_ID);
+
+        // register classes
+        if (lookup(EasyBean.class) == null) {
+            String msg= "Failed to register class in 
+domain:"+EasyBean.class.getName();
+            Status status= new Status(Status.ERROR, 
+EasyBeanExample.PLUGIN_ID, 0, msg, null);
+            throw new CoreException(status);
+        }
+    }
+
+}
+
+...the intent would be clearer if there was a 'registerClass' method.
+
+
+-------------------------------------------
+
+
+
+>By the way, I noticed you using the old double check idiom in one of the
+>methods:
+>
+>//	REVIEW_CHANGE Added this method.  ted
+>	public IDomainRegistry getDomainRegistry() {
+>		try {
+>			if (_domainRegistry == null) {
+>				synchronized (this) {
+>					if (_domainRegistry == null)
+>						_domainRegistry= new DomainRegistry();
+>				}
+>			}
+>			return _domainRegistry;
+>		}
+>		catch (CoreException x) {
+>			getLog().log(x.getStatus());
+>			throw new RuntimeException(x);
+>		}
+>	}
+>
+>But this is broken, isn't it
+>(http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html)?
+>Or did JDK 5.0 fix it?  At any rate, I've just made these methods
+>synchronized.  If you know better, we can reinstate your version.
+>
+>
+>  
+>
+Are you calling me old!?  Just kidding.
+
+According to the link we should also change the _domainRegistry 
+reference to static.
+Doing that will ensure that the _domainRegistry reference is intialized 
+once and only once before any caller can reference it.
+
+-------------------------------------------
+
+>3 Sessions
+>
+>You added some methods to SessionManager, and asked "How does the action get
+>a Session to use?"
+>
+>The design I had was that there is also a SessionFactory in addition to
+>Session and SessionManager, see AbstractRuntimeTestCase.  The job of the
+>SessionFactory is to hold together a Domain (or rather, the name of a
+>Domain) along with an ObjectStore.  The SessionFactory can then create a
+>Session for the Domain and using the ObjectStore.
+>
+>Actually, I called it SessionFactory, but it's more of a binding:
+>(Marketing, London)
+>(Marketing, NY)
+>(Order Mgmt, London)
+>
+>or
+>(Cust Services, Development)
+>(Cust Services, Production)
+>
+>The question I guess I should pose myself though is would one ever have:
+>(Cust Services, Development)
+>(Cust Services, Development)
+>
+>and I suppose the answer actually is "no".  So then, why do I have a
+>factory, why not just instantiate Sessions directly rather than
+>SessionFactorys? Good question, don't know.  Huh, I think I need to refactor
+>again.
+>
+>I think what I'll do is keep your SessionManager#addSession, but make it
+>responsible for creating the session at the same time.  And then get rid of
+>the SessionFactory completely.
+>
+>  
+>
+
+In that case I think that you should also change the name from 
+SessionManager#addSession to SessionManager#createSession.
+
+
+>I also haven't solved the question about how does the user indicate which
+>"session" to use, so I think that getCurrentSession/setCurrentSession are
+>still needed.  Regarding the longer term question of switching sessions,
+>I'll add a feature request onto the wiki.  Perhaps have some sort of
+>dedicated view that just lists the sessions currently instantiated, a bit
+>like how one selects a database when using MS SQL Server (or a schema when
+>using Oracle if you like that sort of thing).
+>
+>  
+>
+
+I'm not so sure about the getCurrentSession/setCurrentSession methods 
+myself.
+Adding those methods was really just a convenience until maybe we came 
+up with something better.
+
+My thinking was that the UI would somehow indicate the current session.
+And maybe different applications might prefer different methods for 
+choosing/indicating the session.
+For instance, in Thunderbird (the e-mail client that I use) the current 
+'session' would be associated with the currently selected folder in the 
+'Folders' view.
+Or, an application might choose to have separate perspectives for each 
+session.
+Or, maybe the session might be settable in Preferences.
+
+The way a UI could manage the 'current' session would be to switch the 
+current session everytime a session-switching UI event occurs.
+For instance, when the perspective is changed to a perspective 
+associated with a different session then the UI would call 
+SessionManager#setCurrentSession.
+
+Alternatively, we could maybe have a way to provide the SessionManager 
+with an application-specific Strategy object that would be able to 
+provide the SessionManager with the current session.
+
+
+
+
+
+
+From dan at haywood-associates.co.uk  Sun Jun 19 08:51:22 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sun, 19 Jun 2005 07:51:22 +0100
+Subject: [Rcpviewer-contributors] Annotations (was RE: IDomainRegistry & EasyBeanDomain)
+In-Reply-To: <42B347E4.50504@yahoo.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEECDDAA.dan@haywood-associates.co.uk>
+
+Ted:
+thanks for your response, I've replied to contributors mailing list so that
+this thread is archived (for those joining the conversation, background to
+this thread is at the end):
+
+I don't completely agree with you that annotations should be considered
+optional but your remarks have helped me clarify in my mind where
+annotations can be used and where we should use some other form of metadata
+(eg XML).
+
+I think I can summarise your concerns - which are legitimate - by saying
+that annotations should be optional to capture metadata that may vary on a
+deployment-by-deployment basis.  The two examples you gave, of mapping to a
+perhaps legacy database, or for labels of fields in the UI, are both
+examples of this.  And the reason is clear: if deploying an application at a
+new site one wouldn't want to have to go through the source code and change
+all the annotations etc.
+
+However, I think it is valid to use annotations for metadata that is
+intrinsic to the domain itself (rather than merely the deployment of the
+domain in some context).  Most of the annotations to date fall into this
+category (eg @Associates,  @LowerBoundOf, @UpperBoundOf and @Unique).  As
+such there is nothing wrong with making these mandatory.  Trying to get by
+without @Associates is all but impossible.  And I include @InDomain as one
+of these.
+
+Let me turn to the two examples you give.  First up, I agree that the use of
+Hibernate annotations would be optional for all the reasons you give, and if
+we were to implement a similar set of persistence annotations that could be
+support Hibernate, JDO or EJB3 say then they too should be considered
+optional.
+
+Your "client-ized" labels are more subtle.  One of the features that needs
+to be implement is to provide a way of identifying any feature - see
+http://www.haywood-associates.co.uk/rcpviewer/space/features/feature-ids.
+For example, consider:
+
+package com.mycompany.domain;
+public class Customer {
+  private String firstName;
+  public String getFirstName() { ... }
+}
+
+The feature Id of firstName would be something like
+com.mycompany.domain.Customer#firstName.  I then imagined that this could be
+used as a key to i18n, or to help, or for security authorization, eg:
+
+in a ResourceBundle:
+de.berlios.rcpviewer.i18n.com.mycompany.domain.Customer#firstName=Christian
+Name
+
+in some help file:
+de.berlios.rcpviewer.help.com.mycompany.domain.Customer#firstName=The first
+or given name of the customer
+
+part of a security service:
+public void IAuthorizationService {
+  public boolean isVisible(final String featureId);
+  public boolean isUsable(final String featureId);
+}
+
+So, these feature Ids could be used for a clientization capability.  Or, to
+be honest, one could think of your different clients as merely different
+locales and just use the i18n feature.
+
+Finally, when I was thinking about this response, I was going to quote
+"@MaxLength" (of an attribute, eg email address) as an annotation that might
+be intrinsic to the domain.  However, it occurred to me that maybe your
+different clients (ie different deployments) might specify different
+lengths.  Perhaps for the majority a default of 50 characters might be
+enough, but you have one client who insists that it should be 100
+characters.  So this made me think that maybe annotations should be
+overridable: the information absolutely is needed, but will be looked up
+from a properties file and only if not present will the annotation be used.
+Hence:
+
+package com.mycompany.domain;
+public class Customer {
+  private String emailAddress;
+  @MaxLengthOf(50)
+  public String getEmailAddress() { ... }
+}
+
+would be enough for most, but at your client who insists on 100 character
+email addresses you would also deploy:
+
+de.berlios.rcpviewer.progmodel.standard.MaxLengthOf.com.mycompany.domain.Cus
+tomer#emailAddress=100
+
+Your thoughts?
+
+Dan
+
+
+> >[dan originally wrote]:
+> >... Under the compile-time, the developer
+> >will open a class for editing, and our plugin would - using Java AST -
+> >notice the @InDomain annotation and from it build a domain on
+> the fly.  In
+> >other words, domain classes come before domains and domains are built
+> >implicitly.
+> >
+> >
+> [ted responded]:
+> I hadn't imagined annotation-processing as a REQUIREMENT for using the
+> framework, I see annotations more as a CONVENIENCE.
+> As a general solution for specifying metadata I know that annotations
+> will work for a lot of projects but I am not crazy in love with the idea
+> of using them.
+> For instance, suppose I need to map the same domain to several different
+> physical databases using Hibernate (which I anticipate the need to do,
+> for instance, if we need to integrate our General Ledger with a thirdy
+> party General Ledger).
+> I would NOT want to use annotations because annotations limit me to only
+> one mapping, I would rather put the mapping in an XML file and use a
+> different XML file at runtime.
+>
+> As far as RCPViewer annotations go, I could only be comfortable with
+> using annotations if I can be sure that I can replace ALL labels defined
+> in annotations at runtime.
+> The labels in our product not only need to be internationalized but they
+> need to be 'client-ized".  That is, different clients use different
+> terms for the same thing and we change the labels in our application to
+> suit them.  For instance, some clients use the term "Sales Agreement"
+> while other clients use the term "Customer Acknowledgement".
+> I imagined eventually having the RCPViewer metadata in an XML file that
+> I could process at runtime and replace tokens with the approriate labels.
+> This would be a mechanism that I would build specifically for our
+> application, but that could be hooked into the framework in some fashion.
+>
+> So... I think there should be a way to discover or register domains at
+> runtime and it should be a generic mechanism that does NOT depend on the
+> use of annotations.
+>
+> The annotation tooling should be built on top of the RCP Viewer
+> framework, however, I think that the framework should remain
+> independent of
+> annotations and other tooling.
+> Developers that want to use annotations can use the OPTIONAL annotation
+> support to annotate thier classes and have the domain and whatever
+> automagically generated for them.
+> Hibernate annotations, http://www.hibernate.org/247.html, is an
+> example of how I imagined annotations would be used along with
+> the RCP Viewer.
+>
+>
+
+
+
+
+From emorning at yahoo.com  Sun Jun 19 18:40:41 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 19 Jun 2005 11:40:41 -0500
+Subject: [Rcpviewer-contributors] Annotations (was RE: IDomainRegistry
+ & EasyBeanDomain)
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKEEECDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKEEECDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42B5A009.1010204@yahoo.com>
+
+Dan Haywood wrote:
+
+>Ted:
+>thanks for your response, I've replied to contributors mailing list so that
+>this thread is archived (for those joining the conversation, background to
+>this thread is at the end):
+>
+>I don't completely agree with you that annotations should be considered
+>optional but your remarks have helped me clarify in my mind where
+>annotations can be used and where we should use some other form of metadata
+>(eg XML).
+>
+>I think I can summarise your concerns - which are legitimate - by saying
+>that annotations should be optional to capture metadata that may vary on a
+>deployment-by-deployment basis.  The two examples you gave, of mapping to a
+>perhaps legacy database, or for labels of fields in the UI, are both
+>examples of this.  And the reason is clear: if deploying an application at a
+>new site one wouldn't want to have to go through the source code and change
+>all the annotations etc.
+>
+>However, I think it is valid to use annotations for metadata that is
+>intrinsic to the domain itself (rather than merely the deployment of the
+>domain in some context).  Most of the annotations to date fall into this
+>category (eg @Associates,  @LowerBoundOf, @UpperBoundOf and @Unique).  As
+>such there is nothing wrong with making these mandatory.  Trying to get by
+>without @Associates is all but impossible.  And I include @InDomain as one
+>of these.
+>
+>  
+>
+I agree that some annotations could be required.
+Unfortunately, I'm not sure that I agree that @InDomain should be required.
+
+However, forget about that for now, let me try to restate what I would 
+really like from the Domain API...
+What I really want is an interface-based Domain API that allows the 
+<implementation> of the API to be plugable.
+That way we really don't need to have debates about how the 
+implementation should work.  If I need to be able to change the set of 
+classes in a domain for different clients then I would be able to do 
+that by swapping out the default Domain SPI with my own implementation. 
+
+The default Domain implementation could be totally driven by 
+annotations.  In fact, the default Domain implementation probably should 
+totally annotation driven since such an implementation is probably the 
+best solution for most projects. 
+But do you want to create an RCPViewer built for a set of developers 
+that want to develop an application in a specific fashion, or do you 
+want an RCPViewer that can be adapted to a wide variety of situations?
+Going back to Hibernate as an example... there is no reason to require 
+anything to be specified as an annotations, the metadata layer should be 
+totally implementation independent.
+
+
+
+
+>Let me turn to the two examples you give.  First up, I agree that the use of
+>Hibernate annotations would be optional for all the reasons you give, and if
+>we were to implement a similar set of persistence annotations that could be
+>support Hibernate, JDO or EJB3 say then they too should be considered
+>optional.
+>
+>Your "client-ized" labels are more subtle.  One of the features that needs
+>to be implement is to provide a way of identifying any feature - see
+>http://www.haywood-associates.co.uk/rcpviewer/space/features/feature-ids.
+>For example, consider:
+>
+>package com.mycompany.domain;
+>public class Customer {
+>  private String firstName;
+>  public String getFirstName() { ... }
+>}
+>
+>The feature Id of firstName would be something like
+>com.mycompany.domain.Customer#firstName.  I then imagined that this could be
+>used as a key to i18n, or to help, or for security authorization, eg:
+>
+>in a ResourceBundle:
+>de.berlios.rcpviewer.i18n.com.mycompany.domain.Customer#firstName=Christian
+>Name
+>
+>in some help file:
+>de.berlios.rcpviewer.help.com.mycompany.domain.Customer#firstName=The first
+>or given name of the customer
+>
+>part of a security service:
+>public void IAuthorizationService {
+>  public boolean isVisible(final String featureId);
+>  public boolean isUsable(final String featureId);
+>}
+>
+>So, these feature Ids could be used for a clientization capability.  Or, to
+>be honest, one could think of your different clients as merely different
+>locales and just use the i18n feature.
+>
+>  
+>
+
+I like this approach very much.
+Why not extend the concept of feature ID to include domains and classes 
+as well as attributes and methods, etc.
+Then the Domain API could become a set of pluggable services that supply 
+RCPViewer with information about all the features available in the system...
+
+public interface IDomainService {
+  public String[] getAllDomainFeatureIds();
+
+  public String[] getAllChildFeatures(String featureId);
+  public boolean contains(String parentFeatureId, String featureId);
+  public FeatureType getFeatureType(featureId);
+
+  public String getName(String featureId);
+  public boolean isOrderable(String featureId);
+  public boolean isReadOnly(String featureId);
+  public int getLowerBound(String featureId);
+ ...
+}
+
+public interface IObjectService {
+  public Object createObject(String featureId);
+
+  public void setValue(Object object, String featureId, Object value);
+  public Object getValue(Object object, String featureId);
+ ...
+}
+
+
+
+public interface IAuthorizationService {
+  public boolean isVisible(String roleName, String featureId);
+  public boolean isUsable(String roleName, String featureId);
+ ...
+}
+
+
+public interface ILabelService {
+  public String getLabel(String featureId);
+ ...
+}
+
+
+public interface ISessionService {
+ 	public void peristObject(Object object);
+ ...
+}
+
+...and so on.
+
+
+Then, no more discussion about things work, only what needs to be done.
+
+
+
+What do you guys think about such an API?
+
+
+
+
+From emorning at yahoo.com  Mon Jun 20 06:33:39 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 19 Jun 2005 23:33:39 -0500
+Subject: [Rcpviewer-contributors] Security in RCPViewer
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+Message-ID: <42B64723.6080801@yahoo.com>
+
+Hi All,
+
+I am interested in expanding the easybean example by adding security 
+features.
+This post is an overview of how I would like to implement security.
+
+The goal of RCPViewer's security implementation seem pretty 
+straighforward, that is...
+...to be able to show/hide UI features based on the user's set of 'roles'
+...be able to get the name of the current user (for display somewhere).
+...not be tied to any particular authentication of authorization method.
+...should not prevent code written to a particular A&A API from being 
+reused in an RCPViewer application.
+
+----------------------------
+Overview
+
+RCPViewer does not need much in terms of authentication and 
+authorization functionality. 
+The only thing that I anticipate that RCPViewer will require is some API 
+to determine who the current user is and to get that user's set of 
+authorizations.
+I don't anticipate that RPCViewer will be involved in actually 
+performing authentication or actually securing calls to methods. 
+The only thing that I anticipate that RCPViewer has to do is to 
+customize the UI depending on who the user is and that user's set of 
+authorizations.
+I expect RCP applications to perform thier own authentication and that 
+the user will have been authenicated BEFORE the RCP workbench is created 
+(this is how the EasyBean eaxmple currently works).
+
+There are two cataegories of information that RCPViewer will need...
+...the user's name, and the set of Roles assigned to the user.
+...the Roles assigned to domain features (domains, classes, attributes, 
+methods, etc).
+
+Seems like adding a couple of simple extensions to the Domain API would 
+be sufficent.
+I propose the following...
+
+...add the following interface to the de.berlios.rcpviewer.domain plugin:
+package de.berlios.rcpviewer.security;
+public interface IUserAuthorizationService {
+    String getName();
+    Collection<String> getRoles();
+}
+
+...and add the following method to the IDomain interface...
+    boolean isFeatureInRoles(Collection<String> roles, String featureId);
+
+..and add the following interface to the de.berlios.domain.runtime plugin:
+package de.berlios.rcpviewer.runtime.security;
+public interface IDomainAuthorizationService {
+    boolean isFeatureInRoles(Collection<String> roles, String featureId);
+}
+
+-----------------------------
+Service Implementation
+
+I expect that we will have more discussion about service implementation 
+in the future.
+However, for now I intend to implement services as OSGi services since 
+Eclipse already contains infrastructure for discovering and managing 
+such services.
+I intend to implement these services in separate bundles so that they 
+can be easily replaced with different implementations.
+
+RCPViewer applications may integrate any security mechanism into 
+RCPViewer by replacing the bundle that supplies the 
+de.berlios.rcpviewer.security.user package. 
+I intend to create two bundles with different implementions of the 
+de.berlios.rcpviewer.security.domain package.
+I will create one bundle named de.berlios.rcpviewer.security.user.acegi 
+that wraps the Acegi toolkit and uses Acegi to implement the 
+de.berlios.rcpviewer.security.user package.
+I will create another bundle named 
+de.berlios.rcpviewer.security.user.jaas that uses JAAS to implement the 
+de.berlios.rcpviewer.security.user package.
+
+RCPViewer applications may use any method for discovering domain 
+authorization information by adding services that implement the 
+IDomainAuthorizationService interface. 
+I intend to create two bundles with different implementions of 
+IDomainAuthorizationService .
+I will create one bundle named 
+de.berlios.rcpviewer.runtime.security.annotations and will use 
+annotations to declare roles for classes, attributes, methods, etc.  
+This plugin will inspect the annotations attached to POJO classes at 
+runtime.  This plugin will expert a service with the name 
+de.berlios.rcpviewer.runtime.security.annotations.AnnotationDomainAuthorizationService.
+I will create another bundle named 
+de.berlios.rcpviewer.runtime.security.xml that will use hierarchical xml 
+configuration files to declare roles for classes, attributes, methods, 
+etc.  This plugin will expert a service with the name 
+de.berlios.rcpviewer.runtime.security.xml.XMLDomainAuthorizationService.
+
+------------------------------
+Supporting multiple domain authorization schemes within a single 
+application.
+
+It is assumed that there will never be a need to use multiple user 
+authorization services within a single application.  If there is a need 
+to integrate with multiple security domains then it is assumed that the 
+user authorization service used in the application implements some kind 
+of Single Sign On method that integrates the disparate domains.
+
+However, it might be necessary to use bundles that export domains that 
+use different domain authorization schemes.  For instance, suppose an 
+application that uses the xml domain authorization scheme wants to reuse 
+a bundle that exports a domain that uses the annotation authorization 
+scheme.  This is why the isFeatureInRoles method has been added to the 
+IDomain interface, because the implementation of the isFeatureInRoles is 
+domain specific.
+However, a domain implementation may simple delegate calls to its 
+isFeatureInRoles method to one of the services named above.
+
+------------------------------
+Customizing the UI...
+
+Given that we have an API for discovering the current user and the 
+user's authorizations the next question is how to actually go about 
+showing/hiding UI elements.
+
+Eclipse Activities provides a mechanism by which UI features may be 
+enabled and disabled based on categories of activities.
+My first though was that we would be able to use the Eclipse Activities 
+API for customizing the UI at runtime.  
+However, there are a few the problems with using the Activities API...
+...large RCP applications that actually want to use the Activities API 
+to filter UI elements based  on task or context would interfer with our 
+use of Activities.  That is, a UI element is shown if any of it's 
+activites are enabled.
+...activities can only be defined at design-time,
+So, I have rejected the use of Activities.
+
+Seems like each UI element created by RCPViewer will have to determine 
+for itself whether it is visible or not by consulting the 
+IUserDomainService and the IDomain for authorization info.
+
+
+
+Clear as mud?
+Comments and suggestions are welcome.
+
+
+-ted
+
+
+From mike.evans at incremental.eu.com  Fri Jun 24 19:01:57 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 24 Jun 2005 18:01:57 +0100
+Subject: [Rcpviewer-contributors] Progress! (of sorts)
+Message-ID: <42BC3C85.2010006@incremental.eu.com>
+
+Finally found a little time & spent most of of it getting back into things.
+
+There is a mike spike4 that works etc. but I do not really think its 
+worth any one's time to review.  Its the working part of my test harness 
+explorations and involves such concepts as TestSessions and scheduled 
+StartUpJobs.  If I get that to a point where I think it might be worth 
+bringing into main development I'll let you know and seek feedback. 
+Until then its stored away in mikespike4.
+
+Have also started the 'gui' projects in the main workspace.  They work 
+but are not even as functional as mikespike3 yet.  Next steps are to 
+look at Ted's persistence stuff and build that in.  Not a test in sight 
+but I am rushing now to make good the last few lost weeks.
+
+There is the 'gui' project with core code and the 'gui acme' project 
+which is (will be) an example domain on top of it.
+
+I suggest not much looking at them until my next alert as there is 
+nothing really new as yet, and as stated, I have not built-in Ted's 
+stuff yet.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Mon Jun 27 10:48:26 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 27 Jun 2005 09:48:26 +0100
+Subject: [Rcpviewer-contributors] Re: busy busy
+In-Reply-To: <42BC44F1.2010202@yahoo.com>
+References: <LGEELLOAEBMLCOGIKLMKKEGDDDAA.dan@haywood-associates.co.uk> <42BBE252.508@incremental.eu.com> <42BC44F1.2010202@yahoo.com>
+Message-ID: <42BFBD5A.5000602@incremental.eu.com>
+
+Hi All,
+
+Incremental progress today : have taken the Gui as far as I ought to
+without reference to Ted's stuff - which is not far at all. All that is
+there is a basic classbar implementation with dummy actions.
+Next steps:
+1) I have (finally) got round to downloading Ted's stuff.  Currently 
+have various funnies with it (non-existing plugins etc.) so will 
+reference Dan's comments and get it working.
+2) Then I can incorporate Ted's stuff which will probably be an 
+overwrite-job on what I have got so far - though I'll try to strip out 
+anything unnecessary (as per Ted's comments in his 're:PetStore' mail )
+3) add a session view - this will be the tree of instances open in the
+current session offering similar functionality to the classbar.
+Then we have a basic app which can open editors, display the session etc
+and I am off your individual critical paths.
+
+
+
+Ted - with regards to the test framework - can we hold fire the above is
+done - say until the end of this week?  The reason is that the only
+architecturally-interesting part of the development so far is my use of
+Jobs.  I am thinking that all UI actions will be scheduled Jobs.  Hence
+we have an instant way into:
+- undo / redo management
+- Dan's aspirational scripting capability
+- easier test harness control.
+I was initially concerned that Jobs were perhaps a little heavyweight
+for individual gui updates (especially those on key strokes) but once I
+started poking around in the Tree and TableViewer implementations I
+noted that Jobs are used for all updates and refreshes - hence I think
+this might be a perfectly  reasonable proposal.
+
+Mike E.
+
+PS : other implementation notes within each plugin's wiki
+
+PPS : do we use official Java programming standards?  I have
+deliberately avoided the _ and __ prefixes though I like them.  Ted
+clearly likes them.  Opinions?
+
+
+
+
+
+ted stockwell wrote:
+> Mike Evans wrote:
+> 
+>>
+>>
+>> 2) I'll focus on the core development - the test harness is something 
+>> I'll get back to.  There'll still be some TDD, just not as much as I'd 
+>> like.
+>>
+> A test harness is very important to me also.
+> I would be willing to bang my head on the test framework while you are 
+> working on the editor.
+> If you want me to do that then commit what you have so far and give me 
+> an outline of what's been done so far and what your goals are.
+> 
+> 
+>>
+>> Ok having groveled, let me do a volte face and blame my tools.
+>> Yet again I am getting errors commiting new stuff to SVN.
+>> Can we go back to basics and make sure I am not doing something wrong:
+>>
+>> 1) I have the Subclipse connection set up as per the wiki.
+>> 2) I have a new 'mikespike4' project to add to SVN in mikes-workspace
+>> 3) Team / Share Project / SVN option / ...
+>> THEN do I
+>> 4a) create a new repository location with a url including 
+>> /spikes/mike-workspace
+>> OR do I
+>> 4b) use the default URl and specific /spikes/mikes-workspace/ in the 
+>> module name
+>> OR
+>> 4c) have I got it completely wrong?
+>>
+>> I get errors whatever I try.
+>>
+> 
+> 
+> First of all, a while back after I upgraded all my SVN-related plugins I 
+> found that I couldn't do a damn thing with Subclipse.
+> I reverted back to the following versions, rebuilt my workspace, and now 
+> things are much better, my build problems are resolved (except when the 
+> user goes braindead ;-))....
+> JavaSVN 0.8.7
+> JavaSVN Subclipse Extension 0.8.7
+> Subclipse 0.9.28
+> 
+> ----------
+> 
+> Also, I am able to successfully commit, update, compare, AND add new 
+> products from with Eclipse.
+> I have found that I MUST have the repository URL set to 
+> svn+ssh://svn.berlios.de/svnroot/repos/rcpviewer (and the default URL is 
+> set to this).
+> 
+> Other URLs cause Subclipse to barf when I try adding a new project.
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Wed Jun 29 10:58:07 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 29 Jun 2005 09:58:07 +0100
+Subject: [Rcpviewer-contributors] Progress 20050629
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKIEHDDDAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKIEHDDDAA.dan@haywood-associates.co.uk>
+Message-ID: <42C2629F.1090208@incremental.eu.com>
+
+Hi All,
+
+Projects
+* de.berlios.rcpviewer.gui
+* de.berlios.rcpviewer.gui.acme
+committed.
+They are essentially merge/rewrite of mikespike3 plus Ted's persistence 
+stuff.  In fact de.berlios.rcpviewer.gui is a replacement for 
+de.berlios.rcpviewer.rcp.  (Why I did not just update the latter I am 
+not too sure).
+Currently it does not include the Search capability as I will have to 
+update the ...persistence.ui plugin - will do so tomorrow.
+
+Attached after this note are the salient points from the wiki - please 
+peruse and if anything interests you, then it might be worth taking a 
+look at the source.
+
+Next steps:
+* add Ted's search stuff
+* properly review Ted's persistence changes
+* tidy everything ( consistent formatting etc, JAVADOC! )
+* add session tree view
+All intended for this week.
+
+Next week I intend to get back to some TDD and have a chat with Ted 
+regarding the test harness.
+
+Mike E.
+
+
+
+
+FROM WIKI:
+
+
+'''Design Points'''
+* A DomainBootstrapFactory used to allow options in the future.
+* The returned IDomainBootstrap is wrapped in a  job.  This is strictly 
+unecessary at the moment (indeed necesitates a join() call in plugin's 
+startup()) but wrapping such long / heavy operations such as this in Job 
+is one of my suggested standards.
+* Similarly there is a session bootstrap job - this is in the plugin 
+startup rather than the application initialisation so that, eventually, 
+it can be configured via eclipse mechanisms.
+* Ted's dummy authorisation wizard is left out for now.  Don't 
+particularly like the wizard approach to login - I suggest a good ole' 
+dialog.
+* Currently no domains extesnion point - simply uses default - this is 
+where the session bootstrap job could come in.
+
+'''Current Errors'''
+* second save() fails on editor - re: discussion between save() and 
+persist() methods.
+
+'''Suggested Standards'''
+* wrap all log / complex operations in Job's
+* 'eat your own dogfood' for all extension points  '''unless''' the 
+fall-back default option; hecnce 'exts' sub-directories where extension 
+points are implemented
+* apart from explicit extension points, am '''not''' writing classes for 
+extension, rather the opposite - trying to make as un-public as possible.
+* use _ notation for fields (?)
+* place constants on appropriate classes - not a global constant 
+interface (an anti-pattern?)
+
+
+
+Dan Haywood wrote:
+> Hi Mike,
+> 
+> Just did an update on your plugin.  One thing I had to do was apply a
+> singleton=true directive since I am running 3.1rc4 right now, see rev 352.
+> Just wanted you to know in case it causes you problems on an older build.
+> 
+> Also, did you get a chance to try Ted's version of your spike?  He had a
+> File>New to instantiate domain classes, and also a contribution to the
+> Search menu for fetching persisted objects.  Probably worth salvaging and
+> folding into your stuff?
+> 
+> In fact, just checking, looks like some of Ted's spike was actually moved up
+> by him into the main workspace, see de.berlios.rcpviewer.rcp and
+> de.berlios.persistence.ui.  So we should merge all this because there's
+> definitely some overlap.  Whether you merge his into yours or vice versa is
+> your call.
+> 
+> Dan
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Thu Jun 30 13:12:57 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 30 Jun 2005 12:12:57 +0100
+Subject: [Rcpviewer-contributors] Re: could you work on the action view before returning to the test
+ harness?
+In-Reply-To: <Zen-1DnvK8-0007ca-QS@pythagoras.zen.co.uk>
+References: <Zen-1DnvK8-0007ca-QS@pythagoras.zen.co.uk>
+Message-ID: <42C3D3B9.9030900@incremental.eu.com>
+
+Okey-dokey.
+Looks like my query regarding the DefautEditor's use of reflection to 
+obtain getters and setters was apposite.
+I gather you really expect it to use IDomainObject attributes and 
+operations rather than do its own refelction.
+This fits nicely with my Job model.
+I want to make a generic:
+DomainOperationJob( IDomainObject obj, Operation op ) {}...
+which would be used for all setters as well as other ops.  Then tie the 
+gui in as listeners upon this.
+Which should also give the basis for the action-view.
+
+Mike E.
+
+Dan Haywood wrote:
+> Hi Mike,
+> thanks for the work this week, really good stuff.  Looking forward to seeing the other few things you mentioned in your last posting.
+> 
+> You said next week you want to go back to the test harness, after consulting with Ted.  Since Ted is on vacation though, could you put that on hold and see if you could lash together a version of the action view (http://www.haywood-associates.co.uk/rcpviewer/space/features/action-view) or some other equivalent means of invoking actions.
+> 
+> I'll then be able to do some meaningful work on a Petstore demo.  Also, there'll be something for me to "work at" in terms of enhancing the UI myself (in very small ways) to enforce some of the constraints and semantics of the metamodel.
+> 
+> Let me know...
+> Dan
+> 
+> 
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Thu Jun 30 11:17:15 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 30 Jun 2005 10:17:15 +0100
+Subject: [Rcpviewer-contributors] Progress 20050630
+Message-ID: <42C3B89B.2080006@incremental.eu.com>
+
+Hi All,
+
+1. Incorporated search functionality - not hard really as Ted built it in
+Notes:
+* had to change dependency for ...persistence.ui project from ...rcp
+project to ...gui
+* there is one REVIEW_CHANGE - just fitting it in with job model
+* the default run of ...gui.acme does NOT include the search - see wiki
+for details.
+
+2. Standardised format
+No check-style yet but used __ and _ prefixes for fields.
+We can now start the struggle to assert whose coding style is second 
+best after mine.
+Other suggested standards in the wiki.
+
+3. Got rid of "public"
+A suggested standard - every class/method is private.
+Only if there is a very good reason should it be package protected.
+Only if there is a better reason should it be protected.
+Only is there is an unarguable reason, should it be public.
+We are building a framework that other might extend - lets minimise our 
+problems from the beginning.  Make everything as tight as possible, use 
+features such as Bundle's ability not to export packages, and later we 
+can explicitly publicise (exactly the right word here!) the stuff we 
+want people to code against.
+
+4. Review of Ted's DefaultEditor changes
+* A few minor specifics - look for REVIEW_CHANGE
+* Major one - DefaultEditorConetntPane is still doing its own 
+reflection. Is there a reason it is not using the IDomainClass stuff? 
+This will impact the contract of IFieldBuilder.
+
+Tomorrow : session tree view
+
+Mike E.
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+From dan at haywood-associates.co.uk  Thu Jun 30 13:48:47 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 30 Jun 2005 11:48:47 GMT
+Subject: [Rcpviewer-contributors] Re: could you work on the action view before returning to the test harness?
+Message-ID: <Zen-1DnxXD-0008Sp-Rb@pythagoras.zen.co.uk>
+
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> Okey-dokey.
+> Looks like my query regarding the DefautEditor's use of reflection to obtain getters and setters was apposite.
+
+I missed that.
+
+
+> I gather you really expect it to use IDomainObject attributes and operations rather than do its own refelction.
+
+Absolutely.
+
+
+> This fits nicely with my Job model.
+
+Excellent.
+
+
+> I want to make a generic:
+> DomainOperationJob( IDomainObject obj, Operation op ) {}...
+> which would be used for all setters as well as other ops.  Then tie the gui in as listeners upon this.
+> Which should also give the basis for the action-view.
+
+
+Sounds good.
+
+Dan
+
+
+
+
+
+
+
+

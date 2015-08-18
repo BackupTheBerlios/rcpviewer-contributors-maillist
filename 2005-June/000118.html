@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Update on gui development
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Update%20on%20gui%20development&In-Reply-To=%3C42AE781D.9070102%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000120.html">
+   <LINK REL="Next"  HREF="000119.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Update on gui development</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Update%20on%20gui%20development&In-Reply-To=%3C42AE781D.9070102%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Update on gui development">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Tue Jun 14 08:24:29 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000120.html">[Rcpviewer-contributors] Finally, I make a contribution...
+</A></li>
+        <LI>Next message: <A HREF="000119.html">[Rcpviewer-contributors] Re: IDomainBuilder?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#118">[ date ]</a>
+              <a href="thread.html#118">[ thread ]</a>
+              <a href="subject.html#118">[ subject ]</a>
+              <a href="author.html#118">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The testing framework option is what I ma looking at.
+You're right - I'll have a look at the Eclipse Testing Project.
+
+Mike E.
+
+ted stockwell wrote:
+&gt;<i> Mike Evans wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi All,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Just a quick update on my progress.
+</I>&gt;&gt;<i> I covered some of the issues I was dealing with in an earlier mail.
+</I>&gt;&gt;<i> In summary I am having fun trying to fit the square peg of start-up 
+</I>&gt;&gt;<i> domain instantiation with the round hole of PDE JUnit tests because:
+</I>&gt;&gt;<i> a) all app startup occurs BEFORE JUnit's setup() method is called
+</I>&gt;&gt;<i> b) a single app instance is opened for all tests within a test class
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think I now have a workable solution for a) - I use the platform's 
+</I>&gt;&gt;<i> Job mechanism and put domain-related startup jobs to sleep if in test 
+</I>&gt;&gt;<i> mode - letting setup() do its thing and then waking up these jobs.
+</I>&gt;&gt;<i> For b) I do not wish to subvert the PDE testing mechanisms so am 
+</I>&gt;&gt;<i> instead looking at an additional GUI option that would run each test 
+</I>&gt;&gt;<i> class within a suite in a seperate app.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sorry if this all appears off the main stream of development but I 
+</I>&gt;&gt;<i> really do not want to start this until I have an effective test 
+</I>&gt;&gt;<i> harness in place.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Will upload code for review once I am convinced it works!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I think that b) will be problematic because the platform's design kinda 
+</I>&gt;<i> assumes that there is one and only one, globally available, workbench.
+</I>&gt;<i> I have run into problems trying to run more than one workbench within 
+</I>&gt;<i> the same VM (part of some work I did for RSWT where I tried to run 
+</I>&gt;<i> several RCP applications as server-side applications with thin-client 
+</I>&gt;<i> front-ends;  never got it to work :-(,  but maybe some day.....
+</I>&gt;<i> 
+</I>&gt;<i> Anyway, in terms of a testing framework, maybe a good approach would be 
+</I>&gt;<i> to create a 'test runner' that can run just a single test and then 
+</I>&gt;<i> develop a test harness that can run many tests in separate VMs and 
+</I>&gt;<i> aggregate the results.
+</I>&gt;<i> 
+</I>&gt;<i> -------------
+</I>&gt;<i> 
+</I>&gt;<i> Is there maybe anything in the Eclipse Testing Tools project that can 
+</I>&gt;<i> help you here?  (I've looked at Haydes in the past but found the 
+</I>&gt;<i> documentation not sufficient for my meager cognitive abilities ;-)).
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000120.html">[Rcpviewer-contributors] Finally, I make a contribution...
+</A></li>
+	<LI>Next message: <A HREF="000119.html">[Rcpviewer-contributors] Re: IDomainBuilder?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#118">[ date ]</a>
+              <a href="thread.html#118">[ thread ]</a>
+              <a href="subject.html#118">[ subject ]</a>
+              <a href="author.html#118">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

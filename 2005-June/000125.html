@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Annotations%20%28was%20RE%3A%20IDomainRegistry%20%26%20EasyBeanDomain%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEECDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000124.html">
+   <LINK REL="Next"  HREF="000126.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Annotations%20%28was%20RE%3A%20IDomainRegistry%20%26%20EasyBeanDomain%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEECDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun Jun 19 08:51:22 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000124.html">[Rcpviewer-contributors] Re: Reviewing your changes
+</A></li>
+        <LI>Next message: <A HREF="000126.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#125">[ date ]</a>
+              <a href="thread.html#125">[ thread ]</a>
+              <a href="subject.html#125">[ subject ]</a>
+              <a href="author.html#125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ted:
+thanks for your response, I've replied to contributors mailing list so that
+this thread is archived (for those joining the conversation, background to
+this thread is at the end):
+
+I don't completely agree with you that annotations should be considered
+optional but your remarks have helped me clarify in my mind where
+annotations can be used and where we should use some other form of metadata
+(eg XML).
+
+I think I can summarise your concerns - which are legitimate - by saying
+that annotations should be optional to capture metadata that may vary on a
+deployment-by-deployment basis.  The two examples you gave, of mapping to a
+perhaps legacy database, or for labels of fields in the UI, are both
+examples of this.  And the reason is clear: if deploying an application at a
+new site one wouldn't want to have to go through the source code and change
+all the annotations etc.
+
+However, I think it is valid to use annotations for metadata that is
+intrinsic to the domain itself (rather than merely the deployment of the
+domain in some context).  Most of the annotations to date fall into this
+category (eg @Associates,  @LowerBoundOf, @UpperBoundOf and @Unique).  As
+such there is nothing wrong with making these mandatory.  Trying to get by
+without @Associates is all but impossible.  And I include @InDomain as one
+of these.
+
+Let me turn to the two examples you give.  First up, I agree that the use of
+Hibernate annotations would be optional for all the reasons you give, and if
+we were to implement a similar set of persistence annotations that could be
+support Hibernate, JDO or EJB3 say then they too should be considered
+optional.
+
+Your &quot;client-ized&quot; labels are more subtle.  One of the features that needs
+to be implement is to provide a way of identifying any feature - see
+<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/features/feature-ids.">http://www.haywood-associates.co.uk/rcpviewer/space/features/feature-ids.</A>
+For example, consider:
+
+package com.mycompany.domain;
+public class Customer {
+  private String firstName;
+  public String getFirstName() { ... }
+}
+
+The feature Id of firstName would be something like
+com.mycompany.domain.Customer#firstName.  I then imagined that this could be
+used as a key to i18n, or to help, or for security authorization, eg:
+
+in a ResourceBundle:
+de.berlios.rcpviewer.i18n.com.mycompany.domain.Customer#firstName=Christian
+Name
+
+in some help file:
+de.berlios.rcpviewer.help.com.mycompany.domain.Customer#firstName=The first
+or given name of the customer
+
+part of a security service:
+public void IAuthorizationService {
+  public boolean isVisible(final String featureId);
+  public boolean isUsable(final String featureId);
+}
+
+So, these feature Ids could be used for a clientization capability.  Or, to
+be honest, one could think of your different clients as merely different
+locales and just use the i18n feature.
+
+Finally, when I was thinking about this response, I was going to quote
+&quot;@MaxLength&quot; (of an attribute, eg email address) as an annotation that might
+be intrinsic to the domain.  However, it occurred to me that maybe your
+different clients (ie different deployments) might specify different
+lengths.  Perhaps for the majority a default of 50 characters might be
+enough, but you have one client who insists that it should be 100
+characters.  So this made me think that maybe annotations should be
+overridable: the information absolutely is needed, but will be looked up
+from a properties file and only if not present will the annotation be used.
+Hence:
+
+package com.mycompany.domain;
+public class Customer {
+  private String emailAddress;
+  @MaxLengthOf(50)
+  public String getEmailAddress() { ... }
+}
+
+would be enough for most, but at your client who insists on 100 character
+email addresses you would also deploy:
+
+de.berlios.rcpviewer.progmodel.standard.MaxLengthOf.com.mycompany.domain.Cus
+tomer#emailAddress=100
+
+Your thoughts?
+
+Dan
+
+
+&gt;<i> &gt;[dan originally wrote]:
+</I>&gt;<i> &gt;... Under the compile-time, the developer
+</I>&gt;<i> &gt;will open a class for editing, and our plugin would - using Java AST -
+</I>&gt;<i> &gt;notice the @InDomain annotation and from it build a domain on
+</I>&gt;<i> the fly.  In
+</I>&gt;<i> &gt;other words, domain classes come before domains and domains are built
+</I>&gt;<i> &gt;implicitly.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> [ted responded]:
+</I>&gt;<i> I hadn't imagined annotation-processing as a REQUIREMENT for using the
+</I>&gt;<i> framework, I see annotations more as a CONVENIENCE.
+</I>&gt;<i> As a general solution for specifying metadata I know that annotations
+</I>&gt;<i> will work for a lot of projects but I am not crazy in love with the idea
+</I>&gt;<i> of using them.
+</I>&gt;<i> For instance, suppose I need to map the same domain to several different
+</I>&gt;<i> physical databases using Hibernate (which I anticipate the need to do,
+</I>&gt;<i> for instance, if we need to integrate our General Ledger with a thirdy
+</I>&gt;<i> party General Ledger).
+</I>&gt;<i> I would NOT want to use annotations because annotations limit me to only
+</I>&gt;<i> one mapping, I would rather put the mapping in an XML file and use a
+</I>&gt;<i> different XML file at runtime.
+</I>&gt;<i>
+</I>&gt;<i> As far as RCPViewer annotations go, I could only be comfortable with
+</I>&gt;<i> using annotations if I can be sure that I can replace ALL labels defined
+</I>&gt;<i> in annotations at runtime.
+</I>&gt;<i> The labels in our product not only need to be internationalized but they
+</I>&gt;<i> need to be 'client-ized&quot;.  That is, different clients use different
+</I>&gt;<i> terms for the same thing and we change the labels in our application to
+</I>&gt;<i> suit them.  For instance, some clients use the term &quot;Sales Agreement&quot;
+</I>&gt;<i> while other clients use the term &quot;Customer Acknowledgement&quot;.
+</I>&gt;<i> I imagined eventually having the RCPViewer metadata in an XML file that
+</I>&gt;<i> I could process at runtime and replace tokens with the approriate labels.
+</I>&gt;<i> This would be a mechanism that I would build specifically for our
+</I>&gt;<i> application, but that could be hooked into the framework in some fashion.
+</I>&gt;<i>
+</I>&gt;<i> So... I think there should be a way to discover or register domains at
+</I>&gt;<i> runtime and it should be a generic mechanism that does NOT depend on the
+</I>&gt;<i> use of annotations.
+</I>&gt;<i>
+</I>&gt;<i> The annotation tooling should be built on top of the RCP Viewer
+</I>&gt;<i> framework, however, I think that the framework should remain
+</I>&gt;<i> independent of
+</I>&gt;<i> annotations and other tooling.
+</I>&gt;<i> Developers that want to use annotations can use the OPTIONAL annotation
+</I>&gt;<i> support to annotate thier classes and have the domain and whatever
+</I>&gt;<i> automagically generated for them.
+</I>&gt;<i> Hibernate annotations, <A HREF="http://www.hibernate.org/247.html,">http://www.hibernate.org/247.html,</A> is an
+</I>&gt;<i> example of how I imagined annotations would be used along with
+</I>&gt;<i> the RCP Viewer.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000124.html">[Rcpviewer-contributors] Re: Reviewing your changes
+</A></li>
+	<LI>Next message: <A HREF="000126.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#125">[ date ]</a>
+              <a href="thread.html#125">[ thread ]</a>
+              <a href="subject.html#125">[ subject ]</a>
+              <a href="author.html#125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Versioning
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-April/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Versioning&In-Reply-To=%3C42596C0B.9040308%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000003.html">
+   <LINK REL="Next"  HREF="000005.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Versioning</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Versioning&In-Reply-To=%3C42596C0B.9040308%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Versioning">emorning at yahoo.com
+       </A><BR>
+    <I>Sun Apr 10 20:10:19 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000003.html">[Rcpviewer-contributors] Bookmarking
+</A></li>
+        <LI>Next message: <A HREF="000005.html">[Rcpviewer-contributors] The GPL
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>RPC Software sells an ERP system for small &amp; medium sized businesses.  
+Our customers absolutely need to track the changes made to certain 
+documents, like customer orders.  Our product currently only implements 
+a rudimentary audit trail facility for only a couple of documents types, 
+customer orders and comission plans, and the implementation for both are 
+ad hoc methods that were added to the system later in it's development.
+
+I imagine that most systems for which the NO framework would be useful 
+would also benefit from pervasive and consistent support for object 
+'versioning'.
+ From the user perspective I imagine a separate view for every object 
+that can list, in order from most recent to least recent,  the changes 
+to the object and who made those changes.
+Of course, the NO peristence layer would have to be extended to include 
+this facility.
+
+Since we are developing an NO implementation based on the Eclipse 
+framework perhaps it would be possible to have a 'basic' NO 
+implementation, and then have Eclipse extension points that would make 
+it possible to *contribute* additional views to the standard object viewer.
+I imagine the standard NO object viewer as a multi-tabbed editor.  We 
+could have an NO extension point that would allow a third-party plugin 
+to add an additional tab to the standard NO object viewer.  This the NO 
+'versioning' support could then be developed as a separate plugin and 
+then included only when a system requires versioning.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000003.html">[Rcpviewer-contributors] Bookmarking
+</A></li>
+	<LI>Next message: <A HREF="000005.html">[Rcpviewer-contributors] The GPL
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

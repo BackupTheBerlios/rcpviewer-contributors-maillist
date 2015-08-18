@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Operations (actions) programming model
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Operations%20%28actions%29%20programming%20model&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKGEKODCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000059.html">
+   <LINK REL="Next"  HREF="000060.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Operations (actions) programming model</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Operations%20%28actions%29%20programming%20model&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKGEKODCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Operations (actions) programming model">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Tue May 10 15:24:30 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000059.html">[Rcpviewer-contributors] Operations (actions) programming model
+</A></li>
+        <LI>Next message: <A HREF="000060.html">[Rcpviewer-contributors] Acceptance test scripts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#63">[ date ]</a>
+              <a href="thread.html#63">[ thread ]</a>
+              <a href="subject.html#63">[ subject ]</a>
+              <a href="author.html#63">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;&gt;<i> Ted, thanks for your thoughts on this.  Some good points; conversation
+</I>continues within...
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+stockwell
+Sent: 10 May 2005 13:49
+
+
+--------
+&gt;<i>   public Order placeOrderDefaults(Date[] d) {  // framework will pass in a
+</I>&gt;<i>1-element array
+</I>&gt;<i>     d[0] = yesterdaysDate();                   // typesafe
+</I>&gt;<i>   }
+</I>I don't understand why the placeOrderDefaults method returns an Order
+object instead of just returning an array of defaults for the placeOrder
+method.
+
+That is, I would have expected this instead...
+
+  public Object[] getPlaceOrderDefaults() { return new Object[] {
+  yesterdaysDate() }; }
+
+
+&gt;&gt;<i> first up, actually I made a mistake, in that the placeOrderDefaults(...)
+</I>would probably just be void rather than return null.
+
+&gt;&gt;<i> other than that, I think I prefer my approach because (a) it's easy to
+</I>copy-and-paste the original method and then just append &quot;[]&quot; to the end of
+each method, and (b) it's typesafe in a way that returning a array of
+Objects isn't.
+
+&gt;&gt;<i> any other opinions???
+</I>
+
+----
+I would prefer the placeOrderPreConditions method to throw a checked
+exception.  The aspect that invokes the placeOrderPreConditions method
+can always rethrow a RuntimeException that wraps the exception thrown by
+the placeOrderPreConditions method.
+
+&gt;&gt;<i> Okay, I buy that.  That is a more natural way to go.
+</I>
+
+----
+A thought...
+since you envision an aspect calling the placeOrderPreConditions method
+anyway then why not just put the code for the placeOrderPreConditions
+method in an aspect?
+
+It kinda makes sense to me to that &quot;defaults&quot; and &quot;pre conditions&quot; are
+aspects of the system that could be implemented separately from the
+domain model.
+
+&gt;&gt;<i> Don't agree here.  Preconditions are part of the semantics of a domain
+</I>model so should be expressed in it.  Since we aren't writing Eiffel, this is
+the most natural way I can think of.  And while we might use aspects for our
+own implementation, I don't want to force the use of aspects on regular
+domain programmers.
+
+
+----
+The advantage of such would be that a domain model could be reused in
+systems that have different requirements in terms of default and
+preconditions.  Or even better... different defaults and pre conditions
+could be 'woven' into a system at runtime.
+
+&gt;&gt;<i> Now *that* is a very interesting idea.  What it says to me is that rather
+</I>than relying on a naming convention (append &quot;PreConditions&quot;, one would
+instead use some more extensible mechanism to indicate preconditions.
+Actually, this does sound a little like aspects, though.
+
+&gt;&gt;<i> Maybe the commonly trodden path should just be the &quot;PreConditions&quot;
+</I>suffix, but we do (he says, contradicting himself) provide some abstract
+aspects so that more sophisticated domain programmers can easily attach
+additional preconditions if they so choose.  In fact, we should then eat our
+own dog food so that my &quot;apply PreConditions&quot; aspect is just the first of
+those).
+
+&gt;&gt;<i> Anyone else want to contribute on this thread?
+</I>
+
+
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000059.html">[Rcpviewer-contributors] Operations (actions) programming model
+</A></li>
+	<LI>Next message: <A HREF="000060.html">[Rcpviewer-contributors] Acceptance test scripts
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#63">[ date ]</a>
+              <a href="thread.html#63">[ thread ]</a>
+              <a href="subject.html#63">[ subject ]</a>
+              <a href="author.html#63">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Active model
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Active%20model&In-Reply-To=%3C429A3917.3080700%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000088.html">
+   <LINK REL="Next"  HREF="000087.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Active model</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Active%20model&In-Reply-To=%3C429A3917.3080700%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Active model">emorning at yahoo.com
+       </A><BR>
+    <I>Sun May 29 23:50:15 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000088.html">[Rcpviewer-contributors] Active model (was: mikespike3, EMF, etc...)
+</A></li>
+        <LI>Next message: <A HREF="000087.html">[Rcpviewer-contributors] Persistence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#93">[ date ]</a>
+              <a href="thread.html#93">[ thread ]</a>
+              <a href="subject.html#93">[ subject ]</a>
+              <a href="author.html#93">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+&gt;<i>Ted wrote:
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;<i>The biggest problem is when we must customize the domain model for a
+</I>&gt;&gt;<i>    
+</I>&gt;&gt;<i>
+</I>&gt;<i>client
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;<i>by adding new attributes and associates to existing classes.  There is
+</I>&gt;&gt;<i>significant variation in how our clients run their businesses.  Our
+</I>&gt;&gt;<i>model is becoming polluted by all these additions made only for specific
+</I>&gt;&gt;<i>clients.
+</I>&gt;&gt;<i>Also, there is the problem of customizing forms to display data that is
+</I>&gt;&gt;<i>specific to a client.  We currently add new fields to a common form that
+</I>&gt;&gt;<i>is shared by all our clients.  It irritates existing clients that new
+</I>&gt;&gt;<i>fields are showing up on forms, fields that they don't understand and
+</I>&gt;&gt;<i>don't care about.
+</I>&gt;&gt;<i>I suppose that the GUI aspect of customizing forms for clients could be
+</I>&gt;&gt;<i>handled via some plugin-based scheme, however the active model coupled
+</I>&gt;&gt;<i>with a DDUI seems like it solves a whole bunch of problems  at once
+</I>&gt;&gt;<i>(avoids domain model polution by adding new attributes at runtime via a
+</I>&gt;&gt;<i>plugin extension to the domain model, domain driven forms automagically
+</I>&gt;&gt;<i>accomodate the extended domain, more consistent and higher quality UI,
+</I>&gt;&gt;<i>and the real payoff... much less work required to maintain and develop
+</I>&gt;&gt;<i>new functionality).
+</I>&gt;&gt;<i>    
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>Ted - I know you've talked about this before, but what I've never understood
+</I>&gt;<i>is why simple subclassing isn't good enough for this situation?  Or at any
+</I>&gt;<i>rate, do you see any reason why under RcpViewer at least simple subclassing
+</I>&gt;<i>won't by enough?
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>Subclassing doesn't work when more than one subclass is required.
+For instance, suppose a particular client needs time-tracking in 
+addition to the standard functionality.  The time-tracking module wants 
+to subclass the Vendor class to create an Employee class.  An Employee 
+is a Vendor that provides a service and that also has a 'Pay Rate' that 
+determines the cost of the empoyee's service.
+Also suppose that the same client needs to track the Tax Id of Vendors, 
+which is not part of the standard functionality (this is a real case but 
+I don't recall right now what the vendor's Tax Id is used for).  So a 
+customization module is create for the client that subclasses the Vendor 
+class and adds the Tax ID to the Vendor.
+
+Now, how do I create a Vendor at runtime?  I can create either the 
+subclass used by the time-tracking module, or the subclass used by the 
+client plugin. 
+
+I figure that the answer is to use composition instead of subclass so 
+that the two modules can add what they need to the Vendor class at 
+runtime.  An 'active' object model would give me that.
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000088.html">[Rcpviewer-contributors] Active model (was: mikespike3, EMF, etc...)
+</A></li>
+	<LI>Next message: <A HREF="000087.html">[Rcpviewer-contributors] Persistence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#93">[ date ]</a>
+              <a href="thread.html#93">[ thread ]</a>
+              <a href="subject.html#93">[ subject ]</a>
+              <a href="author.html#93">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

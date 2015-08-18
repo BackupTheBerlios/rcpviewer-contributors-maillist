@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Finally, I make a contribution...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Finally%2C%20I%20make%20a%20contribution...&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKIECIDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000117.html">
+   <LINK REL="Next"  HREF="000118.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Finally, I make a contribution...</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Finally%2C%20I%20make%20a%20contribution...&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKIECIDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Finally, I make a contribution...">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Tue Jun 14 08:57:33 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000117.html">[Rcpviewer-contributors] Finally, I make a contribution...
+</A></li>
+        <LI>Next message: <A HREF="000118.html">[Rcpviewer-contributors] Update on gui development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#120">[ date ]</a>
+              <a href="thread.html#120">[ thread ]</a>
+              <a href="subject.html#120">[ subject ]</a>
+              <a href="author.html#120">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ted:
+thanks for all this.  Still looking over what you've done, but your
+REVIEW_CHANGES tag is very helpful.  Will come back with something more
+constructive after I've looked in more detail this evening.
+
+Mike:
+presumably you'll be doing an update against this.  I found that Domain.java
+was missing an import, so I've updated (revision 303 should be okay).  Also,
+the list of plugins that Ted gave is slightly incorrect; here's the
+corrected list:
+
+PLUGIN                                         REPOSITORY LOCATION
+---------                                      -----------------------------
+--
+de.berlios.rcpviewer.mikespike3
+workspace/spikes/teds-workspace/de.berlios.rcpviewer.mikespike3
+net.sf.plugins.utils
+workspace/spikes/teds-workspace/net.sf.plugins.utils
+net.sf.plugins.commons
+workspace/spikes/teds-workspace/net.sf.plugins.commons
+net.sf.plugins.springframework
+workspace/spikes/teds-workspace/net.sf.plugins.springframework
+net.sf.plugins.acegisecurity
+workspace/spikes/teds-workspace/net.sf.plugins.acegisecurity
+de.berlios.rcpviewer.rcp
+workspace/de.berlios.rcpviewer.rcp
+de.berlios.rcpviewer.domain
+workspace/de.berlios.rcpviewer.domain
+de.berlios.rcpviewer.domain.runtime
+workspace/de.berlios.rcpviewer.domain.runtime
+de.berlios.rcpviewer.persistence.inmemory.ui
+workspace/de.berlios.rcpviewer.persistence.inmemory.ui
+de.berlios.rcpviewer.progmodel.extended
+workspace/de.berlios.rcpviewer.progmodel.extended
+de.berlios.rcpviewer.progmodel.rcpviewer
+workspace/de.berlios.rcpviewer.progmodel.rcpviewer
+de.berlios.rcpviewer.progmodel.standard
+workspace/de.berlios.rcpviewer.progmodel.standard
+
+ie: it is de.berlios.rcpviewer.mikespike3, not de.berlios.rcpviewer in Ted's
+workspace; also need ...domain.runtime rather than ...domain.compiletime.
+
+I also found it necessary to run with all installed plugins, rather than
+just the minimum necessary, for the search menu to appear.  Ted: perhaps
+there's a missing dependency in a manifest?
+
+Also, Mike - if you're still getting your test environment up and running
+and haven't done any work on mikespike3 per se, then you might want to use
+Ted's version since his now interfaces with my plugins.  You guys liaise and
+decide on a plan.
+
+Cheers
+Dan
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+</I>&gt;<i> stockwell
+</I>&gt;<i> Sent: 12 June 2005 16:04
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> Subject: [Rcpviewer-contributors] Finally, I make a contribution...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi all,
+</I>&gt;<i>
+</I>&gt;<i> I have committed an example program and associated changes to plugins
+</I>&gt;<i> that adds persistence to Mike's previous example application.
+</I>&gt;<i>
+</I>&gt;<i> You will need the following plugins to run this example application...
+</I>&gt;<i>
+</I>&gt;<i> PLUGIN                                            REPOSITORY LOCATION
+</I>&gt;<i> ---------
+</I>&gt;<i> -------------------------------
+</I>&gt;<i> de.berlios.rcpviewer.mikespike3
+</I>&gt;<i> workspace/spikes/teds-workspace/de.berlios.rcpviewer
+</I>&gt;<i> net.sf.plugins.utils
+</I>&gt;<i> workspace/spikes/teds-workspace/net.sf.plugins.utils
+</I>&gt;<i> net.sf.plugins.commons
+</I>&gt;<i> workspace/spikes/teds-workspace/net.sf.plugins.commons
+</I>&gt;<i> net.sf.plugins.springframework
+</I>&gt;<i> workspace/spikes/teds-workspace/net.sf.plugins.springframework
+</I>&gt;<i> net.sf.plugins.acegisecurity
+</I>&gt;<i> workspace/spikes/teds-workspace/net.sf.plugins.acegisecurity
+</I>&gt;<i> de.berlios.rcpviewer.rcp
+</I>&gt;<i> workspace/de.berlios.rcpviewer.rcp
+</I>&gt;<i> de.berlios.rcpviewer.domain
+</I>&gt;<i> workspace/de.berlios.rcpviewer.domain
+</I>&gt;<i> de.berlios.rcpviewer.domain.compiletime
+</I>&gt;<i> workspace/de.berlios.rcpviewer.domain.compiletime
+</I>&gt;<i> de.berlios.rcpviewer.persistence.inmemory.ui
+</I>&gt;<i> workspace/de.berlios.rcpviewer.persistence.inmemory.ui
+</I>&gt;<i> de.berlios.rcpviewer.progmodel.extended
+</I>&gt;<i> workspace/de.berlios.rcpviewer.progmodel.extended
+</I>&gt;<i> de.berlios.rcpviewer.progmodel.rcpviewer
+</I>&gt;<i> workspace/de.berlios.rcpviewer.progmodel.rcpviewer
+</I>&gt;<i> de.berlios.rcpviewer.progmodel.standard
+</I>&gt;<i> workspace/de.berlios.rcpviewer.progmodel.standard
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> I created this example application by taking Mike's previous spike and
+</I>&gt;<i> moving it to a new plugin, teds-spike/de.berlios.rcpviewer.mikespike3.
+</I>&gt;<i> The de.berlios.rcpviewer.mikespike3 makes a domain known to the editor
+</I>&gt;<i> by declaring the domain in an extension point...
+</I>&gt;<i>     &lt;extension
+</I>&gt;<i>           point=&quot;de.berlios.rcpviewer.domain.runtime.domains&quot;&gt;
+</I>&gt;<i>        &lt;domain
+</I>&gt;<i>              class=&quot;mikespike3.model.EasyBeanDomain&quot;
+</I>&gt;<i>              id=&quot;domain&quot;/&gt;
+</I>&gt;<i>     &lt;/extension&gt;
+</I>&gt;<i>
+</I>&gt;<i> The domain contains just one class, mikespike3.EasyBean.
+</I>&gt;<i> When the application starts the de.berlios.rcpviewer.rcp (which contains
+</I>&gt;<i> all the RCPViewer editor code) adds the File | New | EasyBean menu item
+</I>&gt;<i> to the main menu.  Select this menu item to create a new EasyBean
+</I>&gt;<i> instance and open it in an editor.
+</I>&gt;<i> The save button on the toolbar will be enabled when the editor is
+</I>&gt;<i> opened.  Select the SAVE button to save the new EasyBean instance.
+</I>&gt;<i>
+</I>&gt;<i> Notice that the editor has been extended with 'dirty' support.  So if
+</I>&gt;<i> you make a change to the editor then the Save button is reenabled.
+</I>&gt;<i> I extended Mike's Builder component by making the form that the builder
+</I>&gt;<i> creates an instance of org.eclipse.ui.forms.IManagedForms and changing
+</I>&gt;<i> all the field builders so that they add instances of
+</I>&gt;<i> org.eclipse.ui.forms.IFormPart to the main form.
+</I>&gt;<i> In this way the main form can track changes to the fields and notify the
+</I>&gt;<i> editor when the dirty property changes.
+</I>&gt;<i>
+</I>&gt;<i> I am using the In-Memory object store.  A future spike will extend this
+</I>&gt;<i> application to use Hibernate.
+</I>&gt;<i>
+</I>&gt;<i> Now close the editor window that you previously opened.
+</I>&gt;<i> I have added a 'Search Page' to the Eclipse Search Dialog for finding
+</I>&gt;<i> objects that are in the In-Memory Object Store.
+</I>&gt;<i> Choose Search | Search... | In-Memory Object Store and then hit the
+</I>&gt;<i> 'Finish' button to open a search result page that displays all objects
+</I>&gt;<i> in the in-memory object store.
+</I>&gt;<i> Double-click the one and only one item to reopen the previously created
+</I>&gt;<i> EasyBean.
+</I>&gt;<i>
+</I>&gt;<i> That's all!.  We created a new object, persisted it, searched an object
+</I>&gt;<i> store for objects, and opened an object in a object store.
+</I>&gt;<i>
+</I>&gt;<i> -------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> Notice that I use Spring and ACEGI in this application.  They are not
+</I>&gt;<i> relevant to the application, I am just exploring how to use these
+</I>&gt;<i> frameworks.  Only the mikespike3 plugin requires these plugins.
+</I>&gt;<i> BTW, security is not being applied yet, just hit the 'Finish' button on
+</I>&gt;<i> the login screen to proceed to the example.
+</I>&gt;<i>
+</I>&gt;<i> -------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> I have taken the liberty of committing the de.berlios.rcpviewer.rcp and
+</I>&gt;<i> de.berlios.rcpviewer.persistence.inmemory.ui plugins to the workspace
+</I>&gt;<i> folder in Subversion and comitting some changes to the domain plugins.
+</I>&gt;<i> I have marked all my changes with the REVIEW_CHANGE task tag, as
+</I>&gt;<i> detailed in a previous post.
+</I>&gt;<i>
+</I>&gt;<i> --------------------------
+</I>&gt;<i>
+</I>&gt;<i> You may notice that I have named some plugins with the prefix
+</I>&gt;<i> 'sf.net.plugins'.
+</I>&gt;<i> I have for a while thought about having a project where Eclipse plugins
+</I>&gt;<i> for commonly used framework may be obtained.
+</I>&gt;<i> I am the adminstrator of the 'plugins'  project on SF and I am
+</I>&gt;<i> considering releasing some of these plugins there.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -ted
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000117.html">[Rcpviewer-contributors] Finally, I make a contribution...
+</A></li>
+	<LI>Next message: <A HREF="000118.html">[Rcpviewer-contributors] Update on gui development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#120">[ date ]</a>
+              <a href="thread.html#120">[ thread ]</a>
+              <a href="subject.html#120">[ subject ]</a>
+              <a href="author.html#120">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

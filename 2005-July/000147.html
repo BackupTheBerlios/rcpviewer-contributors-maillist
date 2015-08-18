@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050711
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050711&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEKHDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000146.html">
+   <LINK REL="Next"  HREF="000148.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050711</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050711&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCEKHDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050711">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Tue Jul 12 01:51:24 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000146.html">[Rcpviewer-contributors] progress 20050711
+</A></li>
+        <LI>Next message: <A HREF="000148.html">[Rcpviewer-contributors] progress 20050712
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#147">[ date ]</a>
+              <a href="thread.html#147">[ thread ]</a>
+              <a href="subject.html#147">[ subject ]</a>
+              <a href="author.html#147">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;&gt;<i> within
+</I>
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+</I>&gt;<i> Subject: [Rcpviewer-contributors] progress 20050711
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  From Dan's comments below, I realise that GUI 'liveness' (i.e.
+</I>&gt;<i> automagically reflecting all changes to the domain objects) is going to
+</I>&gt;<i> be fun indeed.  Perhaps we'll need a global repository of all gui
+</I>&gt;<i> elements tied to each object / attribute rather than the simpler
+</I>&gt;<i> encapsulated listener model I was trying to go for.  Ah well.
+</I>
+I've been making good progress with my aspect approach - can correctly pick
+up the pojos and detect changes to them.  Should be able to check in
+something in the day or two.
+
+What that means (I hope) is that the listener model ought to work ok.  The
+aspect will collate the changes and will then ask the IDomainObject to
+notify its listeners just for the bits of it that have changed.  So I think
+there won't be any need for a global repository.
+
+(Separately, I do think that an IDomainObject should be able to return
+IOperation objects that are themselves observable.  This is so that the UI
+can listen as to whether the operation's OK button should be enabled or not
+dependent on any IPrerequisites associated with the IOperation.  But that's
+for the future...)
+
+
+&gt;<i> As a start I have added an 'orrible global refresh action that knows all
+</I>&gt;<i> about the different gui elements and hunts them down and refreshes them
+</I>&gt;<i> (and hence requires loads of public refresh() methods everywhere).  It
+</I>&gt;<i> is exactly the opposite of what I want to do but might provoke thought
+</I>&gt;<i> on what a better solution might look like.
+</I>
+I suspect it'll never get taken out...  but then again belt and braces is
+sometimes best.
+
+
+&gt;<i> Other than that, little functional change today - have been preparing
+</I>&gt;<i> the ground for a non-modal 'ActionArgumentDialog' linked to the
+</I>&gt;<i> ActionsView to be started tomorrow.
+</I>
+Glad to see its non-modal!  Hopefully a future version will be able to get
+rid of the dialog and just put the parameters inline with the action view,
+cf Windows Explorer action bar.  But as usual I'm talking about running
+before we can walk.
+
+
+&gt;<i>
+</I>&gt;<i> Oh - and if you you do a 'Type Hierarchy' on UIJob you might get an
+</I>&gt;<i> inkling of how I intend to use Job Families for clever(ish) undo/redo.
+</I>&gt;<i> More later on that.
+</I>
+Will give that a pass for the moment since I'm in the middle of my aspects.
+However, we should decide whether jobs are a UI responsibility or a domain
+responsibility.  My suspicion is that there's an element of both (especially
+with the IOperation object I alluded to above).
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000146.html">[Rcpviewer-contributors] progress 20050711
+</A></li>
+	<LI>Next message: <A HREF="000148.html">[Rcpviewer-contributors] progress 20050712
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#147">[ date ]</a>
+              <a href="thread.html#147">[ thread ]</a>
+              <a href="subject.html#147">[ subject ]</a>
+              <a href="author.html#147">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

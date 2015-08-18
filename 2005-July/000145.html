@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] RE: progress 20050708
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20RE%3A%20progress%2020050708&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKOEKADDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000144.html">
+   <LINK REL="Next"  HREF="000146.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] RE: progress 20050708</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20RE%3A%20progress%2020050708&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKOEKADDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] RE: progress 20050708">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sat Jul  9 08:20:51 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000144.html">[Rcpviewer-contributors] progress 20050708
+</A></li>
+        <LI>Next message: <A HREF="000146.html">[Rcpviewer-contributors] progress 20050711
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#145">[ date ]</a>
+              <a href="thread.html#145">[ thread ]</a>
+              <a href="subject.html#145">[ subject ]</a>
+              <a href="author.html#145">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Looking forward to trying this out.
+
+To your question:  &quot;how can my introspection know how an operation affects
+its parent object?&quot;
+
+In fact, it's worse than that (Jim - he's dead).  Not only might an
+operation affect various attributes of its parent object, it could affect
+other objects also.  There could potentially be a whole graph of objects
+that might have been instantiated in a user's session and are being
+displayed, all of which need updating.
+
+So option 1 (sledgehammer) doesn't go far enough, and option 2 (affects
+attribute) is a non-starter for me (far too fragile).
+
+I have an option 3: use an aspect with a percflowbelow and picking up set()
+joinpoints on @InDomain objects.  It constructs a list of objects then uses
+the ISession to do a reverse lookup of the IDomainObjects for each affected
+pojo and its IDomainClass to determine the affected attribute.  In fact I
+already have an aspect that does some of this because I wanted to see if an
+in-memory transaction manager could be developed.  If the aspect keeps track
+of the before and after state then it each change can be wrapped into a
+command and thus a rollback can be affected.  So it should help our
+undo/redo functionality too.
+
+So, I suggest that you keep your design of IFieldParts listening to their
+respective IDomainObjects, and I fish out this aspect and try to get it
+working in a plugin environment.  I knew we'd need 'em eventually!
+
+Dan
+
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Mike Evans [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>]
+</I>&gt;<i> Sent: 08 July 2005 09:36
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>; dan Haywood
+</I>&gt;<i> Subject: progress 20050708
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Ok - unproblematic stuff first:
+</I>&gt;<i> 1. Have moved field builder stuff into separate ...gui.fields package as
+</I>&gt;<i> I am going to be using field builders outside of the DefaultEditor
+</I>&gt;<i> (notably for an operation parameters dialog).
+</I>&gt;<i> 2. Hence also FieldBuilderFactory is a singleton so is globally
+</I>&gt;<i> accessible rather than a private class for DefaultEditor.
+</I>&gt;<i> 3. TODO - just as I write this I realise of course that it should be put
+</I>&gt;<i> back in the GuiPlugin - will do.
+</I>&gt;<i> 4. Have added an integer field builder.
+</I>&gt;<i> 5. Have added int fields to the existing beans and added a new domain
+</I>&gt;<i> object in ...acme - Counter.  This will be used for basic operations
+</I>&gt;<i> development.
+</I>&gt;<i>
+</I>&gt;<i> Now - the problem stuff:
+</I>&gt;<i> * The raison d'etre behind Counter is to have a class with operations
+</I>&gt;<i> that affect its publicly accessible state.
+</I>&gt;<i> * I want the GUI to automatically pick up such changes.
+</I>&gt;<i> * Hence I have added an IDomainObjectListener on every FieldPart within
+</I>&gt;<i> the DefaultEditor which updates the field on reception of an attribute
+</I>&gt;<i> changed event.
+</I>&gt;<i> * The theory was that an operation would be triggered, and the open
+</I>&gt;<i> DefaultEditor would automagically display the new values.
+</I>&gt;<i> * Alas firing a (non-setter) operation that affects a domain object's
+</I>&gt;<i> attribute does not cause an attribute-change event to be fired.  On
+</I>&gt;<i> hindsight this is obvious - how can Dan's introspection know how an
+</I>&gt;<i> operation affects its parent object?
+</I>&gt;<i> * So what can we do?
+</I>&gt;<i> * Option 1 : The sledgehammer : Dan add's an operation-fired event to
+</I>&gt;<i> IDomainObjectListener and I completlely refresh the DefaultEditor every
+</I>&gt;<i> time.
+</I>&gt;<i> * Option 2 : an 'Affects' attribute : more metadata on every operation
+</I>&gt;<i> that lets me know what external state might be changed
+</I>&gt;<i> * Option 3 : ???
+</I>&gt;<i>
+</I>&gt;<i> Dan?
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000144.html">[Rcpviewer-contributors] progress 20050708
+</A></li>
+	<LI>Next message: <A HREF="000146.html">[Rcpviewer-contributors] progress 20050711
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#145">[ date ]</a>
+              <a href="thread.html#145">[ thread ]</a>
+              <a href="subject.html#145">[ subject ]</a>
+              <a href="author.html#145">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

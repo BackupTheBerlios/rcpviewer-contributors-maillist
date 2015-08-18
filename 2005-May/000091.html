@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Persistence
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Persistence&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKMEOMDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000095.html">
+   <LINK REL="Next"  HREF="000085.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Persistence</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Persistence&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKMEOMDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Persistence">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun May 29 19:57:33 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000095.html">[Rcpviewer-contributors] Persistence
+</A></li>
+        <LI>Next message: <A HREF="000085.html">[Rcpviewer-contributors] TASKS Was: mikespike3, EMF, etc...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#91">[ date ]</a>
+              <a href="thread.html#91">[ thread ]</a>
+              <a href="subject.html#91">[ subject ]</a>
+              <a href="author.html#91">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;&gt;<i> within
+</I>
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+stockwell
+Sent: 29 May 2005 17:54
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: [Rcpviewer-contributors] Persistence
+
+I expect that each application will handle persistence in its own way.
+Some applications may use Hibernate, some may save objects as XML in a
+file system, etc.
+
+&gt;&gt;<i> agreed.  NO framework also has an &quot;in-memory&quot; objectstore which is
+</I>v. useful for unit testing.  There's a preliminary version of this in
+(what these days is called) de.berlios.rcpviewer.domain.runtime plugin.
+
+
+As I see it it, RCPViewer should not have any API to actually *perform*
+persistence, RCPViewer merely needs a way to hook up peristence objects
+to the GUI.
+
+&gt;&gt;<i> to an extent I agree.  However, I think that the RcpViewer should have
+</I>&gt;&gt;<i> knowledge of a certain regular lifecycle of states that persistable
+</I>objects
+&gt;&gt;<i> can go through.  For example, an object might be created but not yet
+</I>&gt;&gt;<i> persisted; or might subsequently be persisted.  I think in any enterprise
+</I>&gt;&gt;<i> persistence mechanism (JDO, Hibernate and EJB3) these should exist.
+</I>&gt;&gt;<i> Searching is another area where there should be some support.  On the
+</I>&gt;&gt;<i> DSFA project we've used DDD Repositories very successfully.  We
+</I>externalized
+&gt;&gt;<i> all searches into Repository objects, and then had different
+</I>implementations
+&gt;&gt;<i> according to the persistence mechanism in use.  So at a very least the
+</I>&gt;&gt;<i> RcpViewer should provide some infrastructure to make the Repository
+</I>pattern
+&gt;&gt;<i> the easiest thing for domain programmers to use.
+</I>
+
+In order to implement this I propose adding a new method to IDomainClass
+named isNewable().  isNewable() returns true if the class should be
+included on the File | New menu.  The default value is false.
+
+&gt;&gt;<i> That's fine - there's something similar in the NO framework.  Do you have
+</I>&gt;&gt;<i> any suggestions on how we pick up the fact that a given POJO class is
+</I>&gt;&gt;<i> non-instantiable?  eg, in the NO framework one would write:
+</I>&gt;&gt;<i> public class Customer {
+</I>&gt;&gt;<i>   public static void aboutCustomer(ClassAbout about) {
+</I>&gt;&gt;<i>    about.uninstantiable();
+</I>&gt;&gt;<i>   }
+</I>&gt;&gt;<i> }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> (In other words, adding the info in the meta-model is one thing; one
+</I>&gt;&gt;<i> also must decide what the programming model is - ie what the POJOs
+</I>&gt;&gt;<i> should be coded up as.
+</I>
+
+... Editor support for Save, SaveAs methods ... I propose that
+IDomainObjects
+that IDomainObject extends the org.eclipse.ui.ISaveablePart interface
+NOTE: This ties IDomainObject to an Eclipse API.  Is this a bad thing?
+
+&gt;&gt;<i> I thought when I read this first time that I'd have a problem with this,
+</I>&gt;&gt;<i> but I don't think I do.  I can see the IDomain/IDomainClass metamodel
+</I>&gt;&gt;<i> being reused in other contexts, but ISession/IDomainObject are specific
+</I>&gt;&gt;<i> to Eclipse.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> That said, an alternative approach would be to have IDomainObject be
+</I>&gt;&gt;<i> adaptable, eg
+</I>&gt;&gt;<i>   ISaveablePart sp =
+</I>(ISaveablePart)someDomainObject.getAdapter(ISaveablePart.class);
+&gt;&gt;<i> so that we don't pollute the IDomainObject with Eclipse specifics.
+</I>
+----------------
+
+Assuming all of the above os OK then the next question is how do I
+create an implementation of the RCPViewer API that uses POJOs?
+
+&gt;&gt;<i> Let me stop you there for a second: when I read on it seems that you've
+</I>&gt;&gt;<i> made &quot;newability&quot; and &quot;saveability&quot; interchangeable.  I don't think they
+</I>are.
+&gt;&gt;<i> For example, at DSFA we have an object which can be created but can never
+</I>&gt;&gt;<i> be saved.  So my answers below reflect this.
+</I>
+
+The simple answer would be to require high level POJOs that are
+'newable' to implement the org.eclipse.ui.ISaveablePart interface.
+However, if we require POJOs to implement a specific interface then
+they're not really POJOs anymore are they?
+
+&gt;&gt;<i> Agreed, don't like this.  Saying that an IDomainObject is (or can
+</I>&gt;&gt;<i> provide) an ISaveablePart is *not* the same thing as saying that the
+</I>&gt;&gt;<i> POJO that it wraps is an ISaveablePart.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My suggestion would be to use naming conventions for both of these
+</I>&gt;&gt;<i> two concerns of &quot;newability&quot; and &quot;saveability&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If the domain programmer provides a &quot;created&quot; method, then we
+</I>&gt;&gt;<i> say that the object can be - erm - created.  And if the domain
+</I>&gt;&gt;<i> programmer provides a &quot;save()&quot; method, then its saveable.
+</I>
+
+My answer is to provider POJO classes that are 'newable' with an Eclipse
+adapter factory that can adapt POJO instances that are saveable to
+implementations of ISaveablePart.
+
+&gt;&gt;<i> I don't think that adapter factories are appropriate for the POJOs
+</I>&gt;&gt;<i> themselves.  Remember that we only ever interact with the POJOs
+</I>&gt;&gt;<i> through the IDomainObjects which can translate the requirements of the
+</I>&gt;&gt;<i> rest of the RcpViewer framework into &quot;things that the POJO understand&quot;.
+</I>
+
+----------------
+BTW, I would have suggested integrating RCPView with the Eclipse 'New
+Wizard' functionality but I have found that the 'New Wizards'
+functionality isn't exactly suitable for RCPViewer.  The problem with
+Eclipse 'New Wizards' is that they REQUIRE a wizard page to be shown for
+whatever object you are creating.
+
+&gt;&gt;<i> Perhaps if there is a created(...) method in the POJO which takes
+</I>&gt;&gt;<i> some arguments, then this would be interpreted as providing a
+</I>&gt;&gt;<i> wizard to gather those arguments?
+</I>
+
+
+---------------
+NOTE: I don't see any need for the IObjectStore interface in the
+RCPViewer API.
+
+&gt;&gt;<i> You may well be right, on the other hand it is only a sketch.  It might
+</I>&gt;&gt;<i> be needed to enshrine what RcpViewer requires in terms of persistence
+</I>&gt;&gt;<i> lifecycle state.
+</I>
+---------------
+
+Anyway, I will create a simple axmple of these ideas from mikespike3 and
+hopefully post it in a couple/few days.
+
+
+-ted
+
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000095.html">[Rcpviewer-contributors] Persistence
+</A></li>
+	<LI>Next message: <A HREF="000085.html">[Rcpviewer-contributors] TASKS Was: mikespike3, EMF, etc...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#91">[ date ]</a>
+              <a href="thread.html#91">[ thread ]</a>
+              <a href="subject.html#91">[ subject ]</a>
+              <a href="author.html#91">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

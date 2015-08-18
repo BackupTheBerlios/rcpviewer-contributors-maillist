@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] mikespike3, EMF, etc...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20mikespike3%2C%20EMF%2C%20etc...&In-Reply-To=%3C4299F386.3010907%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000084.html">
+   <LINK REL="Next"  HREF="000088.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] mikespike3, EMF, etc...</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20mikespike3%2C%20EMF%2C%20etc...&In-Reply-To=%3C4299F386.3010907%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] mikespike3, EMF, etc...">emorning at yahoo.com
+       </A><BR>
+    <I>Sun May 29 18:53:26 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000084.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+        <LI>Next message: <A HREF="000088.html">[Rcpviewer-contributors] Active model (was: mikespike3, EMF, etc...)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#86">[ date ]</a>
+              <a href="thread.html#86">[ thread ]</a>
+              <a href="subject.html#86">[ subject ]</a>
+              <a href="author.html#86">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike Evans wrote:
+
+&gt;<i> Once this is done we can divide up into the different areas as 
+</I>&gt;<i> suggested by Ted.  Regarding Ted's ideas:
+</I>&gt;<i> - peristence: I have not given any thought to persistence so am happy 
+</I>&gt;<i> to offer someone else that opportunity...
+</I>
+
+I am happy to add a persistence aspect to the example.
+
+&gt;<i>
+</I>&gt;<i> My other idea relates to Ted's discussion about his EMF plans. 
+</I>&gt;<i> Interestingly, he has identified the same risks as I have wrt to small 
+</I>&gt;<i> company software development - though his proposed solutions are 
+</I>&gt;<i> bolder than mine (I am relying on the plugin concept and auto-updates).
+</I>&gt;<i>
+</I>Same here, I planned on relying on plugins and auto-updates.  The 
+biggest problem is when we must customize the domain model for a client 
+by adding new attributes and associates to existing classes.  There is 
+significant variation in how our clients run their businesses.  Our 
+model is becoming polluted by all these additions made only for specific 
+clients. 
+Also, there is the problem of customizing forms to display data that is 
+specific to a client.  We currently add new fields to a common form that 
+is shared by all our clients.  It irritates existing clients that new 
+fields are showing up on forms, fields that they don't understand and 
+don't care about. 
+I suppose that the GUI aspect of customizing forms for clients could be 
+handled via some plugin-based scheme, however the active model coupled 
+with a DDUI seems like it solves a whole bunch of problems  at once 
+(avoids domain model polution by adding new attributes at runtime via a 
+plugin extension to the domain model, domain driven forms automagically 
+accomodate the extended domain, more consistent and higher quality UI, 
+and the real payoff... much less work required to maintain and develop 
+new functionality).
+
+
+
+&gt;<i> The DDUI is obviously RcpViewer as we all understand it.  It is 
+</I>&gt;<i> essentially an enabler for what he terms the 'active object model'.  
+</I>&gt;<i> Now if this model is static with respect to any single runtime 
+</I>&gt;<i> instance (i.e generated once at startup) surely it is effectively the 
+</I>&gt;<i> same thing as Dan is working on?  In which case can we not define a 
+</I>&gt;<i> single contract / interface that the DDUI works against and 'on the 
+</I>&gt;<i> other side' allow Ted and Dan to explore different ways of 
+</I>&gt;<i> implementing that contract?  That would give us a clear division of 
+</I>&gt;<i> work. e
+</I>
+I agree.  Dan's model is 'THE' model.  Different implementation of the 
+model are used for POJO development versus EMF development. 
+This is one point that I was trying to get at in my last e-mail about 
+why Mike's spike is more appropriate for a base going forward.  My spike 
+is based on EMF-generated objects, Mike's spike is based on POJOs.  Most 
+developers will use POJOs therefore Mike's spike is more appropriate for 
+developing RCPViewer.  My spike respresents an exceptional case, 
+therefore I should adapt my domain objects to work with Mike's spike.
+
+&gt;<i>
+</I>&gt;<i> Perhaps this is too much duplication for a small team - but perhaps a 
+</I>&gt;<i> period of parallel, cooperative development would offer a better long 
+</I>&gt;<i> term result?
+</I>&gt;<i>
+</I>
+Perhaps too much duplication.  Not really sure. 
+The changes that each of us make are gonna be BIG.  So I figure that 
+even if we agree to work on a single example that basically merging the 
+changes together will come down to each of using rewriting the examples 
+that we work on anyway.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000084.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+	<LI>Next message: <A HREF="000088.html">[Rcpviewer-contributors] Active model (was: mikespike3, EMF, etc...)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#86">[ date ]</a>
+              <a href="thread.html#86">[ thread ]</a>
+              <a href="subject.html#86">[ subject ]</a>
+              <a href="author.html#86">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

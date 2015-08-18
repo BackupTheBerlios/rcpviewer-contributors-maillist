@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Ted's screenshot - comment posted.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEJGDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000043.html">
+   <LINK REL="Next"  HREF="000042.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Ted's screenshot - comment posted.</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEJGDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Ted's screenshot - comment posted.">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun May  8 17:12:18 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000043.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+        <LI>Next message: <A HREF="000042.html">[Rcpviewer-contributors] Introducing Chris Nelson &amp; Bastian Bergerhoff...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ted
+&gt;&gt;<i> within.
+</I>Dan
+
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+stockwell
+Sent: 08 May 2005 13:47
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: Re: [Rcpviewer-contributors] Ted's screenshot - comment posted.
+
+
+I like Mike's screenshot of the Customer view a lot.
+Ultimately I would like the Properties pane in my application to look
+like that.
+
+However, a single view like Mike's customer view would not work for many
+of the objects our application displays (my guess is that the Customer
+view doesn't work well for all of the objects that Epic displays either).
+Here's why...consider an order that has hundred's or thousands of line
+items on it.  In terms of Mike's Customer view, consider how that view
+would work if the Customer has a thousand Contacts ...
+
+&gt;&gt;<i> That's true enough, but then again just because there is a 1:m
+</I>relationship from Customer to Contacts, it doesn't mean that there is
+navigability from Customer -&gt; Contacts.
+
+&gt;&gt;<i> Eric Evans makes the case that we should look to constrain the
+</I>navigability of associations (DDD, pp82-87).  I would argue that the size of
+a collection of related objects is a part of that building a good domain
+model.  At the DSFA (Pensions payments) there is an object called
+PensionScheme, which has a collection of Payment objects.  Now, there is one
+Payment per week, and a pensioner could claim for 30 years or more.  That
+makes 1500 related Payments.  The design we came up with was to hold the 20
+most recent Payments, and to have the icon representing the collection
+provide a mechanism to query archived Payments.  We are using Evans'
+Repository pattern (DDD pp147-157) to abstract the domain objects from the
+archive database.
+
+&gt;&gt;<i> So, in summary, if you're trying to let the user navigate through 1000
+</I>objects, you've probably got the navigability in the domain model wrong.  At
+the very least some sort of filtering or querying facility is needed, either
+client-side (resolve the collection and filter in a table) or server-side
+(run a query from a user action).
+
+
+
+---
+So, to solve these problems I think an outline pane is neccessary.  The
+outline  view affords  the user with 'context' about their current
+location within a large object tree and it also provides for easier
+navigation within the object.
+The outline pane could be optional.
+
+Also, the Eclipse IDE put the outline in a view that is separate from
+the editors.  I chose to put the outline inside the editor in a separate
+pane inside the editor ... I didn't want to waste the screen real estate
+an an outline view that
+wouldn't be used all the time.
+
+&gt;&gt;<i> I think I'd argue that the outline pane is important enough to warrant
+</I>its own view.  That said, I was thinking more that it would be combined with
+a navigator-like view, so that all instantied objects in the client-side
+session could be viewed and explored - possibly recursively.  But this is a
+relatively minor point in the scheme of things.
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000043.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+	<LI>Next message: <A HREF="000042.html">[Rcpviewer-contributors] Introducing Chris Nelson &amp; Bastian Bergerhoff...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

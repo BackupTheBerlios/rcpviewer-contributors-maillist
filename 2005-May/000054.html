@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Docs (was GUI and virtual domain models (was Ted's screenshot - comment posted.))
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Docs%20%28was%20GUI%20and%20virtual%20domain%20models%20%28was%20Ted%27s%20screenshot%20-%20comment%20posted.%29%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEJNDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000053.html">
+   <LINK REL="Next"  HREF="000041.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Docs (was GUI and virtual domain models (was Ted's screenshot - comment posted.))</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Docs%20%28was%20GUI%20and%20virtual%20domain%20models%20%28was%20Ted%27s%20screenshot%20-%20comment%20posted.%29%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEJNDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Docs (was GUI and virtual domain models (was Ted's screenshot - comment posted.))">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Mon May  9 11:31:29 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000053.html">[Rcpviewer-contributors] Docs (was GUI and virtual domain models (was Ted's screenshot - comment posted.))
+</A></li>
+        <LI>Next message: <A HREF="000041.html">[Rcpviewer-contributors] Field ordering (was Ted's screenshot - comment posted.)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;&gt;<i> within
+</I>Dan
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+Sent: 09 May 2005 10:02
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: Re: [Rcpviewer-contributors] Docs (was GUI and virtual domain
+models (was Ted's screenshot - comment posted.))
+
+
+Two more thoughts re: using Eclipse extension points for any sort of GUI
+control:
+
+1) In concept they are additive, not subtractive, so we would be going
+against the grain to use them as a mechanism to constrain root
+functionality (Dan's subtractive approach).
+
+&gt;&gt;<i> I think these are slightly different points.  My &quot;subtractive
+</I>programming&quot; thing relates to what a domain programmer does - he identifies
+constraints and business rules and then finds a way to represent them in the
+domain model so that the application can &quot;do less&quot;.
+&gt;&gt;<i> I do think there may be a role for using Eclipse extension points,
+</I>though, to correspond to my IMetaModelExtension.  In other words, we are
+teaching the metamodel builder to pick up additional semantics because
+(presumably) the rcpviewer knows to look for them and to render them
+appropriately.  And of course some of those semantics might be to constrain
+the model (eg a state management extension point that picks up
+@UnusableInState({PENDING, IN_QC}) on attributes and operations.  Hmmm,
+that's a subtle point: we're adding subtractions...
+&gt;&gt;<i> That said, I've written IMetaModelExtension without presuming extension
+</I>points, in case the metamodel is ever used outside of Eclipse (eg in Trails)
+
+---
+&gt;&gt;<i> What I'd like you and Ted to tell me though: what is the relationship on
+</I>Eclipse extension points and Spring?  Do we use Spring to stitch together
+the components of our architecture, or Eclipse?  I *think* my preference is
+for Spring, with some uber-plugin that basically exposes Spring's Dependency
+Injection functionality to others.  But I'm very sketchy on this.
+
+
+------
+2) They will be hard to test as (I believe) there is no public API for
+changing the the extension registry as runtime.  Hence short of fiddling
+with config files and restarting plugins (*) different test conditions
+will be hard to come up with.  In contrast amodel defined by our own
+mechanism can be built with testing in mind...
+
+&gt;&gt;<i> Don't really have any knowledge on this, but in general we do want
+</I>testability.  Mock objects guys say to build a facade around things that
+aren't testable: one could argue my MetaModel is doing this around Eclipse's
+Platform class.
+
+
+Mike E.
+
+(*) : of course we can use reflection but whilst am happy to do so for
+the core SWT and JFace classes I am not for Eclipse's own metamodels.
+
+
+
+Dan Haywood wrote:
+
+&gt;<i> Ted said:
+</I>&gt;<i>
+</I>&gt;<i> In my previous post I documented the thought process that lead to my
+</I>&gt;<i> insight.
+</I>&gt;<i> I think that you should have something like that process in your NO
+</I>&gt;<i> documentation.
+</I>&gt;<i> That is, instead of just saying &quot;All NO objects must implement these
+</I>&gt;<i> methods....&quot; you should lead a new developer through the thought process
+</I>&gt;<i> that enables them to erase the difference in thier mind between
+</I>&gt;<i> configuring/building a GUI versus having the domain supply the data
+</I>&gt;<i> necessary to 'connect' a GUI to the object.  That might help popularize
+</I>&gt;<i> the NO approach.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>Good idea.  I've started a docbook XML doc anyway which I hope to evolve
+</I>&gt;<i>
+</I>&gt;<i> into a developer's guide.  So I've just put a few stub sections to capture
+</I>&gt;<i> this thought.  (Formal docs are to live under SVN/trunk/docs, by the
+</I>&gt;<i> ay).  -- Dan
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+</I>&gt;<i> stockwell
+</I>&gt;<i> Sent: 08 May 2005 16:27
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Rcpviewer-contributors] GUI and virtual domain models (was
+</I>&gt;<i> Ted's screenshot - comment posted.)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dan Haywood wrote:
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>Ted wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Before reading this post I responded to one Mike's posts by saying that
+</I>&gt;&gt;<i>almost all GUI-related data should be in the GUI metadata layer.  Now
+</I>&gt;&gt;<i>I'm gonna say that almost all GUI-related data should be in the domain
+</I>&gt;&gt;<i>model.  And I'm correct both times!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>The difference is that from now on I will think of the GUI metadata
+</I>&gt;&gt;<i>layer as a 'virtual domain model' built on top of a legacy domain
+</I>&gt;&gt;<i>model.  If a domain model already provides all the methods and
+</I>&gt;&gt;<i>attributes required to work with RCPViewer then very little or no extra
+</I>&gt;&gt;<i>GUI metadata will be required.  A legacy domain model will require more
+</I>&gt;&gt;<i>GUI metadata to be provided.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Does this approach make sense to you guys?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Music to my ears!  This is part of what I was getting on the wiki page:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>&quot;<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/concepts/virtual-doma">http://www.haywood-associates.co.uk/rcpviewer/space/concepts/virtual-doma</A>
+</I>i
+&gt;<i>
+</I>&gt;<i> n
+</I>&gt;<i>
+</I>&gt;&gt;<i>-objects&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Now I understand that post.  I guess I was not 'getting' it before.
+</I>&gt;<i> I suppose that one critisism of the NO framework that you have heard a
+</I>&gt;<i> lot is that NO requires stuff to be in the domain model that should
+</I>&gt;<i> really not be in the domain model.
+</I>&gt;<i> This will be a frequent critisism of developers that have not had the
+</I>&gt;<i> 'aha' moment that I had today.
+</I>&gt;<i>
+</I>&gt;<i> In my previous post I documented the thought process that lead to my
+</I>&gt;<i> insight.
+</I>&gt;<i> I think that you should have something like that process in your NO
+</I>&gt;<i> documentation.
+</I>&gt;<i> That is, instead of just saying &quot;All NO objects must implement these
+</I>&gt;<i> methods....&quot; you should lead a new developer through the thought process
+</I>&gt;<i> that enables them to erase the difference in thier mind between
+</I>&gt;<i> configuring/building a GUI versus having the domain supply the data
+</I>&gt;<i> necessary to 'connect' a GUI to the object.  That might help popularize
+</I>&gt;<i> the NO approach.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+--
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000053.html">[Rcpviewer-contributors] Docs (was GUI and virtual domain models (was Ted's screenshot - comment posted.))
+</A></li>
+	<LI>Next message: <A HREF="000041.html">[Rcpviewer-contributors] Field ordering (was Ted's screenshot - comment posted.)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

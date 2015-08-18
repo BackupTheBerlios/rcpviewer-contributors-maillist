@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050629
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050629&In-Reply-To=%3C42C2629F.1090208%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000129.html">
+   <LINK REL="Next"  HREF="000132.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050629</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050629&In-Reply-To=%3C42C2629F.1090208%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050629">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Wed Jun 29 10:58:07 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000129.html">[Rcpviewer-contributors] Re: busy busy
+</A></li>
+        <LI>Next message: <A HREF="000132.html">[Rcpviewer-contributors] Progress 20050630
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All,
+
+Projects
+* de.berlios.rcpviewer.gui
+* de.berlios.rcpviewer.gui.acme
+committed.
+They are essentially merge/rewrite of mikespike3 plus Ted's persistence 
+stuff.  In fact de.berlios.rcpviewer.gui is a replacement for 
+de.berlios.rcpviewer.rcp.  (Why I did not just update the latter I am 
+not too sure).
+Currently it does not include the Search capability as I will have to 
+update the ...persistence.ui plugin - will do so tomorrow.
+
+Attached after this note are the salient points from the wiki - please 
+peruse and if anything interests you, then it might be worth taking a 
+look at the source.
+
+Next steps:
+* add Ted's search stuff
+* properly review Ted's persistence changes
+* tidy everything ( consistent formatting etc, JAVADOC! )
+* add session tree view
+All intended for this week.
+
+Next week I intend to get back to some TDD and have a chat with Ted 
+regarding the test harness.
+
+Mike E.
+
+
+
+
+FROM WIKI:
+
+
+'''Design Points'''
+* A DomainBootstrapFactory used to allow options in the future.
+* The returned IDomainBootstrap is wrapped in a  job.  This is strictly 
+unecessary at the moment (indeed necesitates a join() call in plugin's 
+startup()) but wrapping such long / heavy operations such as this in Job 
+is one of my suggested standards.
+* Similarly there is a session bootstrap job - this is in the plugin 
+startup rather than the application initialisation so that, eventually, 
+it can be configured via eclipse mechanisms.
+* Ted's dummy authorisation wizard is left out for now.  Don't 
+particularly like the wizard approach to login - I suggest a good ole' 
+dialog.
+* Currently no domains extesnion point - simply uses default - this is 
+where the session bootstrap job could come in.
+
+'''Current Errors'''
+* second save() fails on editor - re: discussion between save() and 
+persist() methods.
+
+'''Suggested Standards'''
+* wrap all log / complex operations in Job's
+* 'eat your own dogfood' for all extension points  '''unless''' the 
+fall-back default option; hecnce 'exts' sub-directories where extension 
+points are implemented
+* apart from explicit extension points, am '''not''' writing classes for 
+extension, rather the opposite - trying to make as un-public as possible.
+* use _ notation for fields (?)
+* place constants on appropriate classes - not a global constant 
+interface (an anti-pattern?)
+
+
+
+Dan Haywood wrote:
+&gt;<i> Hi Mike,
+</I>&gt;<i> 
+</I>&gt;<i> Just did an update on your plugin.  One thing I had to do was apply a
+</I>&gt;<i> singleton=true directive since I am running 3.1rc4 right now, see rev 352.
+</I>&gt;<i> Just wanted you to know in case it causes you problems on an older build.
+</I>&gt;<i> 
+</I>&gt;<i> Also, did you get a chance to try Ted's version of your spike?  He had a
+</I>&gt;<i> File&gt;New to instantiate domain classes, and also a contribution to the
+</I>&gt;<i> Search menu for fetching persisted objects.  Probably worth salvaging and
+</I>&gt;<i> folding into your stuff?
+</I>&gt;<i> 
+</I>&gt;<i> In fact, just checking, looks like some of Ted's spike was actually moved up
+</I>&gt;<i> by him into the main workspace, see de.berlios.rcpviewer.rcp and
+</I>&gt;<i> de.berlios.persistence.ui.  So we should merge all this because there's
+</I>&gt;<i> definitely some overlap.  Whether you merge his into yours or vice versa is
+</I>&gt;<i> your call.
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000129.html">[Rcpviewer-contributors] Re: busy busy
+</A></li>
+	<LI>Next message: <A HREF="000132.html">[Rcpviewer-contributors] Progress 20050630
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#130">[ date ]</a>
+              <a href="thread.html#130">[ thread ]</a>
+              <a href="subject.html#130">[ subject ]</a>
+              <a href="author.html#130">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

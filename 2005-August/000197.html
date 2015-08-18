@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20Save-as-you-go%20%28was%3A%20Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050816%29&In-Reply-To=%3CZen-1E5Q2d-0004xf-1K%40rutherford.zen.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000196.html">
+   <LINK REL="Next"  HREF="000198.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20Save-as-you-go%20%28was%3A%20Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050816%29&In-Reply-To=%3CZen-1E5Q2d-0004xf-1K%40rutherford.zen.co.uk%3E"
+       TITLE="Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Wed Aug 17 17:41:23 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000196.html">Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)
+</A></li>
+        <LI>Next message: <A HREF="000198.html">[Rcpviewer-contributors] Re: transactions &amp; Progress 20050822
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#197">[ date ]</a>
+              <a href="thread.html#197">[ thread ]</a>
+              <a href="subject.html#197">[ subject ]</a>
+              <a href="author.html#197">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>within
+
+---
+Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+
+&gt;<i> OK - so the transaction manager handles the transient state, with a 
+</I>&gt;<i> 'Save All' action causing it to flush to database.
+</I>
+&gt;<i> 
+</I>&gt;<i> I'll need the manager or the model to somehow tell me which objects are 
+</I>&gt;<i> dirty so that I can display the '*'.  Or you might have some listening 
+</I>&gt;<i> mechanism I can tie into.
+</I>
+I think that the existing IDomainObject.IAttributeListener should be enough.  They only fire if the attribute has changed, I think.
+
+
+&gt;<i> 
+</I>&gt;<i> Now the undo:
+</I>&gt;<i> 
+</I>&gt;<i> Say I make changes.
+</I>&gt;<i> Then I File/Save/
+</I>&gt;<i> Then Undo
+</I>&gt;<i> Do I return to the state before the Save (i.e. some objects dirty etc) 
+</I>&gt;<i> or do I return to the state at it was at the beginning of the 
+</I>&gt;<i> transaction I just saved?  Or does it do nothing?  Or is that the 
+</I>&gt;<i> purpose of Undo All..?  I'm a bit unclear here.
+</I>
+Okay, let's define it as following:
+Edit&gt;Undo is enabled ONLY whenever there is a pending transaction not yet committed.  It will undo each of the individual operations / field edits within that change up until they have undone all pending changes (ie to the state they were in when they last did a File&gt;Save All).  Similarly Edit&gt;Redo will allow them to go forward.
+
+Edit&gt;Undo All is also enabled ONLY whenever there is a pending transaction, and undoes all individual actions to their last File&gt;Save All in one go.
+
+Edit&gt;Undo Last is enabled ONLY whenever a File&gt;Save All has been completed, and it will (attempt to) undo an already committed transaction.  If they do any subsequent operation or field edit and thus start a new transaction, then Edit&gt;Undo Last is not available.
+
+That might be clunky from a usability perspective, I don't know; let's see how it goes.  I do think that the user would want to distinguish (Edit&gt;Undo vs Edit&gt;Undo Last) when they are undoing previously committed work vs merely undoing pending work.
+
+
+&gt;<i> As for candy floss fine - I can see lots of little icons to represent 
+</I>&gt;<i> different actions etc.  Gimme a listening mechanism to pick up the 
+</I>&gt;<i> atomic operations within the transaction manager I cando.
+</I>
+Cool.  I'll get busy on it then.
+
+
+&gt;<i> 
+</I>&gt;<i> Mike E.
+</I>&gt;<i> 
+</I>&gt;<i> Dan Haywood wrote:
+</I>&gt;<i> &gt; I think I agree with your analysis: we definitely should keep the UI and the
+</I>&gt;<i> model in sync.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I agree too that the 'Save' action should be removed for each editor, but my
+</I>&gt;<i> analysis (now I've thought about it some more is a little different).  File&gt;Save
+</I>&gt;<i> only makes sense when each editor is independent of the next.  That isn't the
+</I>&gt;<i> case for our RCP applications: a change made via one editor can result in
+</I>&gt;<i> multiple pojos becoming modified.  By all means we can have the &quot;*&quot; decorator on
+</I>&gt;<i> the editor to indicate which are dirty (I rather like that convention), however
+</I>&gt;<i> it doesn't make sense to try to 'Save' one of these dirty objects without saving
+</I>&gt;<i> them all.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; So I think we should remove File&gt;Save.  On the other hand a File&gt;Save All
+</I>&gt;<i> would make sense.  What the user would see when they invoke this is all the &quot;*&quot;s
+</I>&gt;<i> disappearing in one go, but what's really happening is that the pending
+</I>&gt;<i> transaction is committed to the persistence object store (via Hibernate or
+</I>&gt;<i> whatever).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Now let's talk about undo.  First off, we can undo a committed (File&gt;Save All)
+</I>&gt;<i> transaction.  Since the TransactionManager holds an undo/redo stack, that's just
+</I>&gt;<i> a matter of invoking undo.  This will result in a new database transaction via
+</I>&gt;<i> Hibernate, effectively backing out the changes.  I'm not sure if that should be
+</I>&gt;<i> exposed as Edit&gt;Undo or not.  Perhaps an Edit&gt;Undo Last?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Over and above this though, the TransactionManager also keeps track of the
+</I>&gt;<i> current (IN_PROGRESS, still to be committed) Transaction.  So even before a
+</I>&gt;<i> File&gt;Save All, the user could undo their in-memory changes, either one at a time
+</I>&gt;<i>  (Edit&gt;Undo definitely makes sense here) or the  whole set (ie to the last time
+</I>&gt;<i> that File&gt;Save All was invoked; Edit&gt;Undo All?)
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Let me know if this make sense.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; One other bit of UI candifloss - it would be quite nice to expose the
+</I>&gt;<i> TransactionManager's state through the UI in a view.  Internally the
+</I>&gt;<i> TransactionManager consists of an undo stack and redo stack of Transactions;
+</I>&gt;<i> each Transaction is a collection of &quot;WorkAtoms&quot; that form a composite pattern,
+</I>&gt;<i> hence a luvverly tree view.  Might be nice for demos, and for debugging, and
+</I>&gt;<i> perhaps even useful for end-users themselves.  What think you?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Dan
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; ---
+</I>&gt;<i> &gt; Mike Evans &amp;lang=en&quot;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt;
+</I>&gt;<i> wrote :
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt;Priorities noted.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;I think the open/edit/save model should be continued with as this is 
+</I>&gt;<i> &gt;&gt;what any RCP user would expect an Editor to do.
+</I>&gt;<i> &gt;&gt;Also adding an 'auto-commit' option to code already handling 
+</I>&gt;<i> &gt;&gt;long-running transactions will be easy to do.  Vice versa not so easy.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;I intend to make the ReferencePart's store their own transient state and 
+</I>&gt;<i> &gt;&gt;only fire off changes to the domain object once a save is actually 
+</I>&gt;<i> &gt;&gt;initiated - just as the AttributeParts already do.
+</I>&gt;<i> &gt;&gt;I can see some issues with this but will deal with them as they arise.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;As for Undo/Redo - I think we have to ensure we're talking about the 
+</I>&gt;<i> &gt;&gt;same thing. There are two contexts:
+</I>&gt;<i> &gt;&gt;- an undo/redo stack on an editor dealing with user input/DnD. This is 
+</I>&gt;<i> &gt;&gt;cleared on every save and has nothing to do with the underlying model as 
+</I>&gt;<i> &gt;&gt;it is unaware of any changes until the save.
+</I>&gt;<i> &gt;&gt;- undo/redo of object model changes themselves - including operations etc.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;Oh but ah.  This is going to be another one of those mails where I end 
+</I>&gt;<i> &gt;&gt;up saying exactly the opposite of what I started with...
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;If we have transient state unknown to the model, we cannot carry out 
+</I>&gt;<i> &gt;&gt;operations on a gui object if it's correspoinding editor is open and 
+</I>&gt;<i> &gt;&gt;dirty.  The model must know the state the user believes the object to be 
+</I>&gt;<i> &gt;&gt;in.  Hence we either have to restrict the user's ability to call 
+</I>&gt;<i> &gt;&gt;operations dependent on the object's (and its dependent objects') state 
+</I>&gt;<i> &gt;&gt;-  a complex business - or we go the QuickBooks 'save-as-you-go' route.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;So now I think I see where Dan is coming from - a 'save-as-you-go' 
+</I>&gt;<i> &gt;&gt;approach is probably going to be easier as there will be not be a clash 
+</I>&gt;<i> &gt;&gt;between the editor-save cycle and other operations.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;If so, I would need to:
+</I>&gt;<i> &gt;&gt;- remove 'Save' from the Edtor's;
+</I>&gt;<i> &gt;&gt;- alter AttributeParts to immediately update the model (that'll be fun - 
+</I>&gt;<i> &gt;&gt;if we're not to have 'transactions' for every key stroke!)
+</I>&gt;<i> &gt;&gt;- ReferenceParts are actually doing the right thing now.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;I really should think these things through more...
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;Dan - 'save-as-you-go' then..?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;Mike E.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;Dan Haywood wrote:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;Gonna do an update to check this all out now.
+</I>&gt;<i> &gt;&gt;&gt;In terms of priorities:
+</I>&gt;<i> &gt;&gt;&gt;- complete the reference stuff as you say
+</I>&gt;<i> &gt;&gt;&gt;- the classbar thing (hopefully very easy and quick, but needed for demo
+</I>&gt;<i> &gt;&gt;&gt;video I want to make)
+</I>&gt;<i> &gt;&gt;&gt;- operations delegate to IDomainObject.IExtendedOperation for prereqs and
+</I>&gt;<i> &gt;&gt;&gt;defaults (again hopefully pretty easy)
+</I>&gt;<i> &gt;&gt;&gt;- AND then, the undo stuff.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;The undo stuff is timely; I've been working on a Transaction Aspect which
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;is
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;able to watch for any modifications to fields and wrap them into Command
+</I>&gt;<i> &gt;&gt;&gt;objects such that they can be subsequently undone or redone.  Just gonna
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;do
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;a commit of a first version now.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;Any thoughts on transactional semantics?  The original NOF supports
+</I>&gt;<i> &gt;&gt;&gt;&quot;save-as-you-go&quot; so that each field modification or action is a self
+</I>&gt;<i> &gt;&gt;&gt;contained transaction - no use of File&gt;Save.  Some &quot;enterprise&quot; apps do
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;this
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;too, eg Quickbooks.  If we get full undo support I quite like this.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;On the other hand, perhaps we should start with a more traditional
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;approach
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;where the user must do an explicit File&gt;Save - it's meaning is basically
+</I>&gt;<i> &gt;&gt;&gt;commit this transaction.  The transaction is started the minute they make
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;a
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;field mod or invoke an action.  They could still do an undo after this,
+</I>&gt;<i> of
+</I>&gt;<i> &gt;&gt;&gt;course.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;Opinions please.
+</I>&gt;<i> &gt;&gt;&gt;Dan
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;-----Original Message-----
+</I>&gt;<i> &gt;&gt;&gt;&gt;From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;Behalf Of Mike Evans
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;Sent: 16 August 2005 10:06
+</I>&gt;<i> &gt;&gt;&gt;&gt;To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;Subject: [Rcpviewer-contributors] Progress 20050816
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;STILL coding gui to displaying object's references.
+</I>&gt;<i> &gt;&gt;&gt;&gt;Have checked in what I have got:
+</I>&gt;<i> &gt;&gt;&gt;&gt;* the 1:M references appears to work
+</I>&gt;<i> &gt;&gt;&gt;&gt;* the 1:1 does not yet (the listeners are not picking up changes)
+</I>&gt;<i> &gt;&gt;&gt;&gt;* 'dirty' state is incorrectly handled.
+</I>&gt;<i> &gt;&gt;&gt;&gt;In fact the last of those is a fairly major fault.
+</I>&gt;<i> &gt;&gt;&gt;&gt;The implementation is currently flawed in that I am immediately updating
+</I>&gt;<i> &gt;&gt;&gt;&gt;the domain object rather than waiting for a save.  Have to sort this
+</I>&gt;<i> out.
+</I>&gt;<i> &gt;&gt;&gt;&gt;Dunno why I am making such a meal of this...
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;Also, have been looking at Eclipse 3.1 Undo framework and am interested
+</I>&gt;<i> &gt;&gt;&gt;&gt;in getting on to this ... ONCE I have the references stuff beat.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;Other future work (orders please!):
+</I>&gt;<i> &gt;&gt;&gt;&gt;- separating 'first class' and dependent domain objects for:
+</I>&gt;<i> &gt;&gt;&gt;&gt;   * classbar (as per Dan's request ages ago).
+</I>&gt;<i> &gt;&gt;&gt;&gt;   * extending the object reference gui so that a double click opens
+</I>&gt;<i> &gt;&gt;&gt;&gt;the  appropriate editor for the references object (if first class) and
+</I>&gt;<i> &gt;&gt;&gt;&gt;(...?) a dialog if it does not have its own lifecycle
+</I>&gt;<i> &gt;&gt;&gt;&gt;- applying pre-requisite logic on operations
+</I>&gt;<i> &gt;&gt;&gt;&gt;- tying Ted's search logic to domain object fields (so that pushing
+</I>&gt;<i> &gt;&gt;&gt;&gt;their '+' buttons actually does something)
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;Mike E.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;--
+</I>&gt;<i> &gt;&gt;&gt;&gt;Mike Evans
+</I>&gt;<i> &gt;&gt;&gt;&gt;Incremental Ltd.
+</I>&gt;<i> &gt;&gt;&gt;&gt;www.incremental.eu.com
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;_______________________________________________
+</I>&gt;<i> &gt;&gt;&gt;&gt;Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt;&gt;&gt;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;_______________________________________________
+</I>&gt;<i> &gt;&gt;&gt;Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt;&gt;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;-- 
+</I>&gt;<i> &gt;&gt;Mike Evans
+</I>&gt;<i> &gt;&gt;Incremental Ltd.
+</I>&gt;<i> &gt;&gt;www.incremental.eu.com
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;_______________________________________________
+</I>&gt;<i> &gt;&gt;Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000196.html">Save-as-you-go (was: Re: [Rcpviewer-contributors] Progress 20050816)
+</A></li>
+	<LI>Next message: <A HREF="000198.html">[Rcpviewer-contributors] Re: transactions &amp; Progress 20050822
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#197">[ date ]</a>
+              <a href="thread.html#197">[ thread ]</a>
+              <a href="subject.html#197">[ subject ]</a>
+              <a href="author.html#197">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] XPetStore - first look.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20XPetStore%20-%20first%20look.&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKGENHDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000157.html">
+   <LINK REL="Next"  HREF="000159.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] XPetStore - first look.</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20XPetStore%20-%20first%20look.&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKGENHDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] XPetStore - first look.">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Fri Jul 22 02:28:05 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000157.html">[Rcpviewer-contributors] progress 20050718
+</A></li>
+        <LI>Next message: <A HREF="000159.html">[Rcpviewer-contributors] Progress 20050725
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#158">[ date ]</a>
+              <a href="thread.html#158">[ thread ]</a>
+              <a href="subject.html#158">[ subject ]</a>
+              <a href="author.html#158">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Been developing the xpetstore application.  Although not finished by any
+means, it is starting to look like what I think an rcpviewer application
+will look like &quot;in real life&quot;.  It is certainly reminiscent of the DSFA
+business objects I've been coding up this last year.
+
+The comments are not complete, and those that are have been written in the
+style of a tutorial in explaining things that - well - aren't written yet.
+But hopefully it will act as a useful focus for ongoing development.
+
+For example, I found myself inventing quite a stack of new annotations, all
+of which I've put into the extended programming model plugin package:
+* Optional
+* MinLengthOf
+* MaxLengthOf
+* Mask
+* Lookup
+* Invisible
+* ImmutableOncePersisted
+* FieldLengthOf
+* BusinessKey
+So I need to expose all of these and write tests for 'em.  That'll keep me
+out of mischief.
+
+I've also introduced the IAppContainer interface, as described in
+[features/app-container].  Just enough to get a clean compile for now.
+Eventually want to integrate this stuff with Ted's forthcoming Spring-y
+stuff.
+
+Dan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000157.html">[Rcpviewer-contributors] progress 20050718
+</A></li>
+	<LI>Next message: <A HREF="000159.html">[Rcpviewer-contributors] Progress 20050725
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#158">[ date ]</a>
+              <a href="thread.html#158">[ thread ]</a>
+              <a href="subject.html#158">[ subject ]</a>
+              <a href="author.html#158">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

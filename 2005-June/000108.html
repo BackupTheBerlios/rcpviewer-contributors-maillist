@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] aspects in runtime plugin tests
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20aspects%20in%20runtime%20plugin%20tests&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEPMDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000104.html">
+   <LINK REL="Next"  HREF="000107.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] aspects in runtime plugin tests</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20aspects%20in%20runtime%20plugin%20tests&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEPMDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] aspects in runtime plugin tests">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Fri Jun  3 21:07:27 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000104.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+        <LI>Next message: <A HREF="000107.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#108">[ date ]</a>
+              <a href="thread.html#108">[ thread ]</a>
+              <a href="subject.html#108">[ subject ]</a>
+              <a href="author.html#108">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Per injecting DialogUtil's into a Pojo, not sure I follow.  We should be
+finding way to define this sort of behaviour in terms of a programming
+model, eg:
+
+public class Customer {
+
+  @ShowAsDialog
+  public void someActionMethod(...) { }
+
+}
+
+Though I would have thought that a dialog would be only one way of rendering
+an action method.
+
+Dan
+
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+stockwell
+Sent: 03 June 2005 18:58
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: Re: [Rcpviewer-contributors] aspects in runtime plugin tests
+
+
+This could be handled cleanly by Spring however it would require a bit
+of refactoring...
+
+class DialogUtil {
+    public static void openError(Shell parent, String title, String
+message) {
+            MessageDialog.openError( parent, title, message );
+     }
+}
+class TestSessionDialogUtil extends DialogUtil {
+    public static void openError(Shell parent, String title, String
+message) {
+            MessageDialog dialog = new MessageDialog(
+                    parent,
+                    title,
+                    null,
+                    message,
+                    MessageDialog.ERROR,
+                    new String[] { IDialogConstants.OK_LABEL },
+                    0);
+            TestSession.recordEvent( dialog );
+     }
+}
+class PoJo {
+    private DialogUtil _dialogUtil;
+
+    public void someMethod() {
+       _dialogUtil.openError(...);
+    }
+    public void setDialogUtil(DialogUtil value) {
+       _dialogUtil= value;
+    }
+}
+
+Then, by configuring and using different Spring 'application contexts'
+for the standard runtime environment versus the testing environment,
+PoJo instances will given a DialogUtils instance that is appropriate for
+the environment in which it is running.
+
+
+Mike Evans wrote:
+
+&gt;<i> Dan,
+</I>&gt;<i>
+</I>&gt;<i> I saw your confession about stripping aspects out of your projects.
+</I>&gt;<i> Can I confirm your reasons?
+</I>&gt;<i> Was it because you could not get aspects running in a plugin
+</I>&gt;<i> environment or because you think we are excluding people by doing so?
+</I>&gt;<i> The reason I ask is that almost at the start of the main GUI I am
+</I>&gt;<i> having to introduce some test-harness specifics into the main code so
+</I>&gt;<i> that I can test properly (e.g making sure modal dialogs are not
+</I>&gt;<i> opened).  This is an obvious case for using an aspect but I do not
+</I>&gt;<i> want to waste my time learning how to do this if you have found it not
+</I>&gt;<i> to work in our intended environment.
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i> PS : to give you an example, my here's a test-aware class i have:
+</I>&gt;<i>
+</I>&gt;<i> /**
+</I>&gt;<i>  * Static methods that decorate base Eclipse dialog functionality.
+</I>&gt;<i>  * @author Mike
+</I>&gt;<i>  *
+</I>&gt;<i>  */
+</I>&gt;<i> public class DialogUtil {
+</I>&gt;<i>
+</I>&gt;<i>     /**
+</I>&gt;<i>      * Exactly as MessageDialog.openError() but aware of test sessions
+</I>&gt;<i>      * @link MessageDialog
+</I>&gt;<i>      */
+</I>&gt;<i>     public static void openError(Shell parent, String title, String
+</I>&gt;<i> message) {
+</I>&gt;<i>         if ( TestSession.isActive() ) {
+</I>&gt;<i>             MessageDialog dialog = new MessageDialog(
+</I>&gt;<i>                     parent,
+</I>&gt;<i>                     title,
+</I>&gt;<i>                     null,
+</I>&gt;<i>                     message,
+</I>&gt;<i>                     MessageDialog.ERROR,
+</I>&gt;<i>                     new String[] { IDialogConstants.OK_LABEL },
+</I>&gt;<i>                     0);
+</I>&gt;<i>             TestSession.recordEvent( dialog );
+</I>&gt;<i>         }
+</I>&gt;<i>         else {
+</I>&gt;<i>             MessageDialog.openError( parent, title, message );
+</I>&gt;<i>         }
+</I>&gt;<i>     }
+</I>&gt;<i>
+</I>&gt;<i> }
+</I>&gt;<i>
+</I>&gt;<i> A clear case for an aspect..?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000104.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+	<LI>Next message: <A HREF="000107.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#108">[ date ]</a>
+              <a href="thread.html#108">[ thread ]</a>
+              <a href="subject.html#108">[ subject ]</a>
+              <a href="author.html#108">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

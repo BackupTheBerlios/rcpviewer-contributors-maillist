@@ -1,0 +1,188 @@
+From mike.evans at incremental.eu.com  Tue Oct  4 10:04:28 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 04 Oct 2005 09:04:28 +0100
+Subject: [Rcpviewer-contributors] Update 04/10/05
+Message-ID: <4342378C.908@incremental.eu.com>
+
+Uh-oh.  An 'Update' mail, not a 'Progress' one...
+Actually there is progress - just nothing checked in yet.
+I have actually spent 3+ mandays on re-architecting the GUI stuff.
+Of this, 2+ mandays was wasted as I went around in circles (not one for 
+up-front design me) which is a shame - and the thing looks not too 
+radically diffrent from before.  However this means I have at least 
+contented myself that I cannot come up with any brilliant, simpler way 
+of doing things.
+Another 1.5 or so mandays effort and it'll all be safely in SVN - so say 
+next week some time - does this still fit with your commitmetns Dan?
+
+Mike E.
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Sat Oct 15 07:19:26 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 15 Oct 2005 06:19:26 +0100
+Subject: [Rcpviewer-contributors] testing, testing
+Message-ID: <LGEELLOAEBMLCOGIKLMKIEBEDFAA.dan@haywood-associates.co.uk>
+
+Mike reports that this mailing list is bouncing - is it?
+
+
+
+From dan at haywood-associates.co.uk  Sat Oct 15 07:26:59 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 15 Oct 2005 06:26:59 +0100
+Subject: [Rcpviewer-contributors] Progress 20051014 - on behalf of Mike
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEBFDFAA.dan@haywood-associates.co.uk>
+
+Finally something to report.
+
+The project 'org.essentialplatform.louis' is (or should be - see last
+paragraph) submitted.  It is a direct replacement for the
+'de.berlios.recpviewer.gui' project. The only external difference is
+that it does not rely on 'net.sf.plugins.utils'.
+Both 'de.berlios.rcpviewer.gui.acme' and
+'de.berlios.rcpviewer.petstore.gui' projects now rely on it.
+
+Internally it is a rewrite that, after much faff and heartache, is not
+really that different to its predecessor.  However I am much happier
+with it as it enables much easier extension for domain & value objects etc.
+
+The core pattern is a IGUIFactory per attribute/reference on a domain
+object. Each generates a GUI component and an IFormPart for.  The
+IFormPart is the model that holds gui values until a commit when these
+are flushed to the domain model.  Essentailly a composite pattern.
+Best to start with DefaultEditor and see how the calls work form there.
+
+Supporting patterns:
+
+Finite Options Factories
+e.g ILouisLabelProvider, ITransferProvider
+- getX( args ) methods which return null if the provider cannot satisfy
+the request
+
+Infinite Options Factories
+e.g. IGuiFactory
+- isApplicable( args1 ) and getX( args2 ) methods where the second can
+only be called if the first is true
+
+Global Factories
+Essentially collections of the above that iterate through the collection
+until the first factory that can satisfy the request. Generally there
+are default factories and an extsnion point for domain specialisations.
+Order is significant.
+
+Obviously I'll get this lot writetn onto the wiki when I get a chance.
+
+Issues.
+1) insufficient testing - I have been on this for far too long and have
+no more time
+2) generics faff - you'll see that my generics are a bit of a mess -
+will get tidied in the fulness of time
+3) domain listening - I have the IFormPart's set up to listen in on
+domain changes and refresh themselves if an external change occurs.
+This takes no account of whetehr they are dirty or not so this will have
+to be worked upon.
+4) Transactions !?  Have not really got to grip with Dan's transaction
+stuff so getting arbitary & confusing issues if I do not save in the
+right order (..?).  Again, with more time will get a better handle on
+this.  Note also that I had to make one emergency change on
+de.berlios.rcpviewer.transaction.internal.TransactionManager
+('de.berlios.recpviewer.deomain.runtime' project) to get anything to
+work.  I have checked this in under a REVIEW_CHANGE marker but accept
+this is most probably my misuderstanding.
+5) Why are the 'Color' attribute in EasyBean and any attribute in
+EasiestBean not picked by up by the model?
+6) AspectJ kills my machine - 512 MB is simply not enough - I have to
+restart every hour!  Much better when I turn off auto-build but hey...
+
+Time
+Due to my own faffing I have spent much too much time on this.  I will
+not be able to do much (/any) more between now and mid-November when I
+return from a conference I am going to.  Obviously I am here for scary
+bugs / ineviatbel SVN problems etc but that's about all.
+
+Finally.
+Dan, my SVN access is crawling & when it did get somewhere it threw up a
+'corrupt data' message (??).  I'll try again tomorow am (again must rush
+off now) but just in case I have sent to you a zip file of the project.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+
+From dan at haywood-associates.co.uk  Sat Oct 15 07:48:08 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 15 Oct 2005 06:48:08 +0100
+Subject: [Rcpviewer-contributors] Icons uploaded.
+Message-ID: <LGEELLOAEBMLCOGIKLMKKEBFDFAA.dan@haywood-associates.co.uk>
+
+I commissioned some icons for demos and more generally for use in any
+applications built on the Essential Platform.  These are now uploaded into
+trunk/icons.  A README explains the usage rights.
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Sat Oct 15 12:16:58 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sat, 15 Oct 2005 11:16:58 +0100
+Subject: [Rcpviewer-contributors] Progress 20051015
+Message-ID: <4350D71A.2060607@incremental.eu.com>
+
+org.essentialplatform.louis committed to SVN (rev 507)
+affected projects:
+* petstore
+* gui.acme
+* persistence
+- all will need updating
+note also the Transactionmanager fix I mentioned before if you find 
+nothing working.
+
+Built everything new today with a fresh Eclipse install so SVN version 
+should be hunky-dory.
+
+Mike E.
+
+PS : fatal flaw #1 : my IFormParts are refreshing even after a failed 
+commit - hence after a failed save the gui reversts to it inital state. 
+  ooops - will fix next week.
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+

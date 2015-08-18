@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Starting to need some metadata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Starting%20to%20need%20some%20metadata&In-Reply-To=%3C427A455D.6010109%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000029.html">
+   <LINK REL="Next"  HREF="000034.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Starting to need some metadata</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Starting%20to%20need%20some%20metadata&In-Reply-To=%3C427A455D.6010109%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Starting to need some metadata">emorning at yahoo.com
+       </A><BR>
+    <I>Thu May  5 18:10:05 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000029.html">[Rcpviewer-contributors] Re: Acegi Security
+</A></li>
+        <LI>Next message: <A HREF="000034.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All,
+
+Those of you that love really long e-mails are gonna love this one ;-)....
+
+I'm at the point where I'm ready to write code that will open an EMF 
+object in an Editor, specifically an RCPViewerEditor. 
+An Eclipse editor must be supplied with an instance of IEditorInput when 
+the editor is opened.
+Among other things IEditorInput must implement these three methods...
+
+    /**
+     * Returns the image descriptor for this input.
+     */
+    public ImageDescriptor getImageDescriptor();
+
+    /**
+     * Returns the name of this editor input for display purposes.
+     */
+    public String getName();
+
+    /**
+     * Returns the tool tip text for this editor input. 
+     */
+    public String getToolTipText();
+
+
+These three items are 'extra' properties, for the UI only, and are not 
+normally part of a domain object model.
+NO requires methods to be added to the domain model to supply this 
+information.  Actually, that's one aspect of NO that I don't care for, I 
+don't think that an object model should have to be polluted with this 
+information.  I'm not sure how the POJO version of NO gets this information.
+I've taken a look at the classes in the EMF-Builder project and I didn't 
+see anything that would get me this information.
+
+So, here is my proposal... I have introduced a new interface, 
+IRcpViewerMetadata that provides the viewer with access to this information.
+As is my usual modis operandi,  I use the Eclipse AdapterManager to get 
+an IRcpViewerMetadata from any object.  So, when I need an object's 
+metadata I do this...
+
+    IRcpViewerMetadata metadata= (IRcpViewerMetadata)
+        
+Platform.getAdapterManager().getAdapter(IRcpViewerMetadata.class, 
+anyEObject);
+
+------------------------------
+
+So, instead of modifying the domain model and adding classes that 
+specify this information I have chosen to put this information into an 
+XML file and register this file in an extension point, 
+de.berlios.rcpviewer.metadata.
+The metadata extension element points to a file with the XML metadata in it.
+So, in the plugin that defines the PurchaseOrder class I have this 
+extension element in the plugin.xml...
+
+&lt;extension point=&quot;de.berlios.rcpviewer.metadata&quot;&gt;
+    &lt;metadata class=&quot;com.example.ppo.PurchaseOrder&quot; 
+xml=&quot;PurchaseOrder.rvm&quot; /&gt;
+&lt;/extension&gt;
+
+Then, when the de.berlios.rcpviewer starts up it rips through all the 
+de.berlios.rcpviewer.metadata extensions and, for every metadata 
+element  in an extension, registers an adapter factory that can supply 
+an instance of IRcpViewerMetadata given an object that implements the 
+interface named in the metadata's 'class' element.  The 
+de.berlios.rcpviewer reads the denoted XML file to get the metadata.
+
+Make sense so far?
+
+------------------------------
+
+Here is the best part...
+
+I have modeled the IRcpViewerMetadata in EMF.  Right out of the box I 
+have an editor for creating/editing metadata.  The default EMF.Edit 
+editor lets me save the metadata as XML (Ecore  XML).  The EMF framework 
+gives me tools to load the XML as a IRcpViewerMetadata object. 
+
+Since IRcpViewerMetadata is an Ecore object then when the RCPViewer is 
+completed it will be possible to edit RCPViewer metadata information 
+using the RCPViewer itself.
+
+But wait!  There's more! 
+Have you seen the default EMF model editor?  EMF has a default model 
+editor for creating and editing Ecore models.  This is possible because 
+ECore itself is expressed as a model that the EMF.Edit framework can use 
+to generate an editor.
+So....the EMF.Edit framework can be used to a) create models (that is, 
+model the application), and then b) used in the application itself to 
+create/edit objects.
+
+Following the same pattern as EMF.Edit, if we model the RCPViewer 
+metadata as ECore objects then the RCPViewer will be able to a) model an 
+application, and then b) run the application.
+It would even be possible to open an application's metadata from within 
+the application, change the metadata, and then restart to apply the changes!
+Cool or what!
+
+---------------------------
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000029.html">[Rcpviewer-contributors] Re: Acegi Security
+</A></li>
+	<LI>Next message: <A HREF="000034.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: domainclass plugin not working???
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20domainclass%20plugin%20not%20working%3F%3F%3F&In-Reply-To=%3C42C8EA0F.2020506%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000135.html">
+   <LINK REL="Next"  HREF="000137.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: domainclass plugin not working???</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20domainclass%20plugin%20not%20working%3F%3F%3F&In-Reply-To=%3C42C8EA0F.2020506%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: domainclass plugin not working???">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Jul  4 09:49:35 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000135.html">[Rcpviewer-contributors] Progress 20050701
+</A></li>
+        <LI>Next message: <A HREF="000137.html">[Rcpviewer-contributors] progress 20050704
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#136">[ date ]</a>
+              <a href="thread.html#136">[ thread ]</a>
+              <a href="subject.html#136">[ subject ]</a>
+              <a href="author.html#136">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hmmm - Subclipse and, more believably, Tortoise both think everything is 
+sync'd.   I wonder if it is an Eclipse version issue?
+
+I am downloading the official 3.1 Eclipse release (available sinece last 
+week) &amp; will use this.  Will let you know if I find anything.
+
+Oh, one (more) bit of faff with Subclipse.  Before commiting I did a 
+sync which told me about a single change Dan made in a class I have now 
+deleted.  Hence I did a full cmmit.  AFTER the commit (which I did in 
+Subclipse and Tortoise), Subclipse decided to tell me that 
+Domain-related classes had updates to apply.  Basically using the 
+RuntimeDomain singelton rather than the Domain singleton.  Of course, 
+having committed with Tortoise, I had overwritten those changes.  Let me 
+know how/why/if f'd up.
+
+Mike E.
+
+PS : and another thing - there were several classes deleted in the last 
+commit, which I know can be a subclipse weakness. If you see ANY '*Part' 
+classes apart from ...gui.editors.FieldPart then we have commit issues.
+
+
+
+Dan Haywood wrote:
+&gt;<i> Hi Mike
+</I>&gt;<i> 
+</I>&gt;<i> Just got around to trying out your latest commits.  Having problems getting
+</I>&gt;<i> the domainclasses extension point (as read in DefaultDomainBootstrap) to
+</I>&gt;<i> return anything.
+</I>&gt;<i> 
+</I>&gt;<i> Have looked at your schema/*.exsd and they look wrong (copy and paste), but
+</I>&gt;<i> I'm afraid my Eclipse knowledge ain't quite up to scratch to fix.  (I tried
+</I>&gt;<i> commenting out the schema attribute in your plugin.xml since I know that the
+</I>&gt;<i> .exsd are optional, but still no joy).
+</I>&gt;<i> 
+</I>&gt;<i> I'm guessing that the plugin.xml / .exsd are fine in your local workspace,
+</I>&gt;<i> but just not committed?  Could you check?
+</I>&gt;<i> 
+</I>&gt;<i> Thanks
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000135.html">[Rcpviewer-contributors] Progress 20050701
+</A></li>
+	<LI>Next message: <A HREF="000137.html">[Rcpviewer-contributors] progress 20050704
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#136">[ date ]</a>
+              <a href="thread.html#136">[ thread ]</a>
+              <a href="subject.html#136">[ subject ]</a>
+              <a href="author.html#136">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

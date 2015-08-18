@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Switching editors (was mikespike3 &amp; mikespike3-acme)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Switching%20editors%20%28was%20mikespike3%20%26%0A%20mikespike3-acme%29&In-Reply-To=%3C42985BA4.4030605%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000075.html">
+   <LINK REL="Next"  HREF="000076.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Switching editors (was mikespike3 &amp; mikespike3-acme)</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Switching%20editors%20%28was%20mikespike3%20%26%0A%20mikespike3-acme%29&In-Reply-To=%3C42985BA4.4030605%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Switching editors (was mikespike3 &amp; mikespike3-acme)">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Sat May 28 13:53:08 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000075.html">[Rcpviewer-contributors] Switching editors (was mikespike3 &amp; mikespike3-acme)
+</A></li>
+        <LI>Next message: <A HREF="000076.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#83">[ date ]</a>
+              <a href="thread.html#83">[ thread ]</a>
+              <a href="subject.html#83">[ subject ]</a>
+              <a href="author.html#83">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>My thoughts wrt multiple tabs.
+In mikespike3 we have a single base editor class which provides a single
+page whose contents can be changed via the editorcontentbuilder
+extension point.  The default content is our default / example form editor.
+Standard behaviour is this single editor / page per instance opened.
+
+However setting a 'debug' or 'advanced' mode might well open additional
+tabs on the base editor class.  This could include Dan's accessibility
+editor, and/or for instance, an echo of debug output in a console.
+
+The crucial thing here is that additional tabs are entirely controlled
+by ourselves.  We do not offer an extension point for other developers
+to add their own additional tabs.  This raises the spectre of multiple,
+unknown, GUI components simultaneously updating the same object
+instance.  I fear the complexity of the contract we would have to expect
+said developers to stick to - and the complexity of the defensive
+programming we would have to put in place to enforce it.
+
+Perhaps we will have a clearer idea once we/I actually start develping
+the editor.
+
+Mike E.
+
+
+
+Dan Haywood wrote:
+&gt;<i> Hi Ted, Mike
+</I>&gt;<i> Busy on the mailing list this morning!  I feel all happy and warm (especially since Liverpool won the cup, yeah!  Ted fyi: that's a quite famous soccer team :-)
+</I>&gt;<i> 
+</I>&gt;<i> Regards switching editors, what do we feel about using multiple tabs? eg the PDE manifest editor has the form views or edit the raw text in plugin.xml / manifest.MF.  Thus, each specialist rendering would contribute an extra tab via some extension point.
+</I>&gt;<i> 
+</I>&gt;<i> For example, my idea of an accessibility editor, whereby one could in a Smalltalk-like way invoke actions on objects, would be separate tab.
+</I>&gt;<i> 
+</I>&gt;<i> Seems to me this is doing it &quot;the Eclipse way&quot; - thoughts?
+</I>&gt;<i> Dan
+</I>&gt;<i> ---
+</I>&gt;<i> Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>Hi Ted,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Bit busy at the moment but my machine is currently running through 
+</I>&gt;&gt;<i>Epic's GUI tests which take 5 minutes or so, so I have that long.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>The mechanism is deliberately simple.  Glad you approve.
+</I>&gt;&gt;<i>Just to check - the blue form content builder is only isApplicable() for 
+</I>&gt;&gt;<i>one of the two bean classes.  Remember the class itself  decides this - 
+</I>&gt;&gt;<i>not the xml config.  Are you sure you have tried both bean classes?  If 
+</I>&gt;&gt;<i>so I have a probelm and will take a look at it.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Switching mechanism is a good idea.  We could build it in as a dynamic 
+</I>&gt;&gt;<i>base Editor class action.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>BTW: ( ... tests are still running ...), that brings up another thought. 
+</I>&gt;&gt;<i>  One of Epic's eccentricities is that there is no application-wide 
+</I>&gt;&gt;<i>toolbar (forget the screenshots - I'll update those).  I found it 
+</I>&gt;&gt;<i>redundant as I much prefer each form editor to use its own toolbar - to 
+</I>&gt;&gt;<i>me this keeps the user focussed (and provides for much simpler coding!) 
+</I>&gt;&gt;<i>Any thoughts with regard to RcpViewer?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>ted stockwell wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Mike Evans wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>My third little spike is complete.
+</I>&gt;&gt;&gt;&gt;<i>It suggests a base mechanism for GUI generation.
+</I>&gt;&gt;&gt;&gt;<i>For review - most of the info is in the wiki page whose content I 
+</I>&gt;&gt;&gt;&gt;<i>attach below to save a download of the whole spike.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>Mike E.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Good job Mike!
+</I>&gt;&gt;&gt;<i>I like your approach overall and don't see any particular  flaws in it.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Have just one question...
+</I>&gt;&gt;&gt;<i>I'm not sure if the mikespike3-acme plugin is working or if I am doing 
+</I>&gt;&gt;&gt;<i>something wrong.
+</I>&gt;&gt;&gt;<i>I can see that mikespike3-acme is contributing an extension to the 
+</I>&gt;&gt;&gt;<i>mikespike3.editorContentBuilder extension point.
+</I>&gt;&gt;&gt;<i>Therefore I expected to see &quot;Blue Form&quot; to show up on the list of 
+</I>&gt;&gt;&gt;<i>editors I can use to open an object.
+</I>&gt;&gt;&gt;<i>However, that bit is not working for me, I get only the 'Default Form'.
+</I>&gt;&gt;&gt;<i>I am including the mikespike3-acme plugin in my .launch.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i>Note that I follow the standard Eclipse approach of offering a default 
+</I>&gt;&gt;&gt;<i>Editor for any particular type (dbl-click or 'open' menu option) or a 
+</I>&gt;&gt;&gt;<i>list of other options via the 'open with' menu option.  Whatever option 
+</I>&gt;&gt;&gt;<i>is selected becomes the default for that type).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>I like this idea.
+</I>&gt;&gt;&gt;<i>One thing I don't like about the Eclipse approach is that I have to 
+</I>&gt;&gt;&gt;<i>close an editor in order to open an object in a different editor.
+</I>&gt;&gt;&gt;<i>I use JasperAssistant to create JasperReports, I am constantly flipping 
+</I>&gt;&gt;&gt;<i>between the text editor and the JasperAssistant GUI editor when creating 
+</I>&gt;&gt;&gt;<i>JasperReport designs, and it's a PITA to have to close the text editor 
+</I>&gt;&gt;&gt;<i>and then open the JasperAssistant GUI.
+</I>&gt;&gt;&gt;<i>I would be nice if there were some convenient UI mechanism to switch 
+</I>&gt;&gt;&gt;<i>editors.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>-- 
+</I>&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000075.html">[Rcpviewer-contributors] Switching editors (was mikespike3 &amp; mikespike3-acme)
+</A></li>
+	<LI>Next message: <A HREF="000076.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#83">[ date ]</a>
+              <a href="thread.html#83">[ thread ]</a>
+              <a href="subject.html#83">[ subject ]</a>
+              <a href="author.html#83">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

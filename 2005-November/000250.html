@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-November/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Change%20sets%20%28was%20Transaction%20view%29&In-Reply-To=%3C438B5199.7080503%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000249.html">
+   <LINK REL="Next"  HREF="000251.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: Change sets (was Transaction view)</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Change%20sets%20%28was%20Transaction%20view%29&In-Reply-To=%3C438B5199.7080503%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: Change sets (was Transaction view)">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Nov 28 19:51:05 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000249.html">[Rcpviewer-contributors] Transaction view
+</A></li>
+        <LI>Next message: <A HREF="000251.html">[Rcpviewer-contributors] Re: Change sets (was Transaction view)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#250">[ date ]</a>
+              <a href="thread.html#250">[ thread ]</a>
+              <a href="subject.html#250">[ subject ]</a>
+              <a href="author.html#250">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dan,
+
+TRANSACTION PER POJO
+Having each newly created pojo in its own transaction will require some 
+sort of merge etc. as I would suggest it will normal practice to create 
+more than one dependent pojo at a time (I mean pojos with their own 
+lifecycles but then linked, e.g Beans &amp; EasyBean).
+
+Perhaps we can have a convention that identifies one pojo as a 
+(non-unique) factory of another type of pojo in which case when an 
+instance of the latter are created by the former they remain in the same 
+transaction.
+e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating 
+a factory method whose output remains in the transaction.
+
+Irrespective of that the merge/umnmerge would be needed. Perhaps 
+something on the lines of:
+
+MyTransaction(){...}
+
+MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+
+MyTransaction merge( MyTransaction partner ) {
+   return new MyTransaction( this, partner );
+}
+
+MyTransaction[] unmerge() {
+   if ( _dad == null ) throw new IllegalStateException();
+   if ( _mum == null ) throw new IllegalStateException();
+   return new MyTransaction[]{ dad, mum };
+}
+
+I'll have a think - we'll probably need a new transaciton state or two 
+to  get the undo/redo logic right.
+
+CONCURRENCY
+How scalable are we going to be?
+Is our distribuetd app going to be peer-to-peer or controlled centrally?
+If centrally we can go for pessimistic locking of all objects.  As soon 
+as a transaction enlists the object, it cannot be enlisted by any other 
+transaction.  I like that where scalability allows, as no user ever 
+wastes time on lost changes (guess how Epic works).
+
+Other ideas...
+Can we emulate a global lock p2p?  S'ppose so. A TransactionManager 
+broadcasts that it has grabbed a lock on a pojo AND when it releases 
+that lock.  All other Transaction Managers record which pojo's are out 
+of bounds.  Fail Safety: the broadcast gives the address of the locking 
+Transaction Manager (TM) so if another TM wants to lock the pojo it can 
+test whether the locking TM is still running and then ...
+Oh good grief - if you do not like centralised locking let's leave it to 
+File/Save errors for now.
+
+
+Mike E.
+
+PS : no coding today - too busy learning NullSoft's installer - which is 
+lovely (if you like Windows).
+
+
+Dan Haywood wrote:
+&gt;<i> (This mail is direct to you only cos the mailing list just bounced me.
+</I>&gt;<i> Huh).
+</I>&gt;<i> -------------
+</I>&gt;<i> 
+</I>&gt;<i> Hi Mike
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>Question : conceptually are all ChangeSets are on a single timeline on
+</I>&gt;&gt;<i>which there is a defined point where they are changeable or not?  Or can
+</I>&gt;&gt;<i>undoable and redoable changes run concurrently?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> In short: the latter.
+</I>&gt;<i> 
+</I>&gt;<i> A bit longer: there can be multiple transactions IN_PROGRESS at the same
+</I>&gt;<i> time.  Each transaction enlists a set of pojos, but a single pojo can only
+</I>&gt;<i> be enlisted in one transaction at a time.  This last is the rule that I
+</I>&gt;<i> think you partially commented out.  I haven't reinstated it cos I want to
+</I>&gt;<i> see how all this works out in practice.
+</I>&gt;<i> 
+</I>&gt;<i> The reason that xactn failures occur, I think, is that if one creates one
+</I>&gt;<i> pojo and then another one (eg Beans and then EasyBean) then they will both
+</I>&gt;<i> be in their own transaction.  Attempting to add the EasyBean to the Beans
+</I>&gt;<i> pojo then fails because the EasyBean cannot be enlisted in the Beans xactn.
+</I>&gt;<i> 
+</I>&gt;<i> An alternative design for this would be to automatically merge the xactns.
+</I>&gt;<i> But what should happen if the user does an Edit-&gt;Undo - should the xactns
+</I>&gt;<i> unmerge again?  So I want to just see it all in use as I originally designed
+</I>&gt;<i> it and then we can see how it behaves in practice.
+</I>&gt;<i> 
+</I>&gt;<i> By the way, another wrinkle that I know I'll need to address is that of
+</I>&gt;<i> concurrent updates.  I intend there to be a JMS subscription thing going on
+</I>&gt;<i> so that xactns committed by other users will be automatically published.
+</I>&gt;<i> That means that the user will always have an up-to-date view, and should be
+</I>&gt;<i> great for when a user isn't in the process of changing an object.  But if
+</I>&gt;<i> they are, then I think that we'll need to get them to acknowledge the update
+</I>&gt;<i> and throw away their own IN_PROGRESS transaction.  My thinking is again
+</I>&gt;<i> better for them to find out earlier rather than later when they do their
+</I>&gt;<i> File-&gt;Save and get an optimistic locking error.  But I'd appreciate your
+</I>&gt;<i> views - I've not designed a &quot;conventional&quot; application this way, so I'm a
+</I>&gt;<i> little nervous if this is a little close to the bleeding edge.
+</I>&gt;<i> 
+</I>&gt;<i> Later
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;<i>From: Mike Evans [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>]
+</I>&gt;&gt;<i>Sent: 26 November 2005 12:34
+</I>&gt;&gt;<i>To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">dan at haywood-associates.co.uk</A>
+</I>&gt;&gt;<i>Subject: Re: [Rcpviewer-contributors] Transaction view
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Yuh.
+</I>&gt;&gt;<i>I was thinking of adding to 'config' options to show changesets and/or
+</I>&gt;&gt;<i>enlisted pojos.
+</I>&gt;&gt;<i>However I think two seperate views would be better.  Sigh.
+</I>&gt;&gt;<i>ChangeSets are a composite I noticed - hence I was going to have an
+</I>&gt;&gt;<i>infinite-leveled tree for this.  May not look so good so might just go
+</I>&gt;&gt;<i>with two levels and use icons to indicate dependencies.  We'll see how
+</I>&gt;&gt;<i>it goes.
+</I>&gt;&gt;<i>Question : conceptually are all ChangeSets are on a single timeline on
+</I>&gt;&gt;<i>which there is a defined point where they are changeable or not?  Or can
+</I>&gt;&gt;<i>undoable and redoable changes run concurrently?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Dan Haywood wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>I've put a patch in to stop all those spurious transactions
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>from appearing.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>I see that you are using a tree for the transaction view -
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>good-o.  But as
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>you've noticed, there's actually two or three dimensions to
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>what lives in a
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>transaction
+</I>&gt;&gt;&gt;<i>- the enlisted pojos
+</I>&gt;&gt;&gt;<i>- the change sets (which can be undone)
+</I>&gt;&gt;&gt;<i>- possibly change sets which can be redone.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>I think actually we need two views relating to transactions here:
+</I>&gt;&gt;&gt;<i>- the first should be what you are working on, which is really a
+</I>&gt;&gt;&gt;<i>TransactionManager view.  This should show the transactions +
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>the enlisted
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>pojos in each.
+</I>&gt;&gt;&gt;<i>- the second should show the current transaction for the
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>current pojo that
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>has focus, showing the two sets of changesets (undoable and redoable).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Note that changesets follow the composite pattern, so in theory
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>they could
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>be nested.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Hope that makes sense.
+</I>&gt;&gt;&gt;<i>Dan
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>--
+</I>&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000249.html">[Rcpviewer-contributors] Transaction view
+</A></li>
+	<LI>Next message: <A HREF="000251.html">[Rcpviewer-contributors] Re: Change sets (was Transaction view)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#250">[ date ]</a>
+              <a href="thread.html#250">[ thread ]</a>
+              <a href="subject.html#250">[ subject ]</a>
+              <a href="author.html#250">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

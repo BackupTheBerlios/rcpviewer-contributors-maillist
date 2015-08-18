@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Fwd: Re: [Rcpviewer-contributors] Toolbars]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BFwd%3A%20Re%3A%20%5BRcpviewer-contributors%5D%20Toolbars%5D&In-Reply-To=%3C429601E9.4000101%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000079.html">
+   <LINK REL="Next"  HREF="000082.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Fwd: Re: [Rcpviewer-contributors] Toolbars]</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BFwd%3A%20Re%3A%20%5BRcpviewer-contributors%5D%20Toolbars%5D&In-Reply-To=%3C429601E9.4000101%40incremental.eu.com%3E"
+       TITLE="[Fwd: Re: [Rcpviewer-contributors] Toolbars]">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Thu May 26 19:05:45 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000079.html">[Rcpviewer-contributors] Toolbars
+</A></li>
+        <LI>Next message: <A HREF="000082.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#80">[ date ]</a>
+              <a href="thread.html#80">[ thread ]</a>
+              <a href="subject.html#80">[ subject ]</a>
+              <a href="author.html#80">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+-------- Original Message --------
+Subject: Re: [Rcpviewer-contributors] Toolbars
+Date: Thu, 26 May 2005 18:05:23 +0100
+From: Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt;
+To: Dan Haywood &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">dan at haywood-associates.co.uk</A>&gt;
+References: &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Zen-1DbHkM-0004oM-OA at heisenberg.zen.co.uk</A>&gt;
+
+To be honest standard windows design would be to have a single toolbar
+as per Ted's implementation.  I had problems with this in terms of the
+'liveness' of the actions (e.g ensuring the save option is enabled as
+soon as a change has been made) but it sounds like Ted has this one solved.
+
+Both approaches with the decision made by the metadata is a good design
+goal though.
+
+Mike E.
+
+
+
+Dan Haywood wrote:
+
+&gt;<i> It'd be great to have both approaches, starting off with Mike's approach.
+</I>&gt;<i> 
+</I>&gt;<i> For what it's worth, the &quot;official&quot; NO viewpoint would be to put the behaviour near the object, which is more akin to Mike's view: behaviourally complete objects.
+</I>&gt;<i> 
+</I>&gt;<i> On the other hand I still love Ted's screenshot (from Quicken, was it?) with the actions in a separate view.  If that's an easier thing to do (some sort of listener on the currently active editor?) then I'd very much like to see that.  It'll probably need more metadata to drive it which will help develop the programming model too.
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> ---
+</I>&gt;<i> Ted Stockwell &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">emorning at yahoo.com</A>&gt; wrote :
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>Mike Evans wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Hi Ted,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Bit busy at the moment but my machine is currently running through 
+</I>&gt;&gt;&gt;<i>Epic's GUI tests which take 5 minutes or so, so I have that long.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>I'm jealous.  I don't have GUI tests for our product, I have only 
+</I>&gt;&gt;<i>JUnit-based functional tests.  What do you use for GUI testing?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>BTW: ( ... tests are still running ...), that brings up another 
+</I>&gt;&gt;&gt;<i>thought.  One of Epic's eccentricities is that there is no 
+</I>&gt;&gt;&gt;<i>application-wide toolbar (forget the screenshots - I'll update 
+</I>&gt;&gt;&gt;<i>those).  I found it redundant as I much prefer each form editor to use 
+</I>&gt;&gt;&gt;<i>its own toolbar - to me this keeps the user focussed (and provides for 
+</I>&gt;&gt;&gt;<i>much simpler coding!) Any thoughts with regard to RcpViewer?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>My personal preference is to have just one application-wide toolbar.  I 
+</I>&gt;&gt;<i>prefer the 'one stop shopping' that the main toolbar affords me.  I 
+</I>&gt;&gt;<i>don't like to have to scan the screen for the toolbar with the button 
+</I>&gt;&gt;<i>that I want.
+</I>&gt;&gt;<i>In our application I have several toolbar buttons that always stay on 
+</I>&gt;&gt;<i>the toolbar; Save, Refresh, Print, etc.
+</I>&gt;&gt;<i>Editor actions are added to the main toolbar as the active editor 
+</I>&gt;&gt;<i>changes.  I use eclipse extension points exclusively to manage the main 
+</I>&gt;&gt;<i>menu and toolbar.  I like that I don't have any code in my editors to 
+</I>&gt;&gt;<i>manage menus, toolbars, or context menus.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>That said, I don't know what the 'right' thing is.  I think the 'right' 
+</I>&gt;&gt;<i>approach would be the approach that would score highest on usability 
+</I>&gt;&gt;<i>tests, but I don't have a feel for which approach that is.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>---------------------
+</I>&gt;&gt;<i>Given that we have different preferences perhaps the answer is that the 
+</I>&gt;&gt;<i>GUI should be configurable to use either approach.
+</I>&gt;&gt;<i>You could implement your spike to use the editor toolbar and then I 
+</I>&gt;&gt;<i>could research how to dynamically switch between using editor toolbars 
+</I>&gt;&gt;<i>and the application toolbar.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>-------------------
+</I>&gt;&gt;<i>OR.... perhaps the answer is that the domain object should specify 
+</I>&gt;&gt;<i>whether the action should go on the editor toolbar or the application 
+</I>&gt;&gt;<i>toolbar.
+</I>&gt;&gt;<i>If the domain object does not specify which toolbar to use then the GUI 
+</I>&gt;&gt;<i>should use the 'default' toolbar.
+</I>&gt;&gt;<i>The 'default' toolbar could be configurable.  Some developers might 
+</I>&gt;&gt;<i>prefer to make the application toolbar the default toolbar and some 
+</I>&gt;&gt;<i>developers would prefer to use the editor toolbar as the default.
+</I>&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000079.html">[Rcpviewer-contributors] Toolbars
+</A></li>
+	<LI>Next message: <A HREF="000082.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#80">[ date ]</a>
+              <a href="thread.html#80">[ thread ]</a>
+              <a href="subject.html#80">[ subject ]</a>
+              <a href="author.html#80">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

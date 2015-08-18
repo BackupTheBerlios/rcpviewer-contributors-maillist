@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Starting to need some metadata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Starting%20to%20need%20some%20metadata&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKKEILDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000030.html">
+   <LINK REL="Next"  HREF="000036.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Starting to need some metadata</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Starting%20to%20need%20some%20metadata&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKKEILDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Starting to need some metadata">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sat May  7 08:44:44 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000030.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+        <LI>Next message: <A HREF="000036.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ted,
+glad to see you've been busy :-)
+
+Couple of things to note, though - so here's my long email in return...
+
+1. Metadata
+
+You were talking about getName(), getToolTipText(), getImageDescriptor() and
+saying (a) how they aren't in emf-builder, (b) that they shouldn't be, and
+(c) you've put the info into plugin.xml.
+
+In fact, the first two are supported - every IDomainClass, attribute,
+operation and operation parameter has a name.  And the tooltiptext equates
+to the description.  It's a responsibility of the UI components to interpret
+the description as tooltiptext.  In the programming model, this information
+is provided using @Named and @DescribedAs annotations.
+
+The last one is also supported through the metamodel, but as an extension
+object pattern (I've called it Adapter).  I've only just uploaded this, so
+it wasn't there when you looked at the code, but it was my plan.
+
+So how it works is thus: one registers an IMetaModelExtension (either
+programmatically or more likely we define an extension point in
+plugins.xml) - when a POJO is being analyzed and its IDomainClass is being
+built, any extensions are asked to contribute their own semantics.  These
+are then subsequently available using:
+
+SomeExtension myExtension =
+(SomeExtension)someDomainClass.getAdapter(SomeExtension.class);
+
+Have a look at
+tests/de.berlios.rcpviewer.progmodel.standard/TestExplicitNamesAndDescriptio
+ns#testDomainClassThatIsExplicitlyNamed to see this in action.  The concrete
+extension that's tested there is an RcpViewerExtension that is able to
+furnish your aforesaid ImageDescriptors.  (You'll note that I use the URL
+form of constructing this ImageDescriptor, and the IMetaModelExtension uses
+an @ImageUrlAt to save away this URL as an EAnnotation within EMF.  However,
+an alternative implementation of this extension - and one that would be
+preferable I think - would be to use the Class, fileName:String form.  In
+this case no annotation would need to be saved, because the first info is
+known, and the second info could be searched for.  I've described this more
+in the javadoc for @ImageUrlAt).
+
+You chose to put this extra metadata in plugins.xml whereas I've used the
+POJO itself.  You said: &quot;Actually, that's one aspect of NO that I don't care
+for, I don't think that an object model should have to be polluted with this
+information&quot;, so your preference is outside the POJO model.  I take the
+opposite view.  I want rcpviewer to be non technical so that most &quot;domain
+programmers&quot; (guys using rcpviewer to write business applications) have a
+minimum of things to wrap their heads around.  Now we can expect that they
+understand Java and in the next 12 months using annotations will become
+commonplace (eg the EJB3 spec).  But understanding the vagaries of
+plugin.xml is not something I want these guys - our principle users - to
+have to understand.  Also, imagine oneself in this role: in a workshop with
+end-users and identifying a POJO and its attributes and operations.  I want
+to be able to get this information down as quickly as possible, and the
+quickest way is in a single (Java) editor.  Even if we had some rinky dink
+wizard to populate this info into plugin.xml, you'd still have to find that
+wizard, and run it, and then remember the name of the attribute you are
+describing etc - by which time you're out of the flow.  Please remember: I'm
+talking about this &quot;domain programmer&quot; role from the point of view of
+actually having done it for the last 12 months in Ireland.
+
+All that said, the design I've described doesn't preclude using plugin.xml.
+The IMetaModelExtension actually can get its information from anywhere -
+even from a database I guess, for example if it were providing help
+information.  Another example: one of the things I'd like to build is to use
+VEP to create an editor that would allow the application developer to
+explicitly specify where fields go on an form - see
+<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/tooling/domain-object-ui">http://www.haywood-associates.co.uk/rcpviewer/space/tooling/domain-object-ui</A>
+-representation/explicit-form-editor for a little more explanation.  Now the
+result of this editor might well be a bunch of XML that goes into plugin.xml
+(or it could be a new class like a BeanInfo).  But here I'm quite happy that
+this information is separate from the POJO, because developing such a
+customized representation would typically be done after the main domain
+programming, and might even be done by a specialist developer who
+concentrates on building UIs.
+
+I hope some of this makes sense - I have a very clear idea about how certain
+aspects of rcpviewer are to work - and this happens to be one of them.
+
+
+2. EMF
+
+Sounds like you've been up to some clever stuff with EMF.  Although I'm
+using EMF also to hold the data within emf-builder, I'm not using its
+EMF.Edit or code generation features.  And here again I'm a little wary
+about it, because it may raise the bar in terms of sophistication of domain
+programmers.  Remember that EMF is really an implementation of MOF - a
+meta-meta-meta-model.  Most domain programmers I envisage using rcpviewer
+would get freaked out at one &quot;meta&quot;.
+
+But I don't want to sound too negative.  If we can use EMF's code gen stuff
+to develop either some of our custom viewers for the runtime rcpviewer, or
+indeed to provide tooling editors for development time, then fair enough.
+Best thing would be to get your stuff uploaded into SVN, then we can review.
+
+---
+Right - it's a Saturday.  Enough already.
+Dan
+
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of ted
+stockwell
+Sent: 05 May 2005 17:10
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: [Rcpviewer-contributors] Starting to need some metadata
+
+
+Hi All,
+
+Those of you that love really long e-mails are gonna love this one ;-)....
+
+I'm at the point where I'm ready to write code that will open an EMF
+object in an Editor, specifically an RCPViewerEditor.
+An Eclipse editor must be supplied with an instance of IEditorInput when
+the editor is opened.
+Among other things IEditorInput must implement these three methods...
+
+    /**
+     * Returns the image descriptor for this input.
+     */
+    public ImageDescriptor getImageDescriptor();
+
+    /**
+     * Returns the name of this editor input for display purposes.
+     */
+    public String getName();
+
+    /**
+     * Returns the tool tip text for this editor input.
+     */
+    public String getToolTipText();
+
+
+These three items are 'extra' properties, for the UI only, and are not
+normally part of a domain object model.
+NO requires methods to be added to the domain model to supply this
+information.  Actually, that's one aspect of NO that I don't care for, I
+don't think that an object model should have to be polluted with this
+information.  I'm not sure how the POJO version of NO gets this information.
+I've taken a look at the classes in the EMF-Builder project and I didn't
+see anything that would get me this information.
+
+So, here is my proposal... I have introduced a new interface,
+IRcpViewerMetadata that provides the viewer with access to this information.
+As is my usual modis operandi,  I use the Eclipse AdapterManager to get
+an IRcpViewerMetadata from any object.  So, when I need an object's
+metadata I do this...
+
+    IRcpViewerMetadata metadata= (IRcpViewerMetadata)
+
+Platform.getAdapterManager().getAdapter(IRcpViewerMetadata.class,
+anyEObject);
+
+------------------------------
+
+So, instead of modifying the domain model and adding classes that
+specify this information I have chosen to put this information into an
+XML file and register this file in an extension point,
+de.berlios.rcpviewer.metadata.
+The metadata extension element points to a file with the XML metadata in it.
+So, in the plugin that defines the PurchaseOrder class I have this
+extension element in the plugin.xml...
+
+&lt;extension point=&quot;de.berlios.rcpviewer.metadata&quot;&gt;
+    &lt;metadata class=&quot;com.example.ppo.PurchaseOrder&quot;
+xml=&quot;PurchaseOrder.rvm&quot; /&gt;
+&lt;/extension&gt;
+
+Then, when the de.berlios.rcpviewer starts up it rips through all the
+de.berlios.rcpviewer.metadata extensions and, for every metadata
+element  in an extension, registers an adapter factory that can supply
+an instance of IRcpViewerMetadata given an object that implements the
+interface named in the metadata's 'class' element.  The
+de.berlios.rcpviewer reads the denoted XML file to get the metadata.
+
+Make sense so far?
+
+------------------------------
+
+Here is the best part...
+
+I have modeled the IRcpViewerMetadata in EMF.  Right out of the box I
+have an editor for creating/editing metadata.  The default EMF.Edit
+editor lets me save the metadata as XML (Ecore  XML).  The EMF framework
+gives me tools to load the XML as a IRcpViewerMetadata object.
+
+Since IRcpViewerMetadata is an Ecore object then when the RCPViewer is
+completed it will be possible to edit RCPViewer metadata information
+using the RCPViewer itself.
+
+But wait!  There's more!
+Have you seen the default EMF model editor?  EMF has a default model
+editor for creating and editing Ecore models.  This is possible because
+ECore itself is expressed as a model that the EMF.Edit framework can use
+to generate an editor.
+So....the EMF.Edit framework can be used to a) create models (that is,
+model the application), and then b) used in the application itself to
+create/edit objects.
+
+Following the same pattern as EMF.Edit, if we model the RCPViewer
+metadata as ECore objects then the RCPViewer will be able to a) model an
+application, and then b) run the application.
+It would even be possible to open an application's metadata from within
+the application, change the metadata, and then restart to apply the changes!
+Cool or what!
+
+---------------------------
+
+
+
+
+
+
+_______________________________________________
+Rcpviewer-contributors mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+<A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000030.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+	<LI>Next message: <A HREF="000036.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

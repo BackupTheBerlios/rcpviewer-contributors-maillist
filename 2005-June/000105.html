@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] RE: SVN errors?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20RE%3A%20SVN%20errors%3F&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEPLDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000107.html">
+   <LINK REL="Next"  HREF="000115.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] RE: SVN errors?</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20RE%3A%20SVN%20errors%3F&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEPLDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] RE: SVN errors?">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Fri Jun  3 20:57:14 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000107.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+        <LI>Next message: <A HREF="000115.html">[Rcpviewer-contributors] Update on gui development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike,
+sorry, hope this didn't hold you up too much.
+
+Have added 3 missing files, including IDeploymentSpecifics.  I think that
+AbstractTestCase was ok, though - I tend to put my fields along with the
+accessors/mutators.  Not conventional, I know, but it keeps object
+responsibilities together.  I've brought down the files down from SVN myself
+to double check, seems to compile okay.
+
+Much as subclipse is a little flaky, I'd still like to stay with SVN rather
+than CVS.  Notwithstanding me missing out those files :-(, Subclipse +
+Tortoise to pick up on the things that Subclipse misses is workable, I
+think.  The real benefit that SVN gives us is not having to worry about
+where we put files/packages in the first place.  It's an agility thing for
+me - deferring the decision until when it needs to be made.
+
+Dan
+
+-----Original Message-----
+From: Mike Evans [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>]
+Sent: 03 June 2005 09:32
+To: Dan Haywood
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+Subject: SVN errors?
+
+
+Hi Dan,
+
+Just taken the latest from the main workspace in SVN and have compile
+problems in the domain.tests and domain.runtime.tests projects.  I think
+these can be narrowed down to
+* AbstractTestCase is missing the fields it uses
+* interface IDeploymentSpecifics is not defined anywhere
+Could you take a look.
+Note I used Tortoise to fetch the projects so this is probably a commit
+problem.
+Which makes me wonder whether we should not just revert to CVS that at
+least works within Eclipse.
+
+Mike E.
+
+
+--
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000107.html">[Rcpviewer-contributors] aspects in runtime plugin tests
+</A></li>
+	<LI>Next message: <A HREF="000115.html">[Rcpviewer-contributors] Update on gui development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

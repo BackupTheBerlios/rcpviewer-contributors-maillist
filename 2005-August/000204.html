@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050825
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050825&In-Reply-To=%3CZen-1E8Gly-0001AR-DG%40pythagoras.zen.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000203.html">
+   <LINK REL="Next"  HREF="000205.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050825</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050825&In-Reply-To=%3CZen-1E8Gly-0001AR-DG%40pythagoras.zen.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050825">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Thu Aug 25 14:23:58 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000203.html">[Rcpviewer-contributors] Progress 20050825
+</A></li>
+        <LI>Next message: <A HREF="000205.html">[Rcpviewer-contributors] Progress 20050826
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#204">[ date ]</a>
+              <a href="thread.html#204">[ thread ]</a>
+              <a href="subject.html#204">[ subject ]</a>
+              <a href="author.html#204">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Was intending to for first class objects (isInstantiable()) - was going to open a modal dialog for second class ones.  Ok?
+</I>
+a) isInstantiable() doesn't distinguish first class objects from second class, it distinguishes objects that can be instantiated from the class bar (or File&gt;New) from ones which cannot (eg reference data).  For example, might make CatalogItem (or Product) reference data but it is still a first class object - ie a place at which the user can interact with the application.
+
+So instead what you want to do is to look at the reference itself and see if it has containment semantics.  I used the name that EMF gives to this concept (to be crystal: also known in UML as composition or aggregation by value, or by database boys as an identifying relationship).  So there should be an isContained() or something similar to invoke on the EReference.
+
+b) Modal dialogs - argh, Richard Pawson would shoot us.  That's a no.  What I'd really like is to be able to open up these contained objects within the containing object's editor.  But I admit I'm not sure how that might work in the context of a table.  Instead, for now, can you just open up a regular editor but perhaps have a way to indicate its owning object by looking for a 1:1 reference that has isOpposite() = true (ie bidirectional) and also isContained() = true.  (In practice most contained objects would have such a bidirectional association, otherwise the domain objects cannot prevent contained objects from being moved between containers.  Also Hibernate guys tend to suggest setting up such relationships using their &quot;inverse&quot; tag).
+
+Also, while talking about GUI prettiness, could you put the icon + toString() for each object in the body of each editor; the idea being to gives the user another &quot;handle&quot; to the object to drag/drop (rather than go finding it in the session view).
+
+----
+Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+
+&gt;<i> See below...
+</I>&gt;<i> 
+</I>&gt;<i> Dan Haywood wrote:
+</I>&gt;<i> &gt; Thanks for the latest.  To your questions...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; Yes to all.  Now or later?  for c) what columns do you want?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; If you're in the flow with the report job, then please continue.  But
+</I>&gt;<i> &gt; otherwise, now(ish).  My focus is to get the UI looking good enough
+</I>&gt;<i> &gt; to build a video to support a submission for EclipseCon, and that
+</I>&gt;<i> &gt; needs doing by mid Sept or thereabouts.  I think that these features
+</I>&gt;<i> &gt; are prereqs for that.
+</I>&gt;<i> 
+</I>&gt;<i> UI to look good - OK, I'll get on with these.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Which columns?  All attributes, but not references.  Could you also
+</I>&gt;<i> &gt; have it such that double click opens up an editor for the object (but
+</I>&gt;<i> &gt; perhaps it does this, I don't have it running right now).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> Was intending to for first class objects (isInstantiable()) - was going 
+</I>&gt;<i> to open a modal dialog for second class ones.  Ok?
+</I>&gt;<i> 
+</I>&gt;<i> &gt; In the meantime, it also buys me some time to get my xactn aspect
+</I>&gt;<i> &gt; working:-)  And I really am being very naughty and feeling more and
+</I>&gt;<i> &gt; more guilty about the swathes of unit tests that I've left
+</I>&gt;<i> &gt; incomplete.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> Unit tests - ha-ha ho-ho he-he.  Perhaps past the video production eh?
+</I>&gt;<i> Actually, UI unit testing will come after our transaction implementation 
+</I>&gt;<i> as I see undo/redo / transactions / job histories / macros / unit tests 
+</I>&gt;<i> to all be aprt of the same aspect. (re: previous conversations).
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Dan --- Mike Evans &amp;lang=en&quot;&gt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt;
+</I>&gt;<i> wrote :
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; Sorry about the silence over the past two days. Bogged down with
+</I>&gt;<i> &gt;&gt; real work. Be careful if you use the combination of XDoclet2,
+</I>&gt;<i> &gt;&gt; Hibernate and Java 5 generics - or more specifically - Java 5
+</I>&gt;<i> &gt;&gt; generics with any project using qdox(see
+</I>&gt;<i> &gt;&gt; <A HREF="http://qdox.codehaus.org/whouses.html">http://qdox.codehaus.org/whouses.html</A>).  qdox's
+</I>&gt;<i> understanding of
+</I>&gt;<i> &gt;&gt; Java5 is less than perfect.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Anyhow, working on showing histories and feedback on RCPViewer's
+</I>&gt;<i> &gt;&gt; Gui. So far only a 'ReportJob' that is called by most other jobs is
+</I>&gt;<i> &gt;&gt;  committed.  This simply puts up something on the status line but I
+</I>&gt;<i> &gt;&gt;  intend it to become oh so much more. Next a console view for
+</I>&gt;<i> &gt;&gt; displaying histry which I'll also tie it in with Dan's  log4j set
+</I>&gt;<i> &gt;&gt; up. Then I'll  start paying more attention to Dan's annotations.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Dan - your questions:
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; a) could you reevaluate toString() whenever the object's attributes
+</I>&gt;<i> &gt;&gt; have changed? b) could you put the collection view into a
+</I>&gt;<i> &gt;&gt; collapsible region, eg like the &quot;Dependency Analysis&quot; section on
+</I>&gt;<i> &gt;&gt; the &quot;Dependencies&quot; tab of the manifest viewer.  That'll be needed
+</I>&gt;<i> &gt;&gt; for lazy loading of collections in the future. c) could the list be
+</I>&gt;<i> &gt;&gt; converted into a table?
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Yes to all.  Now or later?  for c) what columns do you want?
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Mike E.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; -- Mike Evans Incremental Ltd. www.incremental.eu.com
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; _______________________________________________ 
+</I>&gt;<i> &gt;&gt; Rcpviewer-contributors mailing list 
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; _______________________________________________ 
+</I>&gt;<i> &gt; Rcpviewer-contributors mailing list 
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> 
+</I>&gt;<i> &gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000203.html">[Rcpviewer-contributors] Progress 20050825
+</A></li>
+	<LI>Next message: <A HREF="000205.html">[Rcpviewer-contributors] Progress 20050826
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#204">[ date ]</a>
+              <a href="thread.html#204">[ thread ]</a>
+              <a href="subject.html#204">[ subject ]</a>
+              <a href="author.html#204">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

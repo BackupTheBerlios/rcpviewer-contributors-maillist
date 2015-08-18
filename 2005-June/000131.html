@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: could you work on the action view before returning to the test harness?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20could%20you%20work%20on%20the%20action%20view%20before%20returning%20to%20the%20test%0A%20harness%3F&In-Reply-To=%3C42C3D3B9.9030900%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000132.html">
+   <LINK REL="Next"  HREF="000133.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: could you work on the action view before returning to the test harness?</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20could%20you%20work%20on%20the%20action%20view%20before%20returning%20to%20the%20test%0A%20harness%3F&In-Reply-To=%3C42C3D3B9.9030900%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: could you work on the action view before returning to the test harness?">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Thu Jun 30 13:12:57 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000132.html">[Rcpviewer-contributors] Progress 20050630
+</A></li>
+        <LI>Next message: <A HREF="000133.html">[Rcpviewer-contributors] Re: could you work on the action view before returning to the test harness?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#131">[ date ]</a>
+              <a href="thread.html#131">[ thread ]</a>
+              <a href="subject.html#131">[ subject ]</a>
+              <a href="author.html#131">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Okey-dokey.
+Looks like my query regarding the DefautEditor's use of reflection to 
+obtain getters and setters was apposite.
+I gather you really expect it to use IDomainObject attributes and 
+operations rather than do its own refelction.
+This fits nicely with my Job model.
+I want to make a generic:
+DomainOperationJob( IDomainObject obj, Operation op ) {}...
+which would be used for all setters as well as other ops.  Then tie the 
+gui in as listeners upon this.
+Which should also give the basis for the action-view.
+
+Mike E.
+
+Dan Haywood wrote:
+&gt;<i> Hi Mike,
+</I>&gt;<i> thanks for the work this week, really good stuff.  Looking forward to seeing the other few things you mentioned in your last posting.
+</I>&gt;<i> 
+</I>&gt;<i> You said next week you want to go back to the test harness, after consulting with Ted.  Since Ted is on vacation though, could you put that on hold and see if you could lash together a version of the action view (<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/features/action-view">http://www.haywood-associates.co.uk/rcpviewer/space/features/action-view</A>) or some other equivalent means of invoking actions.
+</I>&gt;<i> 
+</I>&gt;<i> I'll then be able to do some meaningful work on a Petstore demo.  Also, there'll be something for me to &quot;work at&quot; in terms of enhancing the UI myself (in very small ways) to enforce some of the constraints and semantics of the metamodel.
+</I>&gt;<i> 
+</I>&gt;<i> Let me know...
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000132.html">[Rcpviewer-contributors] Progress 20050630
+</A></li>
+	<LI>Next message: <A HREF="000133.html">[Rcpviewer-contributors] Re: could you work on the action view before returning to the test harness?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#131">[ date ]</a>
+              <a href="thread.html#131">[ thread ]</a>
+              <a href="subject.html#131">[ subject ]</a>
+              <a href="author.html#131">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

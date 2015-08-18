@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Toolbars
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Toolbars&In-Reply-To=%3C4295BC25.5030800%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000072.html">
+   <LINK REL="Next"  HREF="000081.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Toolbars</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Toolbars&In-Reply-To=%3C4295BC25.5030800%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Toolbars">emorning at yahoo.com
+       </A><BR>
+    <I>Thu May 26 14:08:05 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000072.html">[Rcpviewer-contributors] mikespike3 &amp; mikespike3-acme
+</A></li>
+        <LI>Next message: <A HREF="000081.html">[Rcpviewer-contributors] Toolbars
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike Evans wrote:
+
+&gt;<i> Hi Ted,
+</I>&gt;<i>
+</I>&gt;<i> Bit busy at the moment but my machine is currently running through 
+</I>&gt;<i> Epic's GUI tests which take 5 minutes or so, so I have that long.
+</I>
+I'm jealous.  I don't have GUI tests for our product, I have only 
+JUnit-based functional tests.  What do you use for GUI testing?
+
+
+&gt;<i> BTW: ( ... tests are still running ...), that brings up another 
+</I>&gt;<i> thought.  One of Epic's eccentricities is that there is no 
+</I>&gt;<i> application-wide toolbar (forget the screenshots - I'll update 
+</I>&gt;<i> those).  I found it redundant as I much prefer each form editor to use 
+</I>&gt;<i> its own toolbar - to me this keeps the user focussed (and provides for 
+</I>&gt;<i> much simpler coding!) Any thoughts with regard to RcpViewer?
+</I>
+
+My personal preference is to have just one application-wide toolbar.  I 
+prefer the 'one stop shopping' that the main toolbar affords me.  I 
+don't like to have to scan the screen for the toolbar with the button 
+that I want.
+In our application I have several toolbar buttons that always stay on 
+the toolbar; Save, Refresh, Print, etc.
+Editor actions are added to the main toolbar as the active editor 
+changes.  I use eclipse extension points exclusively to manage the main 
+menu and toolbar.  I like that I don't have any code in my editors to 
+manage menus, toolbars, or context menus.
+
+
+That said, I don't know what the 'right' thing is.  I think the 'right' 
+approach would be the approach that would score highest on usability 
+tests, but I don't have a feel for which approach that is.
+
+---------------------
+Given that we have different preferences perhaps the answer is that the 
+GUI should be configurable to use either approach.
+You could implement your spike to use the editor toolbar and then I 
+could research how to dynamically switch between using editor toolbars 
+and the application toolbar.
+
+-------------------
+OR.... perhaps the answer is that the domain object should specify 
+whether the action should go on the editor toolbar or the application 
+toolbar.
+If the domain object does not specify which toolbar to use then the GUI 
+should use the 'default' toolbar.
+The 'default' toolbar could be configurable.  Some developers might 
+prefer to make the application toolbar the default toolbar and some 
+developers would prefer to use the editor toolbar as the default.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000072.html">[Rcpviewer-contributors] mikespike3 &amp; mikespike3-acme
+</A></li>
+	<LI>Next message: <A HREF="000081.html">[Rcpviewer-contributors] Toolbars
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

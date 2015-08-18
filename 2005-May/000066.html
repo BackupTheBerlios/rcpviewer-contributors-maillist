@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] multiple meta-models &amp; sessions
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20multiple%20meta-models%20%26%20sessions&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKOEMADCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000065.html">
+   <LINK REL="Next"  HREF="000069.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] multiple meta-models &amp; sessions</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20multiple%20meta-models%20%26%20sessions&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKOEMADCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] multiple meta-models &amp; sessions">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun May 15 10:03:11 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000065.html">[Rcpviewer-contributors] Re: Spring as a plugin?
+</A></li>
+        <LI>Next message: <A HREF="000069.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#66">[ date ]</a>
+              <a href="thread.html#66">[ thread ]</a>
+              <a href="subject.html#66">[ subject ]</a>
+              <a href="author.html#66">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Opinions, please on the following:
+
+At the moment I've been presuming that a metamodel will be instantiated just
+once within a client-side JVM.  Its contents are IDomainClasses: the
+relationship between MetaModel and IDomainClass is 1:m bidirectional.
+
+Similarly, there is an ISession that contains the IDomainObjects that have
+been resolved and are known about for this client.  Again 1:m bidirectional.
+Every IDomainObject knows its IDomainClass (m:1 unidirectional).  I've also
+just realized that really an ISession is an instantiation of a MetaModel, so
+probably should reference it (1:1 unidirectional).
+
+The following summarizes this (use a fixed size font!):
+
+Session       (1) -&gt; (1) MetaModel
+  ^ (1)                      ^ (1)
+  |                          |
+  V (m)                      V (m)
+IDomainObject (m) -&gt; (1) IDomainClass
+
+
+Now, I've been considering allowing multiple metamodels, and thus multiple
+sessions, to be instantiated client side.  As an example, consider an RCP
+app for bug tracking.  I can think of perhaps 3 domains (= metamodels):
+- one representing the bug reports, priorities, issues, problems,
+developers, releases and so forth.  This is the &quot;core&quot; domain would probably
+be persisted using an RDBMS or EJB3.
+- one representing say a chat room app, with chat room, message,
+subscription etc.  When a priority #1 bug report comes in then a message can
+be sent to a corresponding chat room.  This domain might not have any
+persistence other than an in-memory representation held server-side.
+- one representing the code base, with files, branches, tags and so forth.
+This could be implemented using a persistent object store that delegates to
+Subversion
+
+Another example:
+- Customer domain, eg for orders
+- Filesystem domain, for maintaining any correspondence received from them
+(a bit like I see in Mike's EPIC application)
+
+As another final (hackneyed) example, consider a library.  A couple of
+domains might be:
+- the loan management domain (books, titles, loans, reservations)
+- the stock management domain (stock items)
+
+My simplifying assumption is that a single IDomainObject appears only in a
+single domain.  So a Book in the loan domain is not the same object as a
+Stock in the stock management domain.  However, a Book would know that it is
+Stock, and so would have a reference to an IDomainObject whose IDomainClass
+belonged to a different meta-model.
+
+This then starts to firm up (in my mind) what an ISession is: it's a
+collection of objects where the application can transparently traverse from
+one object to another (&quot;walk the object graph&quot;).  If one has a reference to
+an object in another domain, then the responsibility for traversing the
+graph moves to the domain object itself:  typically it would use a lookup
+method (eg Book would use its stock_item_ref to look up its corresponding
+Stock object).
+
+What then are the implications for the GUI?  My thinking is perhaps to use a
+label or icon to represent the domain.  And probably also that the &quot;objects&quot;
+view (the LHS of Mike's spike, more-or-less) probably would have multiple
+tabs, one for each domain.
+
+And what are the implications for the programming model?  I'm thinking
+perhaps of introducing an optional @MetaModel annotation on classes.  If
+missing, then the class is presumed to live in the &quot;default&quot; metamodel -
+most RCP apps will only need to support a single domain.  But if present, it
+would indicate the name of the metamodel.
+
+@MetaModel(&quot;Filesystem&quot;)
+public class WordDoc { ... }
+
+@MetaModel(&quot;InstantMessaging&quot;)
+public class Message { ... }
+
+There would then be a hash of metamodels, held as a singleton, eg:
+MetaModel.instanceNamed(&quot;Filesystem&quot;)
+
+Does any of the above make sense?  I do think it's worth supporting, else
+there is a potential scalability issue.    And it probably is worth
+considering as part of the design of the GUI.
+
+But let me know your thoughts...
+
+Dan
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000065.html">[Rcpviewer-contributors] Re: Spring as a plugin?
+</A></li>
+	<LI>Next message: <A HREF="000069.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#66">[ date ]</a>
+              <a href="thread.html#66">[ thread ]</a>
+              <a href="subject.html#66">[ subject ]</a>
+              <a href="author.html#66">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

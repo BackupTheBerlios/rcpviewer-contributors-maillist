@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050731 &amp; Re: action view + prerequisites
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050731%20%26%20Re%3A%20action%20view%20%2B%20prerequisites&In-Reply-To=%3C42ECB83A.7060507%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000166.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050731 &amp; Re: action view + prerequisites</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050731%20%26%20Re%3A%20action%20view%20%2B%20prerequisites&In-Reply-To=%3C42ECB83A.7060507%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050731 &amp; Re: action view + prerequisites">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Sun Jul 31 13:38:34 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000166.html">[Rcpviewer-contributors] action view + prerequisites
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#167">[ date ]</a>
+              <a href="thread.html#167">[ thread ]</a>
+              <a href="subject.html#167">[ subject ]</a>
+              <a href="author.html#167">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Latest, greatest action view impl committed.
+Two major changes:
+
+1. Primitives
+There are field builders and DnD transfer adapters for all primitive 
+types and their wrappers.  No units tests yet as I still consider myself 
+to be 'catching up'.
+Once the impl's settle down a bit and Dan has enough of a GUI to work on 
+I'll go back to test these.
+
+2. Actions View
+In response to Dan's mail below I have offered a partial solution whilst 
+retaining the tree.  The core idea is the use of an IColorProvider to 
+indicate whether a tree item is valid, and dynamic tooltip to offer more 
+info.  At the moment the logic is pretty dumb, simply preventing nulls, 
+but can easily be extended once Dan's meta model provides more info. 
+Really all I am doing is demonstrating possible GUI behaviour.  Issues 
+arising:
+* is it not bad GUI practice to rely on colous alone?
+* I find the tooltip thing really annoying - would it be better to have 
+a context-sensitive text field below the main tree?
+* currently if an action is not valid (i..e params are null) it will not 
+fire - hence making redundant the 'ActionArg's dialog.  However perhaps 
+we could still use this to offer more friendly user feedback if the user 
+does try to execute an invalid operation..?
+
+
+Still to do [and when I'll do it]:
+* Cell editors for all primitive types (realised I had not done these as 
+typing this mail!) [tomorrow]
+* ARRAYS - more faff - [leave for the moment and get on with collections]
+* DnD type safety is currently too tight - cannot drag a short onto an 
+int [the future].
+
+Dan - there are further comments below on your mail.
+
+Mike E.
+
+
+Dan Haywood wrote:
+&gt;<i> Hi Mike,
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for all the work on the action view.  I know you've still got a bunch
+</I>&gt;<i> more boilerplate to do, so before you go do that I wanted to feedback some
+</I>&gt;<i> thoughts 'cos I'm not sure the treeview approach will be quite rich enough.
+</I>&gt;<i> 
+</I>&gt;<i> To make this concrete, let's just consider one of operations in the Petstore
+</I>&gt;<i> app (though actually I paraphrase cos it isn't implemented quite like this
+</I>&gt;<i> at the moment).  One is:
+</I>&gt;<i> 
+</I>&gt;<i> public OrderItem addOrderLine(
+</I>&gt;<i>       @DescribedAs(&quot;Item to be purchased&quot;)
+</I>&gt;<i>       Item item,
+</I>&gt;<i>       @Named(&quot;Quantity&quot;)
+</I>&gt;<i>       @DescribedAs(&quot;Number of the item to be purchased; if not specified
+</I>&gt;<i> then assume 1&quot;)
+</I>&gt;<i>       @Optional
+</I>&gt;<i>       int quantity)
+</I>&gt;<i> 
+</I>&gt;<i> which returns an OrderItem (an order line of an Order) for purchasing said
+</I>&gt;<i> quantity of said Item.
+</I>&gt;<i> 
+</I>&gt;<i> Now there are two prerequisites to this.  The first is declarative in the
+</I>&gt;<i> parameter list in that the Item is not @Optional (though the quantity is).
+</I>&gt;<i> If this prerequisite is not met then the operation should be disabled.  I
+</I>&gt;<i> imagined this being rendered as an OK button being greyed out.  Your earlier
+</I>&gt;<i> dialog box had something a little like this.
+</I>&gt;<i> 
+</I>&gt;<i> The second prerequisite is programmatic to specify says that an order lines
+</I>&gt;<i> can only be added provided that the order has not already have shipped.
+</I>&gt;<i> This would be coded something like:
+</I>&gt;<i> 
+</I>&gt;<i> public IPrerequisites addOrderLinePre(Item item, int quantity) {
+</I>&gt;<i>   return Prerequisites
+</I>&gt;<i>          .require(getOrder().getStatus() == Order.State.NOT_SHIPPED, &quot;Cannot
+</I>&gt;<i> have been shipped&quot;)
+</I>&gt;<i>          .andRequire(quantity &gt;= 0, &quot;Quantity cannot be negative&quot;);
+</I>&gt;<i> }
+</I>&gt;<i> 
+</I>&gt;<i> If this prereq is not satisfied, then again the operation should be
+</I>&gt;<i> disabled.  I envisaged that the error message (accessible from the returned
+</I>&gt;<i> IPrerequisites) would appear as a tooltip over a disabled OK button.
+</I>&gt;<i> 
+</I>&gt;<i> So I'm thinking that the action view will at least need to have an OK button
+</I>&gt;<i> for each operation, even those that take no parameters.
+</I>&gt;<i> 
+</I>&gt;<i> My suggestion then is would it be possible to reimplement the action view in
+</I>&gt;<i> a style similar to the default editors for the domain objects themselves?  I
+</I>&gt;<i> had a vision that each operation would still be listed but then when
+</I>&gt;<i> clicking on the operation name would reveal the parameter list (if any)
+</I>&gt;<i> along with an OK button that would initially be disabled if prerequisites
+</I>&gt;<i> have not been met?
+</I>&gt;<i> 
+</I>&gt;<i> Another benefit is that it should make it easier to be able to group related
+</I>&gt;<i> operations together.
+</I>&gt;<i> 
+</I>&gt;<i> Something else related: I've been mulling over these operations with the
+</I>&gt;<i> prerequisites and it seems to me that the metamodel (IDomain et al) should
+</I>&gt;<i> work harder on behalf of the UI layer.  In particular, I think that each
+</I>&gt;<i> IDomainObject should be able to return an IOperation for each of the (EMF)
+</I>&gt;<i> EOperations.  This IOperation should then provide listeners so that the UI
+</I>&gt;<i> can be told directly when to enable or disable the OK button, rather than
+</I>&gt;<i> continually have to poll the metamodel.  So, if another operation were
+</I>&gt;<i> invoked that shipped the Order, then any pending &quot;addOrderLine&quot; operation
+</I>&gt;<i> would be notified that it should now be disabled out.
+</I>&gt;<i> 
+</I>
+Much of a muchness really.  I'll put all metamodel polling into utility 
+methods anyway so the code will not be much clearer one way or the 
+other.  Go for whatever you think is easiest form a maintainability 
+point of view.
+
+&gt;<i> Similarly, I think that the IDomainObject should be able to return an
+</I>&gt;<i> IAttribute, because there are prerequisites for the editability of
+</I>&gt;<i> attributes also.
+</I>&gt;<i> 
+</I>&gt;<i> Just wanted to say all this before you spend ages doing boring boilerplate
+</I>&gt;<i> code.  If you agree, it might be worthwhile leaving the action view as it is
+</I>&gt;<i> until I've worked on these IOperations etc and turn to something else (eg
+</I>&gt;<i> collections).  Alternatively, carry on to get the action view working as a
+</I>&gt;<i> first-cut, knowing we'll need to go round the loop to get prerequisites
+</I>&gt;<i> functionality working.
+</I>&gt;<i> 
+</I>
+I avoided boring boilerplate by super-duper generic parent classes. 
+Time will only tell if this was sensible...
+
+&gt;<i> Let me know what you think...
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000166.html">[Rcpviewer-contributors] action view + prerequisites
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#167">[ date ]</a>
+              <a href="thread.html#167">[ thread ]</a>
+              <a href="subject.html#167">[ subject ]</a>
+              <a href="author.html#167">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

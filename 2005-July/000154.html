@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050713
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050713&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKMELCDDAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000153.html">
+   <LINK REL="Next"  HREF="000152.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050713</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050713&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKMELCDDAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050713">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Thu Jul 14 15:23:05 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000153.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+        <LI>Next message: <A HREF="000152.html">[Rcpviewer-contributors] return of the aspects (and other news)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> * the super-duper domain listener for all objects - how do this?
+</I>
+PojoAspect is the baby to hang all this sort of functionality from.  In
+addition to NotifyListenersAspect, there is another subaspect of it already
+checked in in domain.runtime, namely
+de.berlios.rcpviewer.session.TracingAspect.  It's currently disabled but
+picks up the same pointcuts, all inherited from aforementioned PojoAspect.
+
+
+&gt;<i> * on an undo() or a redo() what about objects that have gone out of
+</I>&gt;<i> scope / been deleted etc.
+</I>
+Yes, definitely trickier.
+
+Modifications to attributes of existing objects are trivial, and I think
+that tracking the adding/removing of objects from a collection is also
+reasonably do-able.  As the aspect shows, we can also pick up instantiation
+of new objects.  However deletion is tricky.
+
+One idea is that we could state that objects that can be deleted must
+provide a well defined method, eg &quot;deleted()&quot;?    The Command can hold onto
+these deleted objects so that they are available to be resurrected (I guess
+that means an &quot;undeleted()&quot; command for objects that actually do something
+in their &quot;deleted()&quot; method.
+
+
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Mike Evans [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>]
+</I>&gt;<i> Sent: 14 July 2005 11:04
+</I>&gt;<i> To: Dan Haywood; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Rcpviewer-contributors] progress 20050713
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Wow!  Sounds extremely sexy.  A good showcase for aspects methinks...
+</I>&gt;<i>
+</I>&gt;<i> As to the redo/undo issue - thinking aloud:
+</I>&gt;<i>
+</I>&gt;<i> Assumptions / Constraints / Enablers (in no particular order)
+</I>&gt;<i> * Dan's aspect can pick up all internal state changes, not just
+</I>&gt;<i> public state
+</I>&gt;<i> * the gui knows about the model, not vice versa
+</I>&gt;<i> * the gui code is targeted at RCP developers, hence on the principle of
+</I>&gt;<i> least surprises, the gui code does not use aspects
+</I>&gt;<i> * all Jobs are run through the platform's JobManager - hence we have the
+</I>&gt;<i> IJobChangeListener interface at our disposal
+</I>&gt;<i> * do not want
+</I>&gt;<i>
+</I>&gt;<i> So how about extending AbstractDomainObjectJob to:
+</I>&gt;<i> * have an isUndoable() property
+</I>&gt;<i> * if this is true it adds an IJobChangeListener to itself
+</I>&gt;<i> * this picks up events aboutToRun() and done() to start &amp; stop 'domain
+</I>&gt;<i> listening'
+</I>&gt;<i> * whilst 'domain listening' (using some as-yet-unspec'd contract) all
+</I>&gt;<i> domain change events are recorded by the listener (this is tricky as it
+</I>&gt;<i> would have to pick up all events on all domain objects)
+</I>&gt;<i> * the undo() method could then step through these reversing them
+</I>&gt;<i>
+</I>&gt;<i> Several problems with this, notably:
+</I>&gt;<i> * the super-duper domain listener for all objects - how do this?
+</I>&gt;<i> * on an undo() or a redo() what about objects that have gone out of
+</I>&gt;<i> scope / been deleted etc.
+</I>&gt;<i>
+</I>&gt;<i> Bit fuzzy but its a start.  Will think more about this once I have got
+</I>&gt;<i> the Aspect stuff working here and understand Dan's aspect implementations.
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dan Haywood wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; Mike / (everyone):
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have my aspect going that picks up modifications to attributes on a
+</I>&gt;<i> &gt; pojo, and then uses the IDomainObject to notify any listeners of
+</I>&gt;<i> &gt; those attributes.  In other words, invoking increment() on the
+</I>&gt;<i> &gt; CounterBean causes the field to be updated.  Unsurprisingly, it
+</I>&gt;<i> &gt; didn't take that much code - will check in later today.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; What I've now been thinking about is transactions, commands and jobs.
+</I>&gt;<i> &gt; It seems to me that my little aspect can easily grab the before and
+</I>&gt;<i> &gt; after values of any change to any field, and hence wrap it up into a
+</I>&gt;<i> &gt; Command that has an undo.  In other words, the aspect can capture the
+</I>&gt;<i> &gt; *effects* of invoking an operation such that it might be undone.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Meanwhile, your (Mike's) job stuff effectively is encapsulating those
+</I>&gt;<i> &gt; operations such that they can be invoked - in other words, they
+</I>&gt;<i> &gt; represent the *cause* of a change.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; What I'm mulling on is how to combine this cause (UI job) and effect
+</I>&gt;<i> &gt; (domain object command built dynamically via aspects) such that an
+</I>&gt;<i> &gt; invoking Undo on the UI job just delegates to the corresponding undo
+</I>&gt;<i> &gt; on the command.  Any suggestions?  My best idea at the moment is that
+</I>&gt;<i> &gt; the UI job creates an ICommand that is defined by a domain package,
+</I>&gt;<i> &gt; and then binds it to a threadlocal.  The aspect would then pick this
+</I>&gt;<i> &gt; up and append the mutations to it.  The Job/ICommand pair would be
+</I>&gt;<i> &gt; managed by the UI layer.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Something to think about... Dan
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; --- Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Journeyman stuff today. Both ...gui and ...gui.acme projects
+</I>&gt;<i> &gt;&gt; updated.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; * add further DnD types - Date and even Boolean (the latter is
+</I>&gt;<i> &gt;&gt; pointless but at least consistent) * using platform functionality
+</I>&gt;<i> &gt;&gt; for restoring gui state - one gotcha - I have to close all editors
+</I>&gt;<i> &gt;&gt; on application close as the objects they're displaying do not (yet)
+</I>&gt;<i> &gt;&gt; live across application sessions * using using annotations for
+</I>&gt;<i> &gt;&gt; parameter display
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Have not addded keyboard accelerators yet. I think the platform key
+</I>&gt;<i> &gt;&gt; bindings functionality has got all clever since I last looked at it
+</I>&gt;<i> &gt;&gt; so will have to gen up on it.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; So next stages - as the last progress mail!
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Mike E.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Dan Haywood wrote:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Mike: within
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; -----Original Message----- From:
+</I>&gt;<i> &gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Behalf Of Mike Evans
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; OK - I'm spending too long on this stuff now so the
+</I>&gt;<i> &gt;&gt;&gt;&gt; deliverables will be slowing a bit from now on.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; First priority has to be the day job.  Glad you've been able to
+</I>&gt;<i> &gt;&gt;&gt; devote so much time recently - the UI is starting to take shape.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; One question : Dan - can we gain access to the name of an
+</I>&gt;<i> &gt;&gt;&gt;&gt; operation's parameters? ie. op( int first, int second) &gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; extract &quot;first&quot; and &quot;second&quot; This would make a lot more sense
+</I>&gt;<i> &gt;&gt;&gt;&gt; as field labels in the actions view and arguments display.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; That's supported, though using annotations rather than vanilla
+</I>&gt;<i> &gt;&gt;&gt; Java reflection (which doesn't/can't give access to the formal
+</I>&gt;<i> &gt;&gt;&gt; parameter
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; names).
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; See
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExpli
+</I>&gt;<i> citlyNamed
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; (in ...domain.tests plugin).   The fixture this works on is:
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; @InDomain public class Appointment { public void moveTo(
+</I>&gt;<i> &gt;&gt;&gt; @Named(&quot;newPeriod&quot;) @DescribedAs(&quot;The time when the appointment
+</I>&gt;<i> &gt;&gt;&gt; should now be scheduled&quot;) TimePeriod newPeriod,
+</I>&gt;<i> &gt;&gt;&gt; @Named(&quot;rationale&quot;) @DescribedAs(&quot;The reasoning for moving the
+</I>&gt;<i> &gt;&gt;&gt; appointment&quot;) String rationale) { } public static void createAt(
+</I>&gt;<i> &gt;&gt;&gt; @Named(&quot;timePeriod&quot;) @DescribedAs(&quot;When the appointment is to run
+</I>&gt;<i> &gt;&gt;&gt; to and from&quot;) TimePeriod timePeriod, @Named(&quot;agenda&quot;)
+</I>&gt;<i> &gt;&gt;&gt; @DescribedAs(&quot;The agenda for this appointment&quot;) String agenda) {
+</I>&gt;<i> &gt;&gt;&gt; } }
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; -- Also, a couple of annoyances... 1. can the GUI remember its
+</I>&gt;<i> &gt;&gt;&gt; initial size across invocations?  It always starts by taking up
+</I>&gt;<i> &gt;&gt;&gt; the whole screen (which on my widescreen laptop, is rather a
+</I>&gt;<i> &gt;&gt;&gt; lot...)
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; 2. can you add the accelerator for File menu?
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Dan
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt;&gt; Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; -- Mike Evans Incremental Ltd. www.incremental.eu.com
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000153.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+	<LI>Next message: <A HREF="000152.html">[Rcpviewer-contributors] return of the aspects (and other news)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

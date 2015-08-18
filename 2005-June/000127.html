@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Security in RCPViewer
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Security%20in%20RCPViewer&In-Reply-To=%3C42B64723.6080801%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000126.html">
+   <LINK REL="Next"  HREF="000128.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Security in RCPViewer</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Security%20in%20RCPViewer&In-Reply-To=%3C42B64723.6080801%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Security in RCPViewer">emorning at yahoo.com
+       </A><BR>
+    <I>Mon Jun 20 06:33:39 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000126.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+        <LI>Next message: <A HREF="000128.html">[Rcpviewer-contributors] Progress! (of sorts)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#127">[ date ]</a>
+              <a href="thread.html#127">[ thread ]</a>
+              <a href="subject.html#127">[ subject ]</a>
+              <a href="author.html#127">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All,
+
+I am interested in expanding the easybean example by adding security 
+features.
+This post is an overview of how I would like to implement security.
+
+The goal of RCPViewer's security implementation seem pretty 
+straighforward, that is...
+...to be able to show/hide UI features based on the user's set of 'roles'
+...be able to get the name of the current user (for display somewhere).
+...not be tied to any particular authentication of authorization method.
+...should not prevent code written to a particular A&amp;A API from being 
+reused in an RCPViewer application.
+
+----------------------------
+Overview
+
+RCPViewer does not need much in terms of authentication and 
+authorization functionality. 
+The only thing that I anticipate that RCPViewer will require is some API 
+to determine who the current user is and to get that user's set of 
+authorizations.
+I don't anticipate that RPCViewer will be involved in actually 
+performing authentication or actually securing calls to methods. 
+The only thing that I anticipate that RCPViewer has to do is to 
+customize the UI depending on who the user is and that user's set of 
+authorizations.
+I expect RCP applications to perform thier own authentication and that 
+the user will have been authenicated BEFORE the RCP workbench is created 
+(this is how the EasyBean eaxmple currently works).
+
+There are two cataegories of information that RCPViewer will need...
+...the user's name, and the set of Roles assigned to the user.
+...the Roles assigned to domain features (domains, classes, attributes, 
+methods, etc).
+
+Seems like adding a couple of simple extensions to the Domain API would 
+be sufficent.
+I propose the following...
+
+...add the following interface to the de.berlios.rcpviewer.domain plugin:
+package de.berlios.rcpviewer.security;
+public interface IUserAuthorizationService {
+    String getName();
+    Collection&lt;String&gt; getRoles();
+}
+
+...and add the following method to the IDomain interface...
+    boolean isFeatureInRoles(Collection&lt;String&gt; roles, String featureId);
+
+..and add the following interface to the de.berlios.domain.runtime plugin:
+package de.berlios.rcpviewer.runtime.security;
+public interface IDomainAuthorizationService {
+    boolean isFeatureInRoles(Collection&lt;String&gt; roles, String featureId);
+}
+
+-----------------------------
+Service Implementation
+
+I expect that we will have more discussion about service implementation 
+in the future.
+However, for now I intend to implement services as OSGi services since 
+Eclipse already contains infrastructure for discovering and managing 
+such services.
+I intend to implement these services in separate bundles so that they 
+can be easily replaced with different implementations.
+
+RCPViewer applications may integrate any security mechanism into 
+RCPViewer by replacing the bundle that supplies the 
+de.berlios.rcpviewer.security.user package. 
+I intend to create two bundles with different implementions of the 
+de.berlios.rcpviewer.security.domain package.
+I will create one bundle named de.berlios.rcpviewer.security.user.acegi 
+that wraps the Acegi toolkit and uses Acegi to implement the 
+de.berlios.rcpviewer.security.user package.
+I will create another bundle named 
+de.berlios.rcpviewer.security.user.jaas that uses JAAS to implement the 
+de.berlios.rcpviewer.security.user package.
+
+RCPViewer applications may use any method for discovering domain 
+authorization information by adding services that implement the 
+IDomainAuthorizationService interface. 
+I intend to create two bundles with different implementions of 
+IDomainAuthorizationService .
+I will create one bundle named 
+de.berlios.rcpviewer.runtime.security.annotations and will use 
+annotations to declare roles for classes, attributes, methods, etc.  
+This plugin will inspect the annotations attached to POJO classes at 
+runtime.  This plugin will expert a service with the name 
+de.berlios.rcpviewer.runtime.security.annotations.AnnotationDomainAuthorizationService.
+I will create another bundle named 
+de.berlios.rcpviewer.runtime.security.xml that will use hierarchical xml 
+configuration files to declare roles for classes, attributes, methods, 
+etc.  This plugin will expert a service with the name 
+de.berlios.rcpviewer.runtime.security.xml.XMLDomainAuthorizationService.
+
+------------------------------
+Supporting multiple domain authorization schemes within a single 
+application.
+
+It is assumed that there will never be a need to use multiple user 
+authorization services within a single application.  If there is a need 
+to integrate with multiple security domains then it is assumed that the 
+user authorization service used in the application implements some kind 
+of Single Sign On method that integrates the disparate domains.
+
+However, it might be necessary to use bundles that export domains that 
+use different domain authorization schemes.  For instance, suppose an 
+application that uses the xml domain authorization scheme wants to reuse 
+a bundle that exports a domain that uses the annotation authorization 
+scheme.  This is why the isFeatureInRoles method has been added to the 
+IDomain interface, because the implementation of the isFeatureInRoles is 
+domain specific.
+However, a domain implementation may simple delegate calls to its 
+isFeatureInRoles method to one of the services named above.
+
+------------------------------
+Customizing the UI...
+
+Given that we have an API for discovering the current user and the 
+user's authorizations the next question is how to actually go about 
+showing/hiding UI elements.
+
+Eclipse Activities provides a mechanism by which UI features may be 
+enabled and disabled based on categories of activities.
+My first though was that we would be able to use the Eclipse Activities 
+API for customizing the UI at runtime.  
+However, there are a few the problems with using the Activities API...
+...large RCP applications that actually want to use the Activities API 
+to filter UI elements based  on task or context would interfer with our 
+use of Activities.  That is, a UI element is shown if any of it's 
+activites are enabled.
+...activities can only be defined at design-time,
+So, I have rejected the use of Activities.
+
+Seems like each UI element created by RCPViewer will have to determine 
+for itself whether it is visible or not by consulting the 
+IUserDomainService and the IDomain for authorization info.
+
+
+
+Clear as mud?
+Comments and suggestions are welcome.
+
+
+-ted
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000126.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+	<LI>Next message: <A HREF="000128.html">[Rcpviewer-contributors] Progress! (of sorts)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#127">[ date ]</a>
+              <a href="thread.html#127">[ thread ]</a>
+              <a href="subject.html#127">[ subject ]</a>
+              <a href="author.html#127">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

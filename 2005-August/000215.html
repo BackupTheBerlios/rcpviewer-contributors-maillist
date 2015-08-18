@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: Progress 20050830
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Progress%2020050830&In-Reply-To=%3CZen-1EA5bk-0007NF-Hx%40heisenberg.zen.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000214.html">
+   <LINK REL="Next"  HREF="000216.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: Progress 20050830</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Progress%2020050830&In-Reply-To=%3CZen-1EA5bk-0007NF-Hx%40heisenberg.zen.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Re: Progress 20050830">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Tue Aug 30 14:52:56 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000214.html">[Rcpviewer-contributors] Progress 20050830
+</A></li>
+        <LI>Next message: <A HREF="000216.html">[Rcpviewer-contributors] Progress 20050831
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#215">[ date ]</a>
+              <a href="thread.html#215">[ thread ]</a>
+              <a href="subject.html#215">[ subject ]</a>
+              <a href="author.html#215">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike,
+I've seen this problem too.  I think it's AspectJ getting lost.
+
+My workaround is to do a full clean then a manual build All.  In fact, I've taken to doing manual builds on my laptop cos otherwise the poor old AspectJ weaver does it's best to keep up but sometimes gets lost like you've seen.
+
+So hopefully that's your problem...
+
+Dan
+----------
+
+Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+
+&gt;<i> This is taking too long...
+</I>&gt;<i> Still nothing to check in.
+</I>&gt;<i> Have basic table and (very) basic master.child alternate views for 
+</I>&gt;<i> collections but having weird errors when adding to the collection.
+</I>&gt;<i> Dan - before I back everything out to find otu what has gone wrong - any 
+</I>&gt;<i> ideas whats going on with the 'NoSuchField' error (stack trace below)?
+</I>&gt;<i> 
+</I>&gt;<i> Mike E.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i> 
+</I>&gt;<i> this= InvocationTargetException  (id=66)
+</I>&gt;<i> 	cause= null
+</I>&gt;<i> 	detailMessage= null
+</I>&gt;<i> 	stackTrace= null
+</I>&gt;<i> 	target= null
+</I>&gt;<i> arg0= NoSuchFieldError  (id=17)
+</I>&gt;<i> 	cause= NoSuchFieldError  (id=17)
+</I>&gt;<i> 	detailMessage= &quot;ajc$cflowCounter$0&quot;
+</I>&gt;<i> 	stackTrace= null
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Thread [main] (Suspended)
+</I>&gt;<i> 	Beans.addToEasyBeans_aroundBody20(Beans, EasyBean) line: 31
+</I>&gt;<i> 	Beans.addToEasyBeans(EasyBean) line: 1
+</I>&gt;<i> 	NativeMethodAccessorImpl.invoke0(Method, Object, Object[]) line: not 
+</I>&gt;<i> available [native method]
+</I>&gt;<i> 	NativeMethodAccessorImpl.invoke(Object, Object[]) line: 39
+</I>&gt;<i> 	DelegatingMethodAccessorImpl.invoke(Object, Object[]) line: 25
+</I>&gt;<i> 	Method.invoke(Object, Object...) line: 585
+</I>&gt;<i> 	DomainObject$CollectionReference.addToCollection(IDomainObject) 
+</I>&gt;<i> line: 585
+</I>&gt;<i> 	AddReferenceJob.runInUIThread(IProgressMonitor) line: 45
+</I>&gt;<i> 	UIJob$1.run() line: 93
+</I>&gt;<i> 	RunnableLock.run() line: 35
+</I>&gt;<i> 	UISynchronizer(Synchronizer).runAsyncMessages(boolean) line: 123
+</I>&gt;<i> 	Display.runAsyncMessages(boolean) line: 3057
+</I>&gt;<i> 	Display.readAndDispatch() line: 2716
+</I>&gt;<i> 	Workbench.runEventLoop(Window$IExceptionHandler, Display) line: 1699
+</I>&gt;<i> 	Workbench.runUI() line: 1663
+</I>&gt;<i> 	Workbench.createAndRunWorkbench(Display, WorkbenchAdvisor) line: 367
+</I>&gt;<i> 	PlatformUI.createAndRunWorkbench(Display, WorkbenchAdvisor) line: 143
+</I>&gt;<i> 	Application.run(Object) line: 18
+</I>&gt;<i> 	PlatformActivator$1.run(Object) line: 226
+</I>&gt;<i> 	EclipseStarter.run(Object) line: 376
+</I>&gt;<i> 	EclipseStarter.run(String[], Runnable) line: 163
+</I>&gt;<i> 	NativeMethodAccessorImpl.invoke0(Method, Object, Object[]) line: not 
+</I>&gt;<i> available [native method]
+</I>&gt;<i> 	NativeMethodAccessorImpl.invoke(Object, Object[]) line: 39
+</I>&gt;<i> 	DelegatingMethodAccessorImpl.invoke(Object, Object[]) line: 25
+</I>&gt;<i> 	Method.invoke(Object, Object...) line: 585
+</I>&gt;<i> 	Main.invokeFramework(String[], URL[]) line: 334
+</I>&gt;<i> 	Main.basicRun(String[]) line: 278
+</I>&gt;<i> 	Main.run(String[]) line: 973
+</I>&gt;<i> 	Main.main(String[]) line: 948
+</I>
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000214.html">[Rcpviewer-contributors] Progress 20050830
+</A></li>
+	<LI>Next message: <A HREF="000216.html">[Rcpviewer-contributors] Progress 20050831
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#215">[ date ]</a>
+              <a href="thread.html#215">[ thread ]</a>
+              <a href="subject.html#215">[ subject ]</a>
+              <a href="author.html#215">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

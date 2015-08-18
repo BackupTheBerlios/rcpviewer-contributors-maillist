@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Annotations%20%28was%20RE%3A%20IDomainRegistry%0A%20%26%20EasyBeanDomain%29&In-Reply-To=%3C42B5A009.1010204%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000125.html">
+   <LINK REL="Next"  HREF="000127.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Annotations%20%28was%20RE%3A%20IDomainRegistry%0A%20%26%20EasyBeanDomain%29&In-Reply-To=%3C42B5A009.1010204%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)">emorning at yahoo.com
+       </A><BR>
+    <I>Sun Jun 19 18:40:41 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000125.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+        <LI>Next message: <A HREF="000127.html">[Rcpviewer-contributors] Security in RCPViewer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#126">[ date ]</a>
+              <a href="thread.html#126">[ thread ]</a>
+              <a href="subject.html#126">[ subject ]</a>
+              <a href="author.html#126">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+&gt;<i>Ted:
+</I>&gt;<i>thanks for your response, I've replied to contributors mailing list so that
+</I>&gt;<i>this thread is archived (for those joining the conversation, background to
+</I>&gt;<i>this thread is at the end):
+</I>&gt;<i>
+</I>&gt;<i>I don't completely agree with you that annotations should be considered
+</I>&gt;<i>optional but your remarks have helped me clarify in my mind where
+</I>&gt;<i>annotations can be used and where we should use some other form of metadata
+</I>&gt;<i>(eg XML).
+</I>&gt;<i>
+</I>&gt;<i>I think I can summarise your concerns - which are legitimate - by saying
+</I>&gt;<i>that annotations should be optional to capture metadata that may vary on a
+</I>&gt;<i>deployment-by-deployment basis.  The two examples you gave, of mapping to a
+</I>&gt;<i>perhaps legacy database, or for labels of fields in the UI, are both
+</I>&gt;<i>examples of this.  And the reason is clear: if deploying an application at a
+</I>&gt;<i>new site one wouldn't want to have to go through the source code and change
+</I>&gt;<i>all the annotations etc.
+</I>&gt;<i>
+</I>&gt;<i>However, I think it is valid to use annotations for metadata that is
+</I>&gt;<i>intrinsic to the domain itself (rather than merely the deployment of the
+</I>&gt;<i>domain in some context).  Most of the annotations to date fall into this
+</I>&gt;<i>category (eg @Associates,  @LowerBoundOf, @UpperBoundOf and @Unique).  As
+</I>&gt;<i>such there is nothing wrong with making these mandatory.  Trying to get by
+</I>&gt;<i>without @Associates is all but impossible.  And I include @InDomain as one
+</I>&gt;<i>of these.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>I agree that some annotations could be required.
+Unfortunately, I'm not sure that I agree that @InDomain should be required.
+
+However, forget about that for now, let me try to restate what I would 
+really like from the Domain API...
+What I really want is an interface-based Domain API that allows the 
+&lt;implementation&gt; of the API to be plugable.
+That way we really don't need to have debates about how the 
+implementation should work.  If I need to be able to change the set of 
+classes in a domain for different clients then I would be able to do 
+that by swapping out the default Domain SPI with my own implementation. 
+
+The default Domain implementation could be totally driven by 
+annotations.  In fact, the default Domain implementation probably should 
+totally annotation driven since such an implementation is probably the 
+best solution for most projects. 
+But do you want to create an RCPViewer built for a set of developers 
+that want to develop an application in a specific fashion, or do you 
+want an RCPViewer that can be adapted to a wide variety of situations?
+Going back to Hibernate as an example... there is no reason to require 
+anything to be specified as an annotations, the metadata layer should be 
+totally implementation independent.
+
+
+
+
+&gt;<i>Let me turn to the two examples you give.  First up, I agree that the use of
+</I>&gt;<i>Hibernate annotations would be optional for all the reasons you give, and if
+</I>&gt;<i>we were to implement a similar set of persistence annotations that could be
+</I>&gt;<i>support Hibernate, JDO or EJB3 say then they too should be considered
+</I>&gt;<i>optional.
+</I>&gt;<i>
+</I>&gt;<i>Your &quot;client-ized&quot; labels are more subtle.  One of the features that needs
+</I>&gt;<i>to be implement is to provide a way of identifying any feature - see
+</I>&gt;<i><A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/features/feature-ids.">http://www.haywood-associates.co.uk/rcpviewer/space/features/feature-ids.</A>
+</I>&gt;<i>For example, consider:
+</I>&gt;<i>
+</I>&gt;<i>package com.mycompany.domain;
+</I>&gt;<i>public class Customer {
+</I>&gt;<i>  private String firstName;
+</I>&gt;<i>  public String getFirstName() { ... }
+</I>&gt;<i>}
+</I>&gt;<i>
+</I>&gt;<i>The feature Id of firstName would be something like
+</I>&gt;<i>com.mycompany.domain.Customer#firstName.  I then imagined that this could be
+</I>&gt;<i>used as a key to i18n, or to help, or for security authorization, eg:
+</I>&gt;<i>
+</I>&gt;<i>in a ResourceBundle:
+</I>&gt;<i>de.berlios.rcpviewer.i18n.com.mycompany.domain.Customer#firstName=Christian
+</I>&gt;<i>Name
+</I>&gt;<i>
+</I>&gt;<i>in some help file:
+</I>&gt;<i>de.berlios.rcpviewer.help.com.mycompany.domain.Customer#firstName=The first
+</I>&gt;<i>or given name of the customer
+</I>&gt;<i>
+</I>&gt;<i>part of a security service:
+</I>&gt;<i>public void IAuthorizationService {
+</I>&gt;<i>  public boolean isVisible(final String featureId);
+</I>&gt;<i>  public boolean isUsable(final String featureId);
+</I>&gt;<i>}
+</I>&gt;<i>
+</I>&gt;<i>So, these feature Ids could be used for a clientization capability.  Or, to
+</I>&gt;<i>be honest, one could think of your different clients as merely different
+</I>&gt;<i>locales and just use the i18n feature.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+I like this approach very much.
+Why not extend the concept of feature ID to include domains and classes 
+as well as attributes and methods, etc.
+Then the Domain API could become a set of pluggable services that supply 
+RCPViewer with information about all the features available in the system...
+
+public interface IDomainService {
+  public String[] getAllDomainFeatureIds();
+
+  public String[] getAllChildFeatures(String featureId);
+  public boolean contains(String parentFeatureId, String featureId);
+  public FeatureType getFeatureType(featureId);
+
+  public String getName(String featureId);
+  public boolean isOrderable(String featureId);
+  public boolean isReadOnly(String featureId);
+  public int getLowerBound(String featureId);
+ ...
+}
+
+public interface IObjectService {
+  public Object createObject(String featureId);
+
+  public void setValue(Object object, String featureId, Object value);
+  public Object getValue(Object object, String featureId);
+ ...
+}
+
+
+
+public interface IAuthorizationService {
+  public boolean isVisible(String roleName, String featureId);
+  public boolean isUsable(String roleName, String featureId);
+ ...
+}
+
+
+public interface ILabelService {
+  public String getLabel(String featureId);
+ ...
+}
+
+
+public interface ISessionService {
+ 	public void peristObject(Object object);
+ ...
+}
+
+...and so on.
+
+
+Then, no more discussion about things work, only what needs to be done.
+
+
+
+What do you guys think about such an API?
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000125.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+	<LI>Next message: <A HREF="000127.html">[Rcpviewer-contributors] Security in RCPViewer
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#126">[ date ]</a>
+              <a href="thread.html#126">[ thread ]</a>
+              <a href="subject.html#126">[ subject ]</a>
+              <a href="author.html#126">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] metadata + EMF / platforms (was &quot;Starting to need some metadata&quot;)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20metadata%20%2B%20EMF%20/%20platforms%20%28was%20%22Starting%20to%20need%20some%20metadata%22%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEINDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000036.html">
+   <LINK REL="Next"  HREF="000031.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] metadata + EMF / platforms (was &quot;Starting to need some metadata&quot;)</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20metadata%20%2B%20EMF%20/%20platforms%20%28was%20%22Starting%20to%20need%20some%20metadata%22%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKEEINDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] metadata + EMF / platforms (was &quot;Starting to need some metadata&quot;)">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sat May  7 14:43:37 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000036.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+        <LI>Next message: <A HREF="000031.html">[Rcpviewer-contributors] Re: A preview...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike,
+&gt;&gt;<i> thanks for your comments, some additional notes within...
+</I>Dan
+---
+1. Metadata
+
+Hey - I'm getting involved in the Metadata debate!
+
+I'm actually with Dan here in terms of putting all domain-requisite data
+  within the POJO. And annotations is the seemly solution for this.
+
+Additional, shall I say 'decorating', semantics could then be made
+available via extension points or any other mechanism.
+
+&gt;&gt;<i> I think &quot;decorating&quot; is actually an excellent term.  This is really what
+</I>my IMetaModelExtensions are.  I was also mulling over whether the first
+initial analysis (in DomainClass' identifyOperations / identifyAttributes
+etc) should also be implemented as a decorator - a bit of &quot;eating our own
+dog food&quot;.  This then would allow a different implementation that would
+build a metamodel using Java AST/JDOM for development-time tooling, and yet
+another implementation that takes the original NO framework's metamodel and
+effectively just copies it across.
+
+&gt;&gt;<i> Going back to this term &quot;decorator&quot;... in fact, I've been in touch with
+</I>Chris Nelson whose the guy building the Trails webapp framework (I'll let
+you look it up on google).  It was his solution to use a decorator for
+building his metamodel, so I'm just adapting his idea.
+
+---
+POJO annotations alone must provide a fully functional, if basic, GUI.
+
+&gt;&gt;<i> In fact I think it should be possible to build a basic GUI without any
+</I>annotations.  After all, that's what the NO framework does.  POJO
+annotations should be able to add rather more sophistication - though there
+is a potential scalability problem, as Ted has noted elsewhere.
+
+&gt;&gt;<i> Where POJO annotations won't be enough is when one wishes to break the
+</I>strict 1:1 correspondence between domain object and its UI representation.
+I've discussed this idea a little in
+<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/concepts/virtual-domain-">http://www.haywood-associates.co.uk/rcpviewer/space/concepts/virtual-domain-</A>
+objects.
+
+---
+Extensions can then be used to override the default implementation - in
+Eclipse using the standard Platform.getAdapterManager().getAdapter( ...)
+pattern.
+
+&gt;&gt;<i> I'd rather do this using MetaModel.getDomainClass(...).getAdapter(...)
+</I>rather than from Platform.  That's mostly so that it can be reused
+independently from Eclipse itself.  That (a) makes it easier to test
+(regular JUnit tests rather than PDEUnit tests), and (b) might even allow
+the metamodel to be used in other NO-like products (getting ahead of myself
+as usual, I admit I've suggested the idea to Chris Nelson, though no reply
+thus far...).
+
+---
+2. EMF
+Sounds like we have a basic 'runtime' RcpViewer and a development 'pro'
+version:
+Runtime:
+  - standalone RCP app
+  - packaged with domain model and preconfigured domain data
+  - for Dan's 'domain programmers'
+Development
+  - superset of runtime's plugins but normally runs within Eclipse
+  - allows manipulation of Ted's clever self-describing EMF models.
+  - runs up the runtime version for testing
+  - magic wizards for auto-deployment of runtime.
+
+&gt;&gt;<i> Indeed; a runtime platform and a development platform.  The design page
+</I>on the wiki discusses ideas for the former, the tooling page discusses ideas
+for the latter (<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/design">http://www.haywood-associates.co.uk/rcpviewer/space/design</A>
+and <A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/tooling">http://www.haywood-associates.co.uk/rcpviewer/space/tooling</A>).
+
+&gt;&gt;<i> Where you've slightly misunderstood though is that the runtime RCP app is
+</I>not for &quot;domain programmers&quot;, it is for end users.  The domain programmers
+are developers, so they use the development platform.  But, the basic Java
+editor + annotations should be enough for a domain programmer to get a basic
+RCP app up and running.  There can then be more specialist developers who
+will use other editors that we provide in the development platform to make
+the GUI more customised.  The ones on the tooling page describe such editors
+that most domain programmers should be able to operate.  But a GUI
+programmer might also want to develop a brand new view, eg a Map or an
+Outlook-style journal or calendar.  And so these guys would definitely need
+to be Eclipse-savvy and we might provide wizards to help them do it.
+
+---
+Note with time the boundaries would blur - in fact it might be better to
+think of the runtime to be no more than the development version with the
+'RCPDevelopment' capability disabled.
+
+&gt;&gt;<i> To an extent.  However, the tooling plugins run within a single VM,
+</I>whereas the runtime would be launching another VM.
+
+&gt;&gt;<i> That said, a chap (Bastian Bergerhoff) got in touch from Germany with Rob
+</I>Matthews - he has embedded the current NO framework as a plugin to Eclipse.
+It's very odd to see as a screenshot!  What he's working on then is hot-swap
+deployment, so that one can change the code and the running application
+changes in real-time.  Any of you done Smalltalk?  I haven't, but old-timers
+are always banging on about how good Smalltalk was because it can support
+this idea.
+&gt;&gt;<i> So, if he gets this working, then perhaps the two sets of plugins will
+</I>merge to some extent.  But I still see the development time platform as
+being used by developers, whereas the runtime RCP platform is for use by
+users.
+
+---
+This would also give us a division of responsibilites - runtime GUI vs
+development and builder tools.
+
+&gt;&gt;<i> Absolutely.  The two should have a common extensible metamodel capable of
+</I>supporting both sets of requirements.  The runtime metamodel is immutable
+and is built by reflection, the development-time metamodel is mutable and is
+built by Eclipse's Java AST/Java DOM APIs.
+
+&gt;&gt;<i> It makes sense to me that Mike and Ted initially focus on the runtime RCP
+</I>(picking up on your experience there), and I'll focus on the common
+meta-model and the development time tooling (picking up on my TogetherJ
+experience).  I'm hoping I can get Bastian in on the development-time side
+too (when the meta-model is stable) since he's interested in this area and
+has written some Eclipse plugins.  And hopefully I'd like Eoin to work on
+the back-end for the runtime (distribution, persistence etc) - Eoin? are you
+there?!
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000036.html">[Rcpviewer-contributors] Starting to need some metadata
+</A></li>
+	<LI>Next message: <A HREF="000031.html">[Rcpviewer-contributors] Re: A preview...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,4570 @@
+From mike.evans at incremental.eu.com  Wed Nov 23 16:17:18 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 23 Nov 2005 15:17:18 +0000
+Subject: [Rcpviewer-contributors] Progress 23/11/05
+Message-ID: <438487FE.4010304@incremental.eu.com>
+
+Hullo All,
+
+I'm back.
+Just reminding myself about Essential & Eclipse.
+As a play, changed log4j to append to a console within the app. 
+Configure via preferences off the 'Window' menu.
+Note that there are 2 consoles now - 'History' and 'Log' - you may have 
+to switch 'Log' to be on top.
+All changes within the louis project only - revision no. 577.
+Now will get onto what Dan actually wants - the transation manager view.
+
+
+Mike E.
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From mike.evans at incremental.eu.com  Thu Nov 24 11:55:54 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 24 Nov 2005 10:55:54 +0000
+Subject: [Rcpviewer-contributors] Progress 24/11/05
+Message-ID: <43859C3A.9070302@incremental.eu.com>
+
+Started transaction view.
+Pretty basic list at the moment based on toString() of transactions.
+Committed rev 578.
+Next steps - a tree of Changes & enlisted objects : Dan - I'll need by 
+bypass your isCurrentTransaction checks - change the API or use reflection?
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From dan at haywood-associates.co.uk  Thu Nov 24 13:05:12 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 24 Nov 2005 12:05:12 GMT
+Subject: [Rcpviewer-contributors] Progress 24/11/05
+Message-ID: <Zen-1EfFqi-0004vr-AC@rutherford.zen.co.uk>
+
+Change the API, please, but add a REVIEW_ME tag or similar, please.
+
+Ta
+Dan
+
+
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> Started transaction view.
+> Pretty basic list at the moment based on toString() of transactions.
+> Committed rev 578.
+> Next steps - a tree of Changes & enlisted objects : Dan - I'll need by 
+> bypass your isCurrentTransaction checks - change the API or use reflection?
+> 
+> Mike E.
+> 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Fri Nov 25 17:08:36 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 25 Nov 2005 16:08:36 +0000
+Subject: [Rcpviewer-contributors] Progress 25/11/2005
+Message-ID: <43873704.6010403@incremental.eu.com>
+
+Trivial but annoyingly time-consuming addition.
+Added a configurable filter to the transaction view.
+Dan - also removed redundant code in ITransaction - see the REVIEW_CHANGE.
+
+Mike E.
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From dan at haywood-associates.co.uk  Sat Nov 26 10:11:37 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 26 Nov 2005 09:11:37 -0000
+Subject: [Rcpviewer-contributors] 20051125 Dan's Progress: Id assignment
+Message-ID: <LGEELLOAEBMLCOGIKLMKGEIIDFAA.dan@haywood-associates.co.uk>
+
+Not quite as sexy as the stuff that Mike's doing, but working on the
+(in-memory) object store.  Currently sorting out PersistenceId (simple or
+composite Ids), so can then key by them when store our pojos away.
+
+Mike: have committed your REVIEW_CHANGE to ITransaction.  If this
+functionality is needed, I think EnumSet (which I've since discovered) is a
+better way of doing this.  But YAGNI.
+
+Dan
+
+
+
+
+From dan at haywood-associates.co.uk  Sat Nov 26 12:00:15 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 26 Nov 2005 11:00:15 -0000
+Subject: [Rcpviewer-contributors] Transaction view
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKGEIIDFAA.dan@haywood-associates.co.uk>
+Message-ID: <LGEELLOAEBMLCOGIKLMKKEIJDFAA.dan@haywood-associates.co.uk>
+
+I've put a patch in to stop all those spurious transactions from appearing.
+
+I see that you are using a tree for the transaction view - good-o.  But as
+you've noticed, there's actually two or three dimensions to what lives in a
+transaction
+- the enlisted pojos
+- the change sets (which can be undone)
+- possibly change sets which can be redone.
+
+I think actually we need two views relating to transactions here:
+- the first should be what you are working on, which is really a
+TransactionManager view.  This should show the transactions + the enlisted
+pojos in each.
+- the second should show the current transaction for the current pojo that
+has focus, showing the two sets of changesets (undoable and redoable).
+
+Note that changesets follow the composite pattern, so in theory they could
+be nested.
+
+Hope that makes sense.
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Mon Nov 28 19:51:05 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 28 Nov 2005 18:51:05 +0000
+Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKEEIMDFAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKEEIMDFAA.dan@haywood-associates.co.uk>
+Message-ID: <438B5199.7080503@incremental.eu.com>
+
+Hi Dan,
+
+TRANSACTION PER POJO
+Having each newly created pojo in its own transaction will require some 
+sort of merge etc. as I would suggest it will normal practice to create 
+more than one dependent pojo at a time (I mean pojos with their own 
+lifecycles but then linked, e.g Beans & EasyBean).
+
+Perhaps we can have a convention that identifies one pojo as a 
+(non-unique) factory of another type of pojo in which case when an 
+instance of the latter are created by the former they remain in the same 
+transaction.
+e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating 
+a factory method whose output remains in the transaction.
+
+Irrespective of that the merge/umnmerge would be needed. Perhaps 
+something on the lines of:
+
+MyTransaction(){...}
+
+MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+
+MyTransaction merge( MyTransaction partner ) {
+   return new MyTransaction( this, partner );
+}
+
+MyTransaction[] unmerge() {
+   if ( _dad == null ) throw new IllegalStateException();
+   if ( _mum == null ) throw new IllegalStateException();
+   return new MyTransaction[]{ dad, mum };
+}
+
+I'll have a think - we'll probably need a new transaciton state or two 
+to  get the undo/redo logic right.
+
+CONCURRENCY
+How scalable are we going to be?
+Is our distribuetd app going to be peer-to-peer or controlled centrally?
+If centrally we can go for pessimistic locking of all objects.  As soon 
+as a transaction enlists the object, it cannot be enlisted by any other 
+transaction.  I like that where scalability allows, as no user ever 
+wastes time on lost changes (guess how Epic works).
+
+Other ideas...
+Can we emulate a global lock p2p?  S'ppose so. A TransactionManager 
+broadcasts that it has grabbed a lock on a pojo AND when it releases 
+that lock.  All other Transaction Managers record which pojo's are out 
+of bounds.  Fail Safety: the broadcast gives the address of the locking 
+Transaction Manager (TM) so if another TM wants to lock the pojo it can 
+test whether the locking TM is still running and then ...
+Oh good grief - if you do not like centralised locking let's leave it to 
+File/Save errors for now.
+
+
+Mike E.
+
+PS : no coding today - too busy learning NullSoft's installer - which is 
+lovely (if you like Windows).
+
+
+Dan Haywood wrote:
+> (This mail is direct to you only cos the mailing list just bounced me.
+> Huh).
+> -------------
+> 
+> Hi Mike
+> 
+> 
+>>Question : conceptually are all ChangeSets are on a single timeline on
+>>which there is a defined point where they are changeable or not?  Or can
+>>undoable and redoable changes run concurrently?
+> 
+> 
+> In short: the latter.
+> 
+> A bit longer: there can be multiple transactions IN_PROGRESS at the same
+> time.  Each transaction enlists a set of pojos, but a single pojo can only
+> be enlisted in one transaction at a time.  This last is the rule that I
+> think you partially commented out.  I haven't reinstated it cos I want to
+> see how all this works out in practice.
+> 
+> The reason that xactn failures occur, I think, is that if one creates one
+> pojo and then another one (eg Beans and then EasyBean) then they will both
+> be in their own transaction.  Attempting to add the EasyBean to the Beans
+> pojo then fails because the EasyBean cannot be enlisted in the Beans xactn.
+> 
+> An alternative design for this would be to automatically merge the xactns.
+> But what should happen if the user does an Edit->Undo - should the xactns
+> unmerge again?  So I want to just see it all in use as I originally designed
+> it and then we can see how it behaves in practice.
+> 
+> By the way, another wrinkle that I know I'll need to address is that of
+> concurrent updates.  I intend there to be a JMS subscription thing going on
+> so that xactns committed by other users will be automatically published.
+> That means that the user will always have an up-to-date view, and should be
+> great for when a user isn't in the process of changing an object.  But if
+> they are, then I think that we'll need to get them to acknowledge the update
+> and throw away their own IN_PROGRESS transaction.  My thinking is again
+> better for them to find out earlier rather than later when they do their
+> File->Save and get an optimistic locking error.  But I'd appreciate your
+> views - I've not designed a "conventional" application this way, so I'm a
+> little nervous if this is a little close to the bleeding edge.
+> 
+> Later
+> Dan
+> 
+> 
+>>-----Original Message-----
+>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+>>Sent: 26 November 2005 12:34
+>>To: dan at haywood-associates.co.uk
+>>Subject: Re: [Rcpviewer-contributors] Transaction view
+>>
+>>
+>>Yuh.
+>>I was thinking of adding to 'config' options to show changesets and/or
+>>enlisted pojos.
+>>However I think two seperate views would be better.  Sigh.
+>>ChangeSets are a composite I noticed - hence I was going to have an
+>>infinite-leveled tree for this.  May not look so good so might just go
+>>with two levels and use icons to indicate dependencies.  We'll see how
+>>it goes.
+>>Question : conceptually are all ChangeSets are on a single timeline on
+>>which there is a defined point where they are changeable or not?  Or can
+>>undoable and redoable changes run concurrently?
+>>
+>>Mike E.
+>>
+>>
+>>
+>>Dan Haywood wrote:
+>>
+>>
+>>>I've put a patch in to stop all those spurious transactions
+>>
+>>from appearing.
+>>
+>>>I see that you are using a tree for the transaction view -
+>>
+>>good-o.  But as
+>>
+>>>you've noticed, there's actually two or three dimensions to
+>>
+>>what lives in a
+>>
+>>>transaction
+>>>- the enlisted pojos
+>>>- the change sets (which can be undone)
+>>>- possibly change sets which can be redone.
+>>>
+>>>I think actually we need two views relating to transactions here:
+>>>- the first should be what you are working on, which is really a
+>>>TransactionManager view.  This should show the transactions +
+>>
+>>the enlisted
+>>
+>>>pojos in each.
+>>>- the second should show the current transaction for the
+>>
+>>current pojo that
+>>
+>>>has focus, showing the two sets of changesets (undoable and redoable).
+>>>
+>>>Note that changesets follow the composite pattern, so in theory
+>>
+>>they could
+>>
+>>>be nested.
+>>>
+>>>Hope that makes sense.
+>>>Dan
+>>>
+>>>
+>>>_______________________________________________
+>>>Rcpviewer-contributors mailing list
+>>>Rcpviewer-contributors at lists.berlios.de
+>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>
+>>
+>>--
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+>>
+> 
+> 
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From dan at haywood-associates.co.uk  Mon Nov 28 21:53:52 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Mon, 28 Nov 2005 20:53:52 -0000
+Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+In-Reply-To: <438B5199.7080503@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEJADFAA.dan@haywood-associates.co.uk>
+
+Hi Mike,
+
+TRANSACTION PER POJO
+
+The scenario you described I do have covered: if pojo A creates pojo B, then
+a xactn is created for pojo A and attached to the thread using ThreadLocal;
+when pojo B realizes it needs a xactn (because it is being instantiated) it
+looks first for the thread xactn before going off and creating one for
+itself.  In this way pojo B is enlisted into pojo A's xactn.
+
+The case when a merge might be needed would be if pojo A and pojo B were
+both created directly from the classbar.  But since the classbar represents
+a starting place for unrelated use cases, that's why I'm not sure if the
+merge functionality will be required.
+
+
+CONCURRENCY
+Definitely controlled centrally, probably run up a JMS server with a queue
+from client->server, and a topic to publish changes out.  I quite like
+ActiveMQ, but then again using JBoss will also allow us to build a
+server-side management console that might be useful (use Chris Nelsons'
+NO-like Trails, perhaps?)
+
+I hadn't thought of publishing the enlisting of a pojo, only of publishing
+commits.  The risk of publishing too early is that one also would need to
+publish de-enlistment if a user does Edit>Undo.  There's also a potential
+race condition if two users make the same change ... I wouldn't want to deal
+with the occasional distributed deadlocks.
+
+My idea was a little simpler, then, but in the same spirit.  Allow users to
+enlist as they will, but only publish the change on commit.  At this point
+the user who is still in the process of making changes will receive some
+sort of modal message informing them that there changes cannot be committed.
+When they acknowledge the message, the xactn just committed by the other
+party is applied and the user gets to see what changes have been made.
+
+A slightly more sophisticated version would be to do some sort of merge,
+attribute by attribute.  That might actually be technically feasible given
+that I need to write aspects to track the resolve state of every reference
+and collection, and so could in theory extend to track the state of every
+attribute also (some sort of info in IDomainObject.IObjectAttribute).
+
+
+Keep talking, let's thrash this out.
+
+
+Okay, gonna do some coding now!
+Dan
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Sent: 28 November 2005 18:51
+> To: dan at haywood-associates.co.uk;
+> rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+>
+>
+> Hi Dan,
+>
+> TRANSACTION PER POJO
+> Having each newly created pojo in its own transaction will require some
+> sort of merge etc. as I would suggest it will normal practice to create
+> more than one dependent pojo at a time (I mean pojos with their own
+> lifecycles but then linked, e.g Beans & EasyBean).
+>
+> Perhaps we can have a convention that identifies one pojo as a
+> (non-unique) factory of another type of pojo in which case when an
+> instance of the latter are created by the former they remain in the same
+> transaction.
+> e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating
+> a factory method whose output remains in the transaction.
+>
+> Irrespective of that the merge/umnmerge would be needed. Perhaps
+> something on the lines of:
+>
+> MyTransaction(){...}
+>
+> MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+>
+> MyTransaction merge( MyTransaction partner ) {
+>    return new MyTransaction( this, partner );
+> }
+>
+> MyTransaction[] unmerge() {
+>    if ( _dad == null ) throw new IllegalStateException();
+>    if ( _mum == null ) throw new IllegalStateException();
+>    return new MyTransaction[]{ dad, mum };
+> }
+>
+> I'll have a think - we'll probably need a new transaciton state or two
+> to  get the undo/redo logic right.
+>
+> CONCURRENCY
+> How scalable are we going to be?
+> Is our distribuetd app going to be peer-to-peer or controlled centrally?
+> If centrally we can go for pessimistic locking of all objects.  As soon
+> as a transaction enlists the object, it cannot be enlisted by any other
+> transaction.  I like that where scalability allows, as no user ever
+> wastes time on lost changes (guess how Epic works).
+>
+> Other ideas...
+> Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+> broadcasts that it has grabbed a lock on a pojo AND when it releases
+> that lock.  All other Transaction Managers record which pojo's are out
+> of bounds.  Fail Safety: the broadcast gives the address of the locking
+> Transaction Manager (TM) so if another TM wants to lock the pojo it can
+> test whether the locking TM is still running and then ...
+> Oh good grief - if you do not like centralised locking let's leave it to
+> File/Save errors for now.
+>
+>
+> Mike E.
+>
+> PS : no coding today - too busy learning NullSoft's installer - which is
+> lovely (if you like Windows).
+>
+>
+> Dan Haywood wrote:
+> > (This mail is direct to you only cos the mailing list just bounced me.
+> > Huh).
+> > -------------
+> >
+> > Hi Mike
+> >
+> >
+> >>Question : conceptually are all ChangeSets are on a single timeline on
+> >>which there is a defined point where they are changeable or not?  Or can
+> >>undoable and redoable changes run concurrently?
+> >
+> >
+> > In short: the latter.
+> >
+> > A bit longer: there can be multiple transactions IN_PROGRESS at the same
+> > time.  Each transaction enlists a set of pojos, but a single
+> pojo can only
+> > be enlisted in one transaction at a time.  This last is the rule that I
+> > think you partially commented out.  I haven't reinstated it cos
+> I want to
+> > see how all this works out in practice.
+> >
+> > The reason that xactn failures occur, I think, is that if one
+> creates one
+> > pojo and then another one (eg Beans and then EasyBean) then
+> they will both
+> > be in their own transaction.  Attempting to add the EasyBean to
+> the Beans
+> > pojo then fails because the EasyBean cannot be enlisted in the
+> Beans xactn.
+> >
+> > An alternative design for this would be to automatically merge
+> the xactns.
+> > But what should happen if the user does an Edit->Undo - should
+> the xactns
+> > unmerge again?  So I want to just see it all in use as I
+> originally designed
+> > it and then we can see how it behaves in practice.
+> >
+> > By the way, another wrinkle that I know I'll need to address is that of
+> > concurrent updates.  I intend there to be a JMS subscription
+> thing going on
+> > so that xactns committed by other users will be automatically published.
+> > That means that the user will always have an up-to-date view,
+> and should be
+> > great for when a user isn't in the process of changing an
+> object.  But if
+> > they are, then I think that we'll need to get them to
+> acknowledge the update
+> > and throw away their own IN_PROGRESS transaction.  My thinking is again
+> > better for them to find out earlier rather than later when they do their
+> > File->Save and get an optimistic locking error.  But I'd appreciate your
+> > views - I've not designed a "conventional" application this
+> way, so I'm a
+> > little nervous if this is a little close to the bleeding edge.
+> >
+> > Later
+> > Dan
+> >
+> >
+> >>-----Original Message-----
+> >>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> >>Sent: 26 November 2005 12:34
+> >>To: dan at haywood-associates.co.uk
+> >>Subject: Re: [Rcpviewer-contributors] Transaction view
+> >>
+> >>
+> >>Yuh.
+> >>I was thinking of adding to 'config' options to show changesets and/or
+> >>enlisted pojos.
+> >>However I think two seperate views would be better.  Sigh.
+> >>ChangeSets are a composite I noticed - hence I was going to have an
+> >>infinite-leveled tree for this.  May not look so good so might just go
+> >>with two levels and use icons to indicate dependencies.  We'll see how
+> >>it goes.
+> >>Question : conceptually are all ChangeSets are on a single timeline on
+> >>which there is a defined point where they are changeable or not?  Or can
+> >>undoable and redoable changes run concurrently?
+> >>
+> >>Mike E.
+> >>
+> >>
+> >>
+> >>Dan Haywood wrote:
+> >>
+> >>
+> >>>I've put a patch in to stop all those spurious transactions
+> >>
+> >>from appearing.
+> >>
+> >>>I see that you are using a tree for the transaction view -
+> >>
+> >>good-o.  But as
+> >>
+> >>>you've noticed, there's actually two or three dimensions to
+> >>
+> >>what lives in a
+> >>
+> >>>transaction
+> >>>- the enlisted pojos
+> >>>- the change sets (which can be undone)
+> >>>- possibly change sets which can be redone.
+> >>>
+> >>>I think actually we need two views relating to transactions here:
+> >>>- the first should be what you are working on, which is really a
+> >>>TransactionManager view.  This should show the transactions +
+> >>
+> >>the enlisted
+> >>
+> >>>pojos in each.
+> >>>- the second should show the current transaction for the
+> >>
+> >>current pojo that
+> >>
+> >>>has focus, showing the two sets of changesets (undoable and redoable).
+> >>>
+> >>>Note that changesets follow the composite pattern, so in theory
+> >>
+> >>they could
+> >>
+> >>>be nested.
+> >>>
+> >>>Hope that makes sense.
+> >>>Dan
+> >>>
+> >>>
+> >>>_______________________________________________
+> >>>Rcpviewer-contributors mailing list
+> >>>Rcpviewer-contributors at lists.berlios.de
+> >>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>
+> >>
+> >>--
+> >>Mike Evans
+> >>Incremental Ltd.
+> >>www.incremental.eu.com
+> >>
+> >
+> >
+> >
+> >
+> >
+> >
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From dan at haywood-associates.co.uk  Tue Nov 29 01:00:31 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 29 Nov 2005 00:00:31 -0000
+Subject: [Rcpviewer-contributors] Transaction view and other things
+In-Reply-To: <438B5199.7080503@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEJBDFAA.dan@haywood-associates.co.uk>
+
+Hi Mike,
+Have been playing around with your view and a bunch of issues it's throwing
+up with the xactn mgmt stuff.
+
+There's enough things that I can see that need attention with respect to the
+interaction between the UI and the ITransationManager, and I reckon I have
+enough Eclipse skills, just about, to work them through.
+
+So, rather than us both tripping over each other, do you want to turn your
+attention to some other area?  And then I'll give you a call when my Eclipse
+knowledge is exhausted (won't be long).
+
+What's next, then?  I have three suggestions:
+a) a nicer implementation of the operations view.
+b) develop a way of using an optional markup notation (perhaps Commons Jelly
+(http://jakarta.apache.org/commons/jelly/jellyswt.html), similar a little
+bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+c) start working on the tooling side - building up a Java AST implementation
+of the meta-model.
+
+Or anything else that you're interested in, of course.
+
+Dan
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Sent: 28 November 2005 18:51
+> To: dan at haywood-associates.co.uk;
+> rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+>
+>
+> Hi Dan,
+>
+> TRANSACTION PER POJO
+> Having each newly created pojo in its own transaction will require some
+> sort of merge etc. as I would suggest it will normal practice to create
+> more than one dependent pojo at a time (I mean pojos with their own
+> lifecycles but then linked, e.g Beans & EasyBean).
+>
+> Perhaps we can have a convention that identifies one pojo as a
+> (non-unique) factory of another type of pojo in which case when an
+> instance of the latter are created by the former they remain in the same
+> transaction.
+> e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating
+> a factory method whose output remains in the transaction.
+>
+> Irrespective of that the merge/umnmerge would be needed. Perhaps
+> something on the lines of:
+>
+> MyTransaction(){...}
+>
+> MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+>
+> MyTransaction merge( MyTransaction partner ) {
+>    return new MyTransaction( this, partner );
+> }
+>
+> MyTransaction[] unmerge() {
+>    if ( _dad == null ) throw new IllegalStateException();
+>    if ( _mum == null ) throw new IllegalStateException();
+>    return new MyTransaction[]{ dad, mum };
+> }
+>
+> I'll have a think - we'll probably need a new transaciton state or two
+> to  get the undo/redo logic right.
+>
+> CONCURRENCY
+> How scalable are we going to be?
+> Is our distribuetd app going to be peer-to-peer or controlled centrally?
+> If centrally we can go for pessimistic locking of all objects.  As soon
+> as a transaction enlists the object, it cannot be enlisted by any other
+> transaction.  I like that where scalability allows, as no user ever
+> wastes time on lost changes (guess how Epic works).
+>
+> Other ideas...
+> Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+> broadcasts that it has grabbed a lock on a pojo AND when it releases
+> that lock.  All other Transaction Managers record which pojo's are out
+> of bounds.  Fail Safety: the broadcast gives the address of the locking
+> Transaction Manager (TM) so if another TM wants to lock the pojo it can
+> test whether the locking TM is still running and then ...
+> Oh good grief - if you do not like centralised locking let's leave it to
+> File/Save errors for now.
+>
+>
+> Mike E.
+>
+> PS : no coding today - too busy learning NullSoft's installer - which is
+> lovely (if you like Windows).
+>
+>
+> Dan Haywood wrote:
+> > (This mail is direct to you only cos the mailing list just bounced me.
+> > Huh).
+> > -------------
+> >
+> > Hi Mike
+> >
+> >
+> >>Question : conceptually are all ChangeSets are on a single timeline on
+> >>which there is a defined point where they are changeable or not?  Or can
+> >>undoable and redoable changes run concurrently?
+> >
+> >
+> > In short: the latter.
+> >
+> > A bit longer: there can be multiple transactions IN_PROGRESS at the same
+> > time.  Each transaction enlists a set of pojos, but a single
+> pojo can only
+> > be enlisted in one transaction at a time.  This last is the rule that I
+> > think you partially commented out.  I haven't reinstated it cos
+> I want to
+> > see how all this works out in practice.
+> >
+> > The reason that xactn failures occur, I think, is that if one
+> creates one
+> > pojo and then another one (eg Beans and then EasyBean) then
+> they will both
+> > be in their own transaction.  Attempting to add the EasyBean to
+> the Beans
+> > pojo then fails because the EasyBean cannot be enlisted in the
+> Beans xactn.
+> >
+> > An alternative design for this would be to automatically merge
+> the xactns.
+> > But what should happen if the user does an Edit->Undo - should
+> the xactns
+> > unmerge again?  So I want to just see it all in use as I
+> originally designed
+> > it and then we can see how it behaves in practice.
+> >
+> > By the way, another wrinkle that I know I'll need to address is that of
+> > concurrent updates.  I intend there to be a JMS subscription
+> thing going on
+> > so that xactns committed by other users will be automatically published.
+> > That means that the user will always have an up-to-date view,
+> and should be
+> > great for when a user isn't in the process of changing an
+> object.  But if
+> > they are, then I think that we'll need to get them to
+> acknowledge the update
+> > and throw away their own IN_PROGRESS transaction.  My thinking is again
+> > better for them to find out earlier rather than later when they do their
+> > File->Save and get an optimistic locking error.  But I'd appreciate your
+> > views - I've not designed a "conventional" application this
+> way, so I'm a
+> > little nervous if this is a little close to the bleeding edge.
+> >
+> > Later
+> > Dan
+> >
+> >
+> >>-----Original Message-----
+> >>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> >>Sent: 26 November 2005 12:34
+> >>To: dan at haywood-associates.co.uk
+> >>Subject: Re: [Rcpviewer-contributors] Transaction view
+> >>
+> >>
+> >>Yuh.
+> >>I was thinking of adding to 'config' options to show changesets and/or
+> >>enlisted pojos.
+> >>However I think two seperate views would be better.  Sigh.
+> >>ChangeSets are a composite I noticed - hence I was going to have an
+> >>infinite-leveled tree for this.  May not look so good so might just go
+> >>with two levels and use icons to indicate dependencies.  We'll see how
+> >>it goes.
+> >>Question : conceptually are all ChangeSets are on a single timeline on
+> >>which there is a defined point where they are changeable or not?  Or can
+> >>undoable and redoable changes run concurrently?
+> >>
+> >>Mike E.
+> >>
+> >>
+> >>
+> >>Dan Haywood wrote:
+> >>
+> >>
+> >>>I've put a patch in to stop all those spurious transactions
+> >>
+> >>from appearing.
+> >>
+> >>>I see that you are using a tree for the transaction view -
+> >>
+> >>good-o.  But as
+> >>
+> >>>you've noticed, there's actually two or three dimensions to
+> >>
+> >>what lives in a
+> >>
+> >>>transaction
+> >>>- the enlisted pojos
+> >>>- the change sets (which can be undone)
+> >>>- possibly change sets which can be redone.
+> >>>
+> >>>I think actually we need two views relating to transactions here:
+> >>>- the first should be what you are working on, which is really a
+> >>>TransactionManager view.  This should show the transactions +
+> >>
+> >>the enlisted
+> >>
+> >>>pojos in each.
+> >>>- the second should show the current transaction for the
+> >>
+> >>current pojo that
+> >>
+> >>>has focus, showing the two sets of changesets (undoable and redoable).
+> >>>
+> >>>Note that changesets follow the composite pattern, so in theory
+> >>
+> >>they could
+> >>
+> >>>be nested.
+> >>>
+> >>>Hope that makes sense.
+> >>>Dan
+> >>>
+> >>>
+> >>>_______________________________________________
+> >>>Rcpviewer-contributors mailing list
+> >>>Rcpviewer-contributors at lists.berlios.de
+> >>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>
+> >>
+> >>--
+> >>Mike Evans
+> >>Incremental Ltd.
+> >>www.incremental.eu.com
+> >>
+> >
+> >
+> >
+> >
+> >
+> >
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Nov 29 09:08:09 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 29 Nov 2005 08:08:09 +0000
+Subject: [Rcpviewer-contributors] Transaction view and other things
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKEEJBDFAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKEEJBDFAA.dan@haywood-associates.co.uk>
+Message-ID: <438C0C69.5080300@incremental.eu.com>
+
+Dan,
+
+I was going to see what a master/child looked like.
+ie : master : transactions & their enlisted objects
+      child : changesets of the transaction selected in the master
+Then an option for the master transaction to be linked to the current 
+pojo in focus.
+If you have your own ideas carry on, else let me know & I'll continue 
+with that.
+
+re: alternatives:
+a) define nicer (yes I know it could be improved but how...)
+b) oo - interesting
+c) oo - interesting
+
+However really I should look at unit tests.
+
+Regarding the concurrency discussion we can leave the transaction merges 
+for now.  However I'm a little worried about the idea of 
+attribute-merging - even if technically feaseable.  Apart from having to 
+deal with inconsistent attributes we also run the risk that users change 
+  data that they do not correct in the light of other changed data.
+
+
+Mike E.
+
+Dan Haywood wrote:
+> Hi Mike,
+> Have been playing around with your view and a bunch of issues it's throwing
+> up with the xactn mgmt stuff.
+> 
+> There's enough things that I can see that need attention with respect to the
+> interaction between the UI and the ITransationManager, and I reckon I have
+> enough Eclipse skills, just about, to work them through.
+> 
+> So, rather than us both tripping over each other, do you want to turn your
+> attention to some other area?  And then I'll give you a call when my Eclipse
+> knowledge is exhausted (won't be long).
+> 
+> What's next, then?  I have three suggestions:
+> a) a nicer implementation of the operations view.
+> b) develop a way of using an optional markup notation (perhaps Commons Jelly
+> (http://jakarta.apache.org/commons/jelly/jellyswt.html), similar a little
+> bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+> PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+> c) start working on the tooling side - building up a Java AST implementation
+> of the meta-model.
+> 
+> Or anything else that you're interested in, of course.
+> 
+> Dan
+> 
+> 
+> 
+>>-----Original Message-----
+>>From: rcpviewer-contributors-admin at berlios.de
+>>[mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+>>Sent: 28 November 2005 18:51
+>>To: dan at haywood-associates.co.uk;
+>>rcpviewer-contributors at lists.berlios.de
+>>Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+>>
+>>
+>>Hi Dan,
+>>
+>>TRANSACTION PER POJO
+>>Having each newly created pojo in its own transaction will require some
+>>sort of merge etc. as I would suggest it will normal practice to create
+>>more than one dependent pojo at a time (I mean pojos with their own
+>>lifecycles but then linked, e.g Beans & EasyBean).
+>>
+>>Perhaps we can have a convention that identifies one pojo as a
+>>(non-unique) factory of another type of pojo in which case when an
+>>instance of the latter are created by the former they remain in the same
+>>transaction.
+>>e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating
+>>a factory method whose output remains in the transaction.
+>>
+>>Irrespective of that the merge/umnmerge would be needed. Perhaps
+>>something on the lines of:
+>>
+>>MyTransaction(){...}
+>>
+>>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+>>
+>>MyTransaction merge( MyTransaction partner ) {
+>>   return new MyTransaction( this, partner );
+>>}
+>>
+>>MyTransaction[] unmerge() {
+>>   if ( _dad == null ) throw new IllegalStateException();
+>>   if ( _mum == null ) throw new IllegalStateException();
+>>   return new MyTransaction[]{ dad, mum };
+>>}
+>>
+>>I'll have a think - we'll probably need a new transaciton state or two
+>>to  get the undo/redo logic right.
+>>
+>>CONCURRENCY
+>>How scalable are we going to be?
+>>Is our distribuetd app going to be peer-to-peer or controlled centrally?
+>>If centrally we can go for pessimistic locking of all objects.  As soon
+>>as a transaction enlists the object, it cannot be enlisted by any other
+>>transaction.  I like that where scalability allows, as no user ever
+>>wastes time on lost changes (guess how Epic works).
+>>
+>>Other ideas...
+>>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+>>broadcasts that it has grabbed a lock on a pojo AND when it releases
+>>that lock.  All other Transaction Managers record which pojo's are out
+>>of bounds.  Fail Safety: the broadcast gives the address of the locking
+>>Transaction Manager (TM) so if another TM wants to lock the pojo it can
+>>test whether the locking TM is still running and then ...
+>>Oh good grief - if you do not like centralised locking let's leave it to
+>>File/Save errors for now.
+>>
+>>
+>>Mike E.
+>>
+>>PS : no coding today - too busy learning NullSoft's installer - which is
+>>lovely (if you like Windows).
+>>
+>>
+>>Dan Haywood wrote:
+>>
+>>>(This mail is direct to you only cos the mailing list just bounced me.
+>>>Huh).
+>>>-------------
+>>>
+>>>Hi Mike
+>>>
+>>>
+>>>
+>>>>Question : conceptually are all ChangeSets are on a single timeline on
+>>>>which there is a defined point where they are changeable or not?  Or can
+>>>>undoable and redoable changes run concurrently?
+>>>
+>>>
+>>>In short: the latter.
+>>>
+>>>A bit longer: there can be multiple transactions IN_PROGRESS at the same
+>>>time.  Each transaction enlists a set of pojos, but a single
+>>
+>>pojo can only
+>>
+>>>be enlisted in one transaction at a time.  This last is the rule that I
+>>>think you partially commented out.  I haven't reinstated it cos
+>>
+>>I want to
+>>
+>>>see how all this works out in practice.
+>>>
+>>>The reason that xactn failures occur, I think, is that if one
+>>
+>>creates one
+>>
+>>>pojo and then another one (eg Beans and then EasyBean) then
+>>
+>>they will both
+>>
+>>>be in their own transaction.  Attempting to add the EasyBean to
+>>
+>>the Beans
+>>
+>>>pojo then fails because the EasyBean cannot be enlisted in the
+>>
+>>Beans xactn.
+>>
+>>>An alternative design for this would be to automatically merge
+>>
+>>the xactns.
+>>
+>>>But what should happen if the user does an Edit->Undo - should
+>>
+>>the xactns
+>>
+>>>unmerge again?  So I want to just see it all in use as I
+>>
+>>originally designed
+>>
+>>>it and then we can see how it behaves in practice.
+>>>
+>>>By the way, another wrinkle that I know I'll need to address is that of
+>>>concurrent updates.  I intend there to be a JMS subscription
+>>
+>>thing going on
+>>
+>>>so that xactns committed by other users will be automatically published.
+>>>That means that the user will always have an up-to-date view,
+>>
+>>and should be
+>>
+>>>great for when a user isn't in the process of changing an
+>>
+>>object.  But if
+>>
+>>>they are, then I think that we'll need to get them to
+>>
+>>acknowledge the update
+>>
+>>>and throw away their own IN_PROGRESS transaction.  My thinking is again
+>>>better for them to find out earlier rather than later when they do their
+>>>File->Save and get an optimistic locking error.  But I'd appreciate your
+>>>views - I've not designed a "conventional" application this
+>>
+>>way, so I'm a
+>>
+>>>little nervous if this is a little close to the bleeding edge.
+>>>
+>>>Later
+>>>Dan
+>>>
+>>>
+>>>
+>>>>-----Original Message-----
+>>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+>>>>Sent: 26 November 2005 12:34
+>>>>To: dan at haywood-associates.co.uk
+>>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+>>>>
+>>>>
+>>>>Yuh.
+>>>>I was thinking of adding to 'config' options to show changesets and/or
+>>>>enlisted pojos.
+>>>>However I think two seperate views would be better.  Sigh.
+>>>>ChangeSets are a composite I noticed - hence I was going to have an
+>>>>infinite-leveled tree for this.  May not look so good so might just go
+>>>>with two levels and use icons to indicate dependencies.  We'll see how
+>>>>it goes.
+>>>>Question : conceptually are all ChangeSets are on a single timeline on
+>>>>which there is a defined point where they are changeable or not?  Or can
+>>>>undoable and redoable changes run concurrently?
+>>>>
+>>>>Mike E.
+>>>>
+>>>>
+>>>>
+>>>>Dan Haywood wrote:
+>>>>
+>>>>
+>>>>
+>>>>>I've put a patch in to stop all those spurious transactions
+>>>>
+>>>>from appearing.
+>>>
+>>>>>I see that you are using a tree for the transaction view -
+>>>>
+>>>>good-o.  But as
+>>>>
+>>>>
+>>>>>you've noticed, there's actually two or three dimensions to
+>>>>
+>>>>what lives in a
+>>>>
+>>>>
+>>>>>transaction
+>>>>>- the enlisted pojos
+>>>>>- the change sets (which can be undone)
+>>>>>- possibly change sets which can be redone.
+>>>>>
+>>>>>I think actually we need two views relating to transactions here:
+>>>>>- the first should be what you are working on, which is really a
+>>>>>TransactionManager view.  This should show the transactions +
+>>>>
+>>>>the enlisted
+>>>>
+>>>>
+>>>>>pojos in each.
+>>>>>- the second should show the current transaction for the
+>>>>
+>>>>current pojo that
+>>>>
+>>>>
+>>>>>has focus, showing the two sets of changesets (undoable and redoable).
+>>>>>
+>>>>>Note that changesets follow the composite pattern, so in theory
+>>>>
+>>>>they could
+>>>>
+>>>>
+>>>>>be nested.
+>>>>>
+>>>>>Hope that makes sense.
+>>>>>Dan
+>>>>>
+>>>>>
+>>>>>_______________________________________________
+>>>>>Rcpviewer-contributors mailing list
+>>>>>Rcpviewer-contributors at lists.berlios.de
+>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>>>
+>>>>
+>>>>--
+>>>>Mike Evans
+>>>>Incremental Ltd.
+>>>>www.incremental.eu.com
+>>>>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>--
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+>>_______________________________________________
+>>Rcpviewer-contributors mailing list
+>>Rcpviewer-contributors at lists.berlios.de
+>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From dan at haywood-associates.co.uk  Tue Nov 29 18:49:03 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 29 Nov 2005 17:49:03 GMT
+Subject: [Rcpviewer-contributors] Transaction view and other things
+Message-ID: <Zen-1Eh9bD-0008Au-Cv@heisenberg.zen.co.uk>
+
+Right then.
+
+I managed to get the master/child thing going for displaying changesets, and that's when it started spitting out problems with the ITransactionManager.  I think it will look good eventually, but it's problematic at the moment.
+
+What I'd really really like is for you to look at (b).  I know that we need tests and so forth, but I also don't want to get bogged down with large and elaborate mocking of bits of the Eclipse API related solely to the UI.  So unless there's a specific reason (eg for Epic) why you want to learn this stuff, I'd much prefer you work on Jelly/SWT.
+
+Let me know,
+Dan
+
+----------
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> Dan,
+> 
+> I was going to see what a master/child looked like.
+> ie : master : transactions & their enlisted objects
+>       child : changesets of the transaction selected in the master
+> Then an option for the master transaction to be linked to the current 
+> pojo in focus.
+> If you have your own ideas carry on, else let me know & I'll continue 
+> with that.
+> 
+> re: alternatives:
+> a) define nicer (yes I know it could be improved but how...)
+> b) oo - interesting
+> c) oo - interesting
+> 
+> However really I should look at unit tests.
+> 
+> Regarding the concurrency discussion we can leave the transaction merges 
+> for now.  However I'm a little worried about the idea of 
+> attribute-merging - even if technically feaseable.  Apart from having to 
+> deal with inconsistent attributes we also run the risk that users change 
+>   data that they do not correct in the light of other changed data.
+> 
+> 
+> Mike E.
+> 
+> Dan Haywood wrote:
+> > Hi Mike,
+> > Have been playing around with your view and a bunch of issues it's
+> throwing
+> > up with the xactn mgmt stuff.
+> > 
+> > There's enough things that I can see that need attention with respect to
+> the
+> > interaction between the UI and the ITransationManager, and I reckon I have
+> > enough Eclipse skills, just about, to work them through.
+> > 
+> > So, rather than us both tripping over each other, do you want to turn your
+> > attention to some other area?  And then I'll give you a call when my
+> Eclipse
+> > knowledge is exhausted (won't be long).
+> > 
+> > What's next, then?  I have three suggestions:
+> > a) a nicer implementation of the operations view.
+> > b) develop a way of using an optional markup notation (perhaps Commons
+> Jelly
+> > (http://jakarta.apache.org/commons/jelly/jellyswt.html),
+> similar a little
+> > bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+> > PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+> > c) start working on the tooling side - building up a Java AST
+> implementation
+> > of the meta-model.
+> > 
+> > Or anything else that you're interested in, of course.
+> > 
+> > Dan
+> > 
+> > 
+> > 
+> >>-----Original Message-----
+> >>From: rcpviewer-contributors-admin at berlios.de
+> >>[mailto:rcpviewer-contributors-admin at berlios.de]On
+> Behalf Of Mike Evans
+> >>Sent: 28 November 2005 18:51
+> >>To: dan at haywood-associates.co.uk;
+> >>rcpviewer-contributors at lists.berlios.de
+> >>Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+> >>
+> >>
+> >>Hi Dan,
+> >>
+> >>TRANSACTION PER POJO
+> >>Having each newly created pojo in its own transaction will require some
+> >>sort of merge etc. as I would suggest it will normal practice to create
+> >>more than one dependent pojo at a time (I mean pojos with their own
+> >>lifecycles but then linked, e.g Beans & EasyBean).
+> >>
+> >>Perhaps we can have a convention that identifies one pojo as a
+> >>(non-unique) factory of another type of pojo in which case when an
+> >>instance of the latter are created by the former they remain in the same
+> >>transaction.
+> >>e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating
+> >>a factory method whose output remains in the transaction.
+> >>
+> >>Irrespective of that the merge/umnmerge would be needed. Perhaps
+> >>something on the lines of:
+> >>
+> >>MyTransaction(){...}
+> >>
+> >>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+> >>
+> >>MyTransaction merge( MyTransaction partner ) {
+> >>   return new MyTransaction( this, partner );
+> >>}
+> >>
+> >>MyTransaction[] unmerge() {
+> >>   if ( _dad == null ) throw new IllegalStateException();
+> >>   if ( _mum == null ) throw new IllegalStateException();
+> >>   return new MyTransaction[]{ dad, mum };
+> >>}
+> >>
+> >>I'll have a think - we'll probably need a new transaciton state or two
+> >>to  get the undo/redo logic right.
+> >>
+> >>CONCURRENCY
+> >>How scalable are we going to be?
+> >>Is our distribuetd app going to be peer-to-peer or controlled centrally?
+> >>If centrally we can go for pessimistic locking of all objects.  As soon
+> >>as a transaction enlists the object, it cannot be enlisted by any other
+> >>transaction.  I like that where scalability allows, as no user ever
+> >>wastes time on lost changes (guess how Epic works).
+> >>
+> >>Other ideas...
+> >>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+> >>broadcasts that it has grabbed a lock on a pojo AND when it releases
+> >>that lock.  All other Transaction Managers record which pojo's are out
+> >>of bounds.  Fail Safety: the broadcast gives the address of the locking
+> >>Transaction Manager (TM) so if another TM wants to lock the pojo it can
+> >>test whether the locking TM is still running and then ...
+> >>Oh good grief - if you do not like centralised locking let's leave it to
+> >>File/Save errors for now.
+> >>
+> >>
+> >>Mike E.
+> >>
+> >>PS : no coding today - too busy learning NullSoft's installer - which is
+> >>lovely (if you like Windows).
+> >>
+> >>
+> >>Dan Haywood wrote:
+> >>
+> >>>(This mail is direct to you only cos the mailing list just bounced me.
+> >>>Huh).
+> >>>-------------
+> >>>
+> >>>Hi Mike
+> >>>
+> >>>
+> >>>
+> >>>>Question : conceptually are all ChangeSets are on a single timeline on
+> >>>>which there is a defined point where they are changeable or not?  Or can
+> >>>>undoable and redoable changes run concurrently?
+> >>>
+> >>>
+> >>>In short: the latter.
+> >>>
+> >>>A bit longer: there can be multiple transactions IN_PROGRESS at the same
+> >>>time.  Each transaction enlists a set of pojos, but a single
+> >>
+> >>pojo can only
+> >>
+> >>>be enlisted in one transaction at a time.  This last is the rule that I
+> >>>think you partially commented out.  I haven't reinstated it cos
+> >>
+> >>I want to
+> >>
+> >>>see how all this works out in practice.
+> >>>
+> >>>The reason that xactn failures occur, I think, is that if one
+> >>
+> >>creates one
+> >>
+> >>>pojo and then another one (eg Beans and then EasyBean) then
+> >>
+> >>they will both
+> >>
+> >>>be in their own transaction.  Attempting to add the EasyBean to
+> >>
+> >>the Beans
+> >>
+> >>>pojo then fails because the EasyBean cannot be enlisted in the
+> >>
+> >>Beans xactn.
+> >>
+> >>>An alternative design for this would be to automatically merge
+> >>
+> >>the xactns.
+> >>
+> >>>But what should happen if the user does an Edit->Undo - should
+> >>
+> >>the xactns
+> >>
+> >>>unmerge again?  So I want to just see it all in use as I
+> >>
+> >>originally designed
+> >>
+> >>>it and then we can see how it behaves in practice.
+> >>>
+> >>>By the way, another wrinkle that I know I'll need to address is that of
+> >>>concurrent updates.  I intend there to be a JMS subscription
+> >>
+> >>thing going on
+> >>
+> >>>so that xactns committed by other users will be automatically published.
+> >>>That means that the user will always have an up-to-date view,
+> >>
+> >>and should be
+> >>
+> >>>great for when a user isn't in the process of changing an
+> >>
+> >>object.  But if
+> >>
+> >>>they are, then I think that we'll need to get them to
+> >>
+> >>acknowledge the update
+> >>
+> >>>and throw away their own IN_PROGRESS transaction.  My thinking is again
+> >>>better for them to find out earlier rather than later when they do their
+> >>>File->Save and get an optimistic locking error.  But I'd appreciate your
+> >>>views - I've not designed a "conventional" application this
+> >>
+> >>way, so I'm a
+> >>
+> >>>little nervous if this is a little close to the bleeding edge.
+> >>>
+> >>>Later
+> >>>Dan
+> >>>
+> >>>
+> >>>
+> >>>>-----Original Message-----
+> >>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> >>>>Sent: 26 November 2005 12:34
+> >>>>To: dan at haywood-associates.co.uk
+> >>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+> >>>>
+> >>>>
+> >>>>Yuh.
+> >>>>I was thinking of adding to 'config' options to show changesets and/or
+> >>>>enlisted pojos.
+> >>>>However I think two seperate views would be better.  Sigh.
+> >>>>ChangeSets are a composite I noticed - hence I was going to have an
+> >>>>infinite-leveled tree for this.  May not look so good so might just go
+> >>>>with two levels and use icons to indicate dependencies.  We'll see how
+> >>>>it goes.
+> >>>>Question : conceptually are all ChangeSets are on a single timeline on
+> >>>>which there is a defined point where they are changeable or not?  Or can
+> >>>>undoable and redoable changes run concurrently?
+> >>>>
+> >>>>Mike E.
+> >>>>
+> >>>>
+> >>>>
+> >>>>Dan Haywood wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>>>I've put a patch in to stop all those spurious transactions
+> >>>>
+> >>>>from appearing.
+> >>>
+> >>>>>I see that you are using a tree for the transaction view -
+> >>>>
+> >>>>good-o.  But as
+> >>>>
+> >>>>
+> >>>>>you've noticed, there's actually two or three dimensions to
+> >>>>
+> >>>>what lives in a
+> >>>>
+> >>>>
+> >>>>>transaction
+> >>>>>- the enlisted pojos
+> >>>>>- the change sets (which can be undone)
+> >>>>>- possibly change sets which can be redone.
+> >>>>>
+> >>>>>I think actually we need two views relating to transactions here:
+> >>>>>- the first should be what you are working on, which is really a
+> >>>>>TransactionManager view.  This should show the transactions +
+> >>>>
+> >>>>the enlisted
+> >>>>
+> >>>>
+> >>>>>pojos in each.
+> >>>>>- the second should show the current transaction for the
+> >>>>
+> >>>>current pojo that
+> >>>>
+> >>>>
+> >>>>>has focus, showing the two sets of changesets (undoable and redoable).
+> >>>>>
+> >>>>>Note that changesets follow the composite pattern, so in theory
+> >>>>
+> >>>>they could
+> >>>>
+> >>>>
+> >>>>>be nested.
+> >>>>>
+> >>>>>Hope that makes sense.
+> >>>>>Dan
+> >>>>>
+> >>>>>
+> >>>>>_______________________________________________
+> >>>>>Rcpviewer-contributors mailing list
+> >>>>>Rcpviewer-contributors at lists.berlios.de
+> >>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>>>
+> >>>>
+> >>>>--
+> >>>>Mike Evans
+> >>>>Incremental Ltd.
+> >>>>www.incremental.eu.com
+> >>>>
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>
+> >>--
+> >>Mike Evans
+> >>Incremental Ltd.
+> >>www.incremental.eu.com
+> >>_______________________________________________
+> >>Rcpviewer-contributors mailing list
+> >>Rcpviewer-contributors at lists.berlios.de
+> >>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>
+> > 
+> > 
+> > 
+> > _______________________________________________
+> > Rcpviewer-contributors mailing list
+> > Rcpviewer-contributors at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Nov 29 18:58:52 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 29 Nov 2005 17:58:52 +0000
+Subject: [Rcpviewer-contributors] Transaction view and other things
+In-Reply-To: <Zen-1Eh9bD-0008Au-Cv@heisenberg.zen.co.uk>
+References: <Zen-1Eh9bD-0008Au-Cv@heisenberg.zen.co.uk>
+Message-ID: <438C96DC.2000509@incremental.eu.com>
+
+let me know if you want me to have a look
+else I'll be getting on with b).
+how exciting
+
+Mike E.
+
+Dan Haywood wrote:
+> Right then.
+> 
+> I managed to get the master/child thing going for displaying changesets, and that's when it started spitting out problems with the ITransactionManager.  I think it will look good eventually, but it's problematic at the moment.
+> 
+> What I'd really really like is for you to look at (b).  I know that we need tests and so forth, but I also don't want to get bogged down with large and elaborate mocking of bits of the Eclipse API related solely to the UI.  So unless there's a specific reason (eg for Epic) why you want to learn this stuff, I'd much prefer you work on Jelly/SWT.
+> 
+> Let me know,
+> Dan
+> 
+> ----------
+> Mike Evans <mike.evans at incremental.eu.com> wrote :
+> 
+> 
+>>Dan,
+>>
+>>I was going to see what a master/child looked like.
+>>ie : master : transactions & their enlisted objects
+>>      child : changesets of the transaction selected in the master
+>>Then an option for the master transaction to be linked to the current 
+>>pojo in focus.
+>>If you have your own ideas carry on, else let me know & I'll continue 
+>>with that.
+>>
+>>re: alternatives:
+>>a) define nicer (yes I know it could be improved but how...)
+>>b) oo - interesting
+>>c) oo - interesting
+>>
+>>However really I should look at unit tests.
+>>
+>>Regarding the concurrency discussion we can leave the transaction merges 
+>>for now.  However I'm a little worried about the idea of 
+>>attribute-merging - even if technically feaseable.  Apart from having to 
+>>deal with inconsistent attributes we also run the risk that users change 
+>>  data that they do not correct in the light of other changed data.
+>>
+>>
+>>Mike E.
+>>
+>>Dan Haywood wrote:
+>>
+>>>Hi Mike,
+>>>Have been playing around with your view and a bunch of issues it's
+>>
+>>throwing
+>>
+>>>up with the xactn mgmt stuff.
+>>>
+>>>There's enough things that I can see that need attention with respect to
+>>
+>>the
+>>
+>>>interaction between the UI and the ITransationManager, and I reckon I have
+>>>enough Eclipse skills, just about, to work them through.
+>>>
+>>>So, rather than us both tripping over each other, do you want to turn your
+>>>attention to some other area?  And then I'll give you a call when my
+>>
+>>Eclipse
+>>
+>>>knowledge is exhausted (won't be long).
+>>>
+>>>What's next, then?  I have three suggestions:
+>>>a) a nicer implementation of the operations view.
+>>>b) develop a way of using an optional markup notation (perhaps Commons
+>>
+>>Jelly
+>>
+>>>(http://jakarta.apache.org/commons/jelly/jellyswt.html),
+>>
+>>similar a little
+>>
+>>>bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+>>>PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+>>>c) start working on the tooling side - building up a Java AST
+>>
+>>implementation
+>>
+>>>of the meta-model.
+>>>
+>>>Or anything else that you're interested in, of course.
+>>>
+>>>Dan
+>>>
+>>>
+>>>
+>>>
+>>>>-----Original Message-----
+>>>>From: rcpviewer-contributors-admin at berlios.de
+>>>>[mailto:rcpviewer-contributors-admin at berlios.de]On
+>>
+>>Behalf Of Mike Evans
+>>
+>>>>Sent: 28 November 2005 18:51
+>>>>To: dan at haywood-associates.co.uk;
+>>>>rcpviewer-contributors at lists.berlios.de
+>>>>Subject: [Rcpviewer-contributors] Re: Change sets (was Transaction view)
+>>>>
+>>>>
+>>>>Hi Dan,
+>>>>
+>>>>TRANSACTION PER POJO
+>>>>Having each newly created pojo in its own transaction will require some
+>>>>sort of merge etc. as I would suggest it will normal practice to create
+>>>>more than one dependent pojo at a time (I mean pojos with their own
+>>>>lifecycles but then linked, e.g Beans & EasyBean).
+>>>>
+>>>>Perhaps we can have a convention that identifies one pojo as a
+>>>>(non-unique) factory of another type of pojo in which case when an
+>>>>instance of the latter are created by the former they remain in the same
+>>>>transaction.
+>>>>e.g.  Beans has a addNewEasyBean() method - the addNew prefix indicating
+>>>>a factory method whose output remains in the transaction.
+>>>>
+>>>>Irrespective of that the merge/umnmerge would be needed. Perhaps
+>>>>something on the lines of:
+>>>>
+>>>>MyTransaction(){...}
+>>>>
+>>>>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+>>>>
+>>>>MyTransaction merge( MyTransaction partner ) {
+>>>>  return new MyTransaction( this, partner );
+>>>>}
+>>>>
+>>>>MyTransaction[] unmerge() {
+>>>>  if ( _dad == null ) throw new IllegalStateException();
+>>>>  if ( _mum == null ) throw new IllegalStateException();
+>>>>  return new MyTransaction[]{ dad, mum };
+>>>>}
+>>>>
+>>>>I'll have a think - we'll probably need a new transaciton state or two
+>>>>to  get the undo/redo logic right.
+>>>>
+>>>>CONCURRENCY
+>>>>How scalable are we going to be?
+>>>>Is our distribuetd app going to be peer-to-peer or controlled centrally?
+>>>>If centrally we can go for pessimistic locking of all objects.  As soon
+>>>>as a transaction enlists the object, it cannot be enlisted by any other
+>>>>transaction.  I like that where scalability allows, as no user ever
+>>>>wastes time on lost changes (guess how Epic works).
+>>>>
+>>>>Other ideas...
+>>>>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+>>>>broadcasts that it has grabbed a lock on a pojo AND when it releases
+>>>>that lock.  All other Transaction Managers record which pojo's are out
+>>>>of bounds.  Fail Safety: the broadcast gives the address of the locking
+>>>>Transaction Manager (TM) so if another TM wants to lock the pojo it can
+>>>>test whether the locking TM is still running and then ...
+>>>>Oh good grief - if you do not like centralised locking let's leave it to
+>>>>File/Save errors for now.
+>>>>
+>>>>
+>>>>Mike E.
+>>>>
+>>>>PS : no coding today - too busy learning NullSoft's installer - which is
+>>>>lovely (if you like Windows).
+>>>>
+>>>>
+>>>>Dan Haywood wrote:
+>>>>
+>>>>
+>>>>>(This mail is direct to you only cos the mailing list just bounced me.
+>>>>>Huh).
+>>>>>-------------
+>>>>>
+>>>>>Hi Mike
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>>Question : conceptually are all ChangeSets are on a single timeline on
+>>>>>>which there is a defined point where they are changeable or not?  Or can
+>>>>>>undoable and redoable changes run concurrently?
+>>>>>
+>>>>>
+>>>>>In short: the latter.
+>>>>>
+>>>>>A bit longer: there can be multiple transactions IN_PROGRESS at the same
+>>>>>time.  Each transaction enlists a set of pojos, but a single
+>>>>
+>>>>pojo can only
+>>>>
+>>>>
+>>>>>be enlisted in one transaction at a time.  This last is the rule that I
+>>>>>think you partially commented out.  I haven't reinstated it cos
+>>>>
+>>>>I want to
+>>>>
+>>>>
+>>>>>see how all this works out in practice.
+>>>>>
+>>>>>The reason that xactn failures occur, I think, is that if one
+>>>>
+>>>>creates one
+>>>>
+>>>>
+>>>>>pojo and then another one (eg Beans and then EasyBean) then
+>>>>
+>>>>they will both
+>>>>
+>>>>
+>>>>>be in their own transaction.  Attempting to add the EasyBean to
+>>>>
+>>>>the Beans
+>>>>
+>>>>
+>>>>>pojo then fails because the EasyBean cannot be enlisted in the
+>>>>
+>>>>Beans xactn.
+>>>>
+>>>>
+>>>>>An alternative design for this would be to automatically merge
+>>>>
+>>>>the xactns.
+>>>>
+>>>>
+>>>>>But what should happen if the user does an Edit->Undo - should
+>>>>
+>>>>the xactns
+>>>>
+>>>>
+>>>>>unmerge again?  So I want to just see it all in use as I
+>>>>
+>>>>originally designed
+>>>>
+>>>>
+>>>>>it and then we can see how it behaves in practice.
+>>>>>
+>>>>>By the way, another wrinkle that I know I'll need to address is that of
+>>>>>concurrent updates.  I intend there to be a JMS subscription
+>>>>
+>>>>thing going on
+>>>>
+>>>>
+>>>>>so that xactns committed by other users will be automatically published.
+>>>>>That means that the user will always have an up-to-date view,
+>>>>
+>>>>and should be
+>>>>
+>>>>
+>>>>>great for when a user isn't in the process of changing an
+>>>>
+>>>>object.  But if
+>>>>
+>>>>
+>>>>>they are, then I think that we'll need to get them to
+>>>>
+>>>>acknowledge the update
+>>>>
+>>>>
+>>>>>and throw away their own IN_PROGRESS transaction.  My thinking is again
+>>>>>better for them to find out earlier rather than later when they do their
+>>>>>File->Save and get an optimistic locking error.  But I'd appreciate your
+>>>>>views - I've not designed a "conventional" application this
+>>>>
+>>>>way, so I'm a
+>>>>
+>>>>
+>>>>>little nervous if this is a little close to the bleeding edge.
+>>>>>
+>>>>>Later
+>>>>>Dan
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>>-----Original Message-----
+>>>>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+>>>>>>Sent: 26 November 2005 12:34
+>>>>>>To: dan at haywood-associates.co.uk
+>>>>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+>>>>>>
+>>>>>>
+>>>>>>Yuh.
+>>>>>>I was thinking of adding to 'config' options to show changesets and/or
+>>>>>>enlisted pojos.
+>>>>>>However I think two seperate views would be better.  Sigh.
+>>>>>>ChangeSets are a composite I noticed - hence I was going to have an
+>>>>>>infinite-leveled tree for this.  May not look so good so might just go
+>>>>>>with two levels and use icons to indicate dependencies.  We'll see how
+>>>>>>it goes.
+>>>>>>Question : conceptually are all ChangeSets are on a single timeline on
+>>>>>>which there is a defined point where they are changeable or not?  Or can
+>>>>>>undoable and redoable changes run concurrently?
+>>>>>>
+>>>>>>Mike E.
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>Dan Haywood wrote:
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>I've put a patch in to stop all those spurious transactions
+>>>>>>
+>>>>>>from appearing.
+>>>>>
+>>>>>
+>>>>>>>I see that you are using a tree for the transaction view -
+>>>>>>
+>>>>>>good-o.  But as
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>you've noticed, there's actually two or three dimensions to
+>>>>>>
+>>>>>>what lives in a
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>transaction
+>>>>>>>- the enlisted pojos
+>>>>>>>- the change sets (which can be undone)
+>>>>>>>- possibly change sets which can be redone.
+>>>>>>>
+>>>>>>>I think actually we need two views relating to transactions here:
+>>>>>>>- the first should be what you are working on, which is really a
+>>>>>>>TransactionManager view.  This should show the transactions +
+>>>>>>
+>>>>>>the enlisted
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>pojos in each.
+>>>>>>>- the second should show the current transaction for the
+>>>>>>
+>>>>>>current pojo that
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>has focus, showing the two sets of changesets (undoable and redoable).
+>>>>>>>
+>>>>>>>Note that changesets follow the composite pattern, so in theory
+>>>>>>
+>>>>>>they could
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>be nested.
+>>>>>>>
+>>>>>>>Hope that makes sense.
+>>>>>>>Dan
+>>>>>>>
+>>>>>>>
+>>>>>>>_______________________________________________
+>>>>>>>Rcpviewer-contributors mailing list
+>>>>>>>Rcpviewer-contributors at lists.berlios.de
+>>>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>>>>>
+>>>>>>
+>>>>>>--
+>>>>>>Mike Evans
+>>>>>>Incremental Ltd.
+>>>>>>www.incremental.eu.com
+>>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>--
+>>>>Mike Evans
+>>>>Incremental Ltd.
+>>>>www.incremental.eu.com
+>>>>_______________________________________________
+>>>>Rcpviewer-contributors mailing list
+>>>>Rcpviewer-contributors at lists.berlios.de
+>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>>
+>>>
+>>>
+>>>
+>>>_______________________________________________
+>>>Rcpviewer-contributors mailing list
+>>>Rcpviewer-contributors at lists.berlios.de
+>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>
+>>
+>>-- 
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+> 
+> 
+> 
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From dan at haywood-associates.co.uk  Tue Nov 29 23:10:35 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 29 Nov 2005 22:10:35 -0000
+Subject: [Rcpviewer-contributors] Transaction view and other things
+In-Reply-To: <438C96DC.2000509@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKOEJCDFAA.dan@haywood-associates.co.uk>
+
+Okay, will let you know if I get stuck.
+
+Re: markup, in addition to Jelly/SWT and RIB, I just also came across XSWT,
+advertised via www.eclipse-plugins.info.  Their website is at
+http://xswt.sourceforge.net/cgi-bin/xswt/home.
+
+Dan
+
+
+> -----Original Message-----
+> From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> Sent: 29 November 2005 17:59
+> To: Dan Haywood
+> Cc: rcpviewer-contributors at lists.berlios.de
+> Subject: Re: [Rcpviewer-contributors] Transaction view and other things
+>
+>
+> let me know if you want me to have a look
+> else I'll be getting on with b).
+> how exciting
+>
+> Mike E.
+>
+> Dan Haywood wrote:
+> > Right then.
+> >
+> > I managed to get the master/child thing going for displaying
+> changesets, and that's when it started spitting out problems with
+> the ITransactionManager.  I think it will look good eventually,
+> but it's problematic at the moment.
+> >
+> > What I'd really really like is for you to look at (b).  I know
+> that we need tests and so forth, but I also don't want to get
+> bogged down with large and elaborate mocking of bits of the
+> Eclipse API related solely to the UI.  So unless there's a
+> specific reason (eg for Epic) why you want to learn this stuff,
+> I'd much prefer you work on Jelly/SWT.
+> >
+> > Let me know,
+> > Dan
+> >
+> > ----------
+> > Mike Evans <mike.evans at incremental.eu.com> wrote :
+> >
+> >
+> >>Dan,
+> >>
+> >>I was going to see what a master/child looked like.
+> >>ie : master : transactions & their enlisted objects
+> >>      child : changesets of the transaction selected in the master
+> >>Then an option for the master transaction to be linked to the current
+> >>pojo in focus.
+> >>If you have your own ideas carry on, else let me know & I'll continue
+> >>with that.
+> >>
+> >>re: alternatives:
+> >>a) define nicer (yes I know it could be improved but how...)
+> >>b) oo - interesting
+> >>c) oo - interesting
+> >>
+> >>However really I should look at unit tests.
+> >>
+> >>Regarding the concurrency discussion we can leave the
+> transaction merges
+> >>for now.  However I'm a little worried about the idea of
+> >>attribute-merging - even if technically feaseable.  Apart from
+> having to
+> >>deal with inconsistent attributes we also run the risk that
+> users change
+> >>  data that they do not correct in the light of other changed data.
+> >>
+> >>
+> >>Mike E.
+> >>
+> >>Dan Haywood wrote:
+> >>
+> >>>Hi Mike,
+> >>>Have been playing around with your view and a bunch of issues it's
+> >>
+> >>throwing
+> >>
+> >>>up with the xactn mgmt stuff.
+> >>>
+> >>>There's enough things that I can see that need attention with
+> respect to
+> >>
+> >>the
+> >>
+> >>>interaction between the UI and the ITransationManager, and I
+> reckon I have
+> >>>enough Eclipse skills, just about, to work them through.
+> >>>
+> >>>So, rather than us both tripping over each other, do you want
+> to turn your
+> >>>attention to some other area?  And then I'll give you a call when my
+> >>
+> >>Eclipse
+> >>
+> >>>knowledge is exhausted (won't be long).
+> >>>
+> >>>What's next, then?  I have three suggestions:
+> >>>a) a nicer implementation of the operations view.
+> >>>b) develop a way of using an optional markup notation (perhaps Commons
+> >>
+> >>Jelly
+> >>
+> >>>(http://jakarta.apache.org/commons/jelly/jellyswt.html),
+> >>
+> >>similar a little
+> >>
+> >>>bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+> >>>PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+> >>>c) start working on the tooling side - building up a Java AST
+> >>
+> >>implementation
+> >>
+> >>>of the meta-model.
+> >>>
+> >>>Or anything else that you're interested in, of course.
+> >>>
+> >>>Dan
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>>-----Original Message-----
+> >>>>From: rcpviewer-contributors-admin at berlios.de
+> >>>>[mailto:rcpviewer-contributors-admin at berlios.de]On
+> >>
+> >>Behalf Of Mike Evans
+> >>
+> >>>>Sent: 28 November 2005 18:51
+> >>>>To: dan at haywood-associates.co.uk;
+> >>>>rcpviewer-contributors at lists.berlios.de
+> >>>>Subject: [Rcpviewer-contributors] Re: Change sets (was
+> Transaction view)
+> >>>>
+> >>>>
+> >>>>Hi Dan,
+> >>>>
+> >>>>TRANSACTION PER POJO
+> >>>>Having each newly created pojo in its own transaction will
+> require some
+> >>>>sort of merge etc. as I would suggest it will normal practice
+> to create
+> >>>>more than one dependent pojo at a time (I mean pojos with their own
+> >>>>lifecycles but then linked, e.g Beans & EasyBean).
+> >>>>
+> >>>>Perhaps we can have a convention that identifies one pojo as a
+> >>>>(non-unique) factory of another type of pojo in which case when an
+> >>>>instance of the latter are created by the former they remain
+> in the same
+> >>>>transaction.
+> >>>>e.g.  Beans has a addNewEasyBean() method - the addNew prefix
+> indicating
+> >>>>a factory method whose output remains in the transaction.
+> >>>>
+> >>>>Irrespective of that the merge/umnmerge would be needed. Perhaps
+> >>>>something on the lines of:
+> >>>>
+> >>>>MyTransaction(){...}
+> >>>>
+> >>>>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+> >>>>
+> >>>>MyTransaction merge( MyTransaction partner ) {
+> >>>>  return new MyTransaction( this, partner );
+> >>>>}
+> >>>>
+> >>>>MyTransaction[] unmerge() {
+> >>>>  if ( _dad == null ) throw new IllegalStateException();
+> >>>>  if ( _mum == null ) throw new IllegalStateException();
+> >>>>  return new MyTransaction[]{ dad, mum };
+> >>>>}
+> >>>>
+> >>>>I'll have a think - we'll probably need a new transaciton state or two
+> >>>>to  get the undo/redo logic right.
+> >>>>
+> >>>>CONCURRENCY
+> >>>>How scalable are we going to be?
+> >>>>Is our distribuetd app going to be peer-to-peer or controlled
+> centrally?
+> >>>>If centrally we can go for pessimistic locking of all
+> objects.  As soon
+> >>>>as a transaction enlists the object, it cannot be enlisted by
+> any other
+> >>>>transaction.  I like that where scalability allows, as no user ever
+> >>>>wastes time on lost changes (guess how Epic works).
+> >>>>
+> >>>>Other ideas...
+> >>>>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+> >>>>broadcasts that it has grabbed a lock on a pojo AND when it releases
+> >>>>that lock.  All other Transaction Managers record which pojo's are out
+> >>>>of bounds.  Fail Safety: the broadcast gives the address of
+> the locking
+> >>>>Transaction Manager (TM) so if another TM wants to lock the
+> pojo it can
+> >>>>test whether the locking TM is still running and then ...
+> >>>>Oh good grief - if you do not like centralised locking let's
+> leave it to
+> >>>>File/Save errors for now.
+> >>>>
+> >>>>
+> >>>>Mike E.
+> >>>>
+> >>>>PS : no coding today - too busy learning NullSoft's installer
+> - which is
+> >>>>lovely (if you like Windows).
+> >>>>
+> >>>>
+> >>>>Dan Haywood wrote:
+> >>>>
+> >>>>
+> >>>>>(This mail is direct to you only cos the mailing list just
+> bounced me.
+> >>>>>Huh).
+> >>>>>-------------
+> >>>>>
+> >>>>>Hi Mike
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>>Question : conceptually are all ChangeSets are on a single
+> timeline on
+> >>>>>>which there is a defined point where they are changeable or
+> not?  Or can
+> >>>>>>undoable and redoable changes run concurrently?
+> >>>>>
+> >>>>>
+> >>>>>In short: the latter.
+> >>>>>
+> >>>>>A bit longer: there can be multiple transactions IN_PROGRESS
+> at the same
+> >>>>>time.  Each transaction enlists a set of pojos, but a single
+> >>>>
+> >>>>pojo can only
+> >>>>
+> >>>>
+> >>>>>be enlisted in one transaction at a time.  This last is the
+> rule that I
+> >>>>>think you partially commented out.  I haven't reinstated it cos
+> >>>>
+> >>>>I want to
+> >>>>
+> >>>>
+> >>>>>see how all this works out in practice.
+> >>>>>
+> >>>>>The reason that xactn failures occur, I think, is that if one
+> >>>>
+> >>>>creates one
+> >>>>
+> >>>>
+> >>>>>pojo and then another one (eg Beans and then EasyBean) then
+> >>>>
+> >>>>they will both
+> >>>>
+> >>>>
+> >>>>>be in their own transaction.  Attempting to add the EasyBean to
+> >>>>
+> >>>>the Beans
+> >>>>
+> >>>>
+> >>>>>pojo then fails because the EasyBean cannot be enlisted in the
+> >>>>
+> >>>>Beans xactn.
+> >>>>
+> >>>>
+> >>>>>An alternative design for this would be to automatically merge
+> >>>>
+> >>>>the xactns.
+> >>>>
+> >>>>
+> >>>>>But what should happen if the user does an Edit->Undo - should
+> >>>>
+> >>>>the xactns
+> >>>>
+> >>>>
+> >>>>>unmerge again?  So I want to just see it all in use as I
+> >>>>
+> >>>>originally designed
+> >>>>
+> >>>>
+> >>>>>it and then we can see how it behaves in practice.
+> >>>>>
+> >>>>>By the way, another wrinkle that I know I'll need to address
+> is that of
+> >>>>>concurrent updates.  I intend there to be a JMS subscription
+> >>>>
+> >>>>thing going on
+> >>>>
+> >>>>
+> >>>>>so that xactns committed by other users will be
+> automatically published.
+> >>>>>That means that the user will always have an up-to-date view,
+> >>>>
+> >>>>and should be
+> >>>>
+> >>>>
+> >>>>>great for when a user isn't in the process of changing an
+> >>>>
+> >>>>object.  But if
+> >>>>
+> >>>>
+> >>>>>they are, then I think that we'll need to get them to
+> >>>>
+> >>>>acknowledge the update
+> >>>>
+> >>>>
+> >>>>>and throw away their own IN_PROGRESS transaction.  My
+> thinking is again
+> >>>>>better for them to find out earlier rather than later when
+> they do their
+> >>>>>File->Save and get an optimistic locking error.  But I'd
+> appreciate your
+> >>>>>views - I've not designed a "conventional" application this
+> >>>>
+> >>>>way, so I'm a
+> >>>>
+> >>>>
+> >>>>>little nervous if this is a little close to the bleeding edge.
+> >>>>>
+> >>>>>Later
+> >>>>>Dan
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>>-----Original Message-----
+> >>>>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> >>>>>>Sent: 26 November 2005 12:34
+> >>>>>>To: dan at haywood-associates.co.uk
+> >>>>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+> >>>>>>
+> >>>>>>
+> >>>>>>Yuh.
+> >>>>>>I was thinking of adding to 'config' options to show
+> changesets and/or
+> >>>>>>enlisted pojos.
+> >>>>>>However I think two seperate views would be better.  Sigh.
+> >>>>>>ChangeSets are a composite I noticed - hence I was going to have an
+> >>>>>>infinite-leveled tree for this.  May not look so good so
+> might just go
+> >>>>>>with two levels and use icons to indicate dependencies.
+> We'll see how
+> >>>>>>it goes.
+> >>>>>>Question : conceptually are all ChangeSets are on a single
+> timeline on
+> >>>>>>which there is a defined point where they are changeable or
+> not?  Or can
+> >>>>>>undoable and redoable changes run concurrently?
+> >>>>>>
+> >>>>>>Mike E.
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>Dan Haywood wrote:
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>I've put a patch in to stop all those spurious transactions
+> >>>>>>
+> >>>>>>from appearing.
+> >>>>>
+> >>>>>
+> >>>>>>>I see that you are using a tree for the transaction view -
+> >>>>>>
+> >>>>>>good-o.  But as
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>you've noticed, there's actually two or three dimensions to
+> >>>>>>
+> >>>>>>what lives in a
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>transaction
+> >>>>>>>- the enlisted pojos
+> >>>>>>>- the change sets (which can be undone)
+> >>>>>>>- possibly change sets which can be redone.
+> >>>>>>>
+> >>>>>>>I think actually we need two views relating to transactions here:
+> >>>>>>>- the first should be what you are working on, which is really a
+> >>>>>>>TransactionManager view.  This should show the transactions +
+> >>>>>>
+> >>>>>>the enlisted
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>pojos in each.
+> >>>>>>>- the second should show the current transaction for the
+> >>>>>>
+> >>>>>>current pojo that
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>has focus, showing the two sets of changesets (undoable
+> and redoable).
+> >>>>>>>
+> >>>>>>>Note that changesets follow the composite pattern, so in theory
+> >>>>>>
+> >>>>>>they could
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>be nested.
+> >>>>>>>
+> >>>>>>>Hope that makes sense.
+> >>>>>>>Dan
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>_______________________________________________
+> >>>>>>>Rcpviewer-contributors mailing list
+> >>>>>>>Rcpviewer-contributors at lists.berlios.de
+> >>>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>>>>>
+> >>>>>>
+> >>>>>>--
+> >>>>>>Mike Evans
+> >>>>>>Incremental Ltd.
+> >>>>>>www.incremental.eu.com
+> >>>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>--
+> >>>>Mike Evans
+> >>>>Incremental Ltd.
+> >>>>www.incremental.eu.com
+> >>>>_______________________________________________
+> >>>>Rcpviewer-contributors mailing list
+> >>>>Rcpviewer-contributors at lists.berlios.de
+> >>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>>
+> >>>
+> >>>
+> >>>
+> >>>_______________________________________________
+> >>>Rcpviewer-contributors mailing list
+> >>>Rcpviewer-contributors at lists.berlios.de
+> >>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>
+> >>
+> >>--
+> >>Mike Evans
+> >>Incremental Ltd.
+> >>www.incremental.eu.com
+> >
+> >
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > Rcpviewer-contributors mailing list
+> > Rcpviewer-contributors at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+
+
+
+
+From mike.evans at incremental.eu.com  Wed Nov 30 19:32:08 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 30 Nov 2005 18:32:08 +0000
+Subject: [Rcpviewer-contributors] Transaction view and other things
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKOEJCDFAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKOEJCDFAA.dan@haywood-associates.co.uk>
+Message-ID: <438DF028.6050402@incremental.eu.com>
+
+Dan,
+
+A query on your desire for markup notation.
+What's it for?
+XSWT defines itself as a '1:1 mapping to Java Code' so what's the point?
+Jelly is another language - we're already expecting users to understand 
+all your annotations - so why ask them to know another one as well?
+As for IBM's 'Reflexive User Interface Builder' - both the above 
+comments apply.
+
+So.. is it to allow users to generate editors other than the default 
+one?  (the architecture is ready for that).  In which case what we 
+really want is start the Eclipse tooling - with some GUI builder 
+specialised for Essential.
+
+Unless I have the wrong end of the stick?
+
+Mike E.
+
+
+
+
+Dan Haywood wrote:
+> Okay, will let you know if I get stuck.
+> 
+> Re: markup, in addition to Jelly/SWT and RIB, I just also came across XSWT,
+> advertised via www.eclipse-plugins.info.  Their website is at
+> http://xswt.sourceforge.net/cgi-bin/xswt/home.
+> 
+> Dan
+> 
+> 
+> 
+>>-----Original Message-----
+>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+>>Sent: 29 November 2005 17:59
+>>To: Dan Haywood
+>>Cc: rcpviewer-contributors at lists.berlios.de
+>>Subject: Re: [Rcpviewer-contributors] Transaction view and other things
+>>
+>>
+>>let me know if you want me to have a look
+>>else I'll be getting on with b).
+>>how exciting
+>>
+>>Mike E.
+>>
+>>Dan Haywood wrote:
+>>
+>>>Right then.
+>>>
+>>>I managed to get the master/child thing going for displaying
+>>
+>>changesets, and that's when it started spitting out problems with
+>>the ITransactionManager.  I think it will look good eventually,
+>>but it's problematic at the moment.
+>>
+>>>What I'd really really like is for you to look at (b).  I know
+>>
+>>that we need tests and so forth, but I also don't want to get
+>>bogged down with large and elaborate mocking of bits of the
+>>Eclipse API related solely to the UI.  So unless there's a
+>>specific reason (eg for Epic) why you want to learn this stuff,
+>>I'd much prefer you work on Jelly/SWT.
+>>
+>>>Let me know,
+>>>Dan
+>>>
+>>>----------
+>>>Mike Evans <mike.evans at incremental.eu.com> wrote :
+>>>
+>>>
+>>>
+>>>>Dan,
+>>>>
+>>>>I was going to see what a master/child looked like.
+>>>>ie : master : transactions & their enlisted objects
+>>>>     child : changesets of the transaction selected in the master
+>>>>Then an option for the master transaction to be linked to the current
+>>>>pojo in focus.
+>>>>If you have your own ideas carry on, else let me know & I'll continue
+>>>>with that.
+>>>>
+>>>>re: alternatives:
+>>>>a) define nicer (yes I know it could be improved but how...)
+>>>>b) oo - interesting
+>>>>c) oo - interesting
+>>>>
+>>>>However really I should look at unit tests.
+>>>>
+>>>>Regarding the concurrency discussion we can leave the
+>>
+>>transaction merges
+>>
+>>>>for now.  However I'm a little worried about the idea of
+>>>>attribute-merging - even if technically feaseable.  Apart from
+>>
+>>having to
+>>
+>>>>deal with inconsistent attributes we also run the risk that
+>>
+>>users change
+>>
+>>>> data that they do not correct in the light of other changed data.
+>>>>
+>>>>
+>>>>Mike E.
+>>>>
+>>>>Dan Haywood wrote:
+>>>>
+>>>>
+>>>>>Hi Mike,
+>>>>>Have been playing around with your view and a bunch of issues it's
+>>>>
+>>>>throwing
+>>>>
+>>>>
+>>>>>up with the xactn mgmt stuff.
+>>>>>
+>>>>>There's enough things that I can see that need attention with
+>>
+>>respect to
+>>
+>>>>the
+>>>>
+>>>>
+>>>>>interaction between the UI and the ITransationManager, and I
+>>
+>>reckon I have
+>>
+>>>>>enough Eclipse skills, just about, to work them through.
+>>>>>
+>>>>>So, rather than us both tripping over each other, do you want
+>>
+>>to turn your
+>>
+>>>>>attention to some other area?  And then I'll give you a call when my
+>>>>
+>>>>Eclipse
+>>>>
+>>>>
+>>>>>knowledge is exhausted (won't be long).
+>>>>>
+>>>>>What's next, then?  I have three suggestions:
+>>>>>a) a nicer implementation of the operations view.
+>>>>>b) develop a way of using an optional markup notation (perhaps Commons
+>>>>
+>>>>Jelly
+>>>>
+>>>>
+>>>>>(http://jakarta.apache.org/commons/jelly/jellyswt.html),
+>>>>
+>>>>similar a little
+>>>>
+>>>>
+>>>>>bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+>>>>>PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+>>>>>c) start working on the tooling side - building up a Java AST
+>>>>
+>>>>implementation
+>>>>
+>>>>
+>>>>>of the meta-model.
+>>>>>
+>>>>>Or anything else that you're interested in, of course.
+>>>>>
+>>>>>Dan
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>>-----Original Message-----
+>>>>>>From: rcpviewer-contributors-admin at berlios.de
+>>>>>>[mailto:rcpviewer-contributors-admin at berlios.de]On
+>>>>
+>>>>Behalf Of Mike Evans
+>>>>
+>>>>
+>>>>>>Sent: 28 November 2005 18:51
+>>>>>>To: dan at haywood-associates.co.uk;
+>>>>>>rcpviewer-contributors at lists.berlios.de
+>>>>>>Subject: [Rcpviewer-contributors] Re: Change sets (was
+>>
+>>Transaction view)
+>>
+>>>>>>
+>>>>>>Hi Dan,
+>>>>>>
+>>>>>>TRANSACTION PER POJO
+>>>>>>Having each newly created pojo in its own transaction will
+>>
+>>require some
+>>
+>>>>>>sort of merge etc. as I would suggest it will normal practice
+>>
+>>to create
+>>
+>>>>>>more than one dependent pojo at a time (I mean pojos with their own
+>>>>>>lifecycles but then linked, e.g Beans & EasyBean).
+>>>>>>
+>>>>>>Perhaps we can have a convention that identifies one pojo as a
+>>>>>>(non-unique) factory of another type of pojo in which case when an
+>>>>>>instance of the latter are created by the former they remain
+>>
+>>in the same
+>>
+>>>>>>transaction.
+>>>>>>e.g.  Beans has a addNewEasyBean() method - the addNew prefix
+>>
+>>indicating
+>>
+>>>>>>a factory method whose output remains in the transaction.
+>>>>>>
+>>>>>>Irrespective of that the merge/umnmerge would be needed. Perhaps
+>>>>>>something on the lines of:
+>>>>>>
+>>>>>>MyTransaction(){...}
+>>>>>>
+>>>>>>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+>>>>>>
+>>>>>>MyTransaction merge( MyTransaction partner ) {
+>>>>>> return new MyTransaction( this, partner );
+>>>>>>}
+>>>>>>
+>>>>>>MyTransaction[] unmerge() {
+>>>>>> if ( _dad == null ) throw new IllegalStateException();
+>>>>>> if ( _mum == null ) throw new IllegalStateException();
+>>>>>> return new MyTransaction[]{ dad, mum };
+>>>>>>}
+>>>>>>
+>>>>>>I'll have a think - we'll probably need a new transaciton state or two
+>>>>>>to  get the undo/redo logic right.
+>>>>>>
+>>>>>>CONCURRENCY
+>>>>>>How scalable are we going to be?
+>>>>>>Is our distribuetd app going to be peer-to-peer or controlled
+>>
+>>centrally?
+>>
+>>>>>>If centrally we can go for pessimistic locking of all
+>>
+>>objects.  As soon
+>>
+>>>>>>as a transaction enlists the object, it cannot be enlisted by
+>>
+>>any other
+>>
+>>>>>>transaction.  I like that where scalability allows, as no user ever
+>>>>>>wastes time on lost changes (guess how Epic works).
+>>>>>>
+>>>>>>Other ideas...
+>>>>>>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+>>>>>>broadcasts that it has grabbed a lock on a pojo AND when it releases
+>>>>>>that lock.  All other Transaction Managers record which pojo's are out
+>>>>>>of bounds.  Fail Safety: the broadcast gives the address of
+>>
+>>the locking
+>>
+>>>>>>Transaction Manager (TM) so if another TM wants to lock the
+>>
+>>pojo it can
+>>
+>>>>>>test whether the locking TM is still running and then ...
+>>>>>>Oh good grief - if you do not like centralised locking let's
+>>
+>>leave it to
+>>
+>>>>>>File/Save errors for now.
+>>>>>>
+>>>>>>
+>>>>>>Mike E.
+>>>>>>
+>>>>>>PS : no coding today - too busy learning NullSoft's installer
+>>
+>>- which is
+>>
+>>>>>>lovely (if you like Windows).
+>>>>>>
+>>>>>>
+>>>>>>Dan Haywood wrote:
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>(This mail is direct to you only cos the mailing list just
+>>
+>>bounced me.
+>>
+>>>>>>>Huh).
+>>>>>>>-------------
+>>>>>>>
+>>>>>>>Hi Mike
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>>Question : conceptually are all ChangeSets are on a single
+>>
+>>timeline on
+>>
+>>>>>>>>which there is a defined point where they are changeable or
+>>
+>>not?  Or can
+>>
+>>>>>>>>undoable and redoable changes run concurrently?
+>>>>>>>
+>>>>>>>
+>>>>>>>In short: the latter.
+>>>>>>>
+>>>>>>>A bit longer: there can be multiple transactions IN_PROGRESS
+>>
+>>at the same
+>>
+>>>>>>>time.  Each transaction enlists a set of pojos, but a single
+>>>>>>
+>>>>>>pojo can only
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>be enlisted in one transaction at a time.  This last is the
+>>
+>>rule that I
+>>
+>>>>>>>think you partially commented out.  I haven't reinstated it cos
+>>>>>>
+>>>>>>I want to
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>see how all this works out in practice.
+>>>>>>>
+>>>>>>>The reason that xactn failures occur, I think, is that if one
+>>>>>>
+>>>>>>creates one
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>pojo and then another one (eg Beans and then EasyBean) then
+>>>>>>
+>>>>>>they will both
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>be in their own transaction.  Attempting to add the EasyBean to
+>>>>>>
+>>>>>>the Beans
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>pojo then fails because the EasyBean cannot be enlisted in the
+>>>>>>
+>>>>>>Beans xactn.
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>An alternative design for this would be to automatically merge
+>>>>>>
+>>>>>>the xactns.
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>But what should happen if the user does an Edit->Undo - should
+>>>>>>
+>>>>>>the xactns
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>unmerge again?  So I want to just see it all in use as I
+>>>>>>
+>>>>>>originally designed
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>it and then we can see how it behaves in practice.
+>>>>>>>
+>>>>>>>By the way, another wrinkle that I know I'll need to address
+>>
+>>is that of
+>>
+>>>>>>>concurrent updates.  I intend there to be a JMS subscription
+>>>>>>
+>>>>>>thing going on
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>so that xactns committed by other users will be
+>>
+>>automatically published.
+>>
+>>>>>>>That means that the user will always have an up-to-date view,
+>>>>>>
+>>>>>>and should be
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>great for when a user isn't in the process of changing an
+>>>>>>
+>>>>>>object.  But if
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>they are, then I think that we'll need to get them to
+>>>>>>
+>>>>>>acknowledge the update
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>and throw away their own IN_PROGRESS transaction.  My
+>>
+>>thinking is again
+>>
+>>>>>>>better for them to find out earlier rather than later when
+>>
+>>they do their
+>>
+>>>>>>>File->Save and get an optimistic locking error.  But I'd
+>>
+>>appreciate your
+>>
+>>>>>>>views - I've not designed a "conventional" application this
+>>>>>>
+>>>>>>way, so I'm a
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>>little nervous if this is a little close to the bleeding edge.
+>>>>>>>
+>>>>>>>Later
+>>>>>>>Dan
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>>-----Original Message-----
+>>>>>>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+>>>>>>>>Sent: 26 November 2005 12:34
+>>>>>>>>To: dan at haywood-associates.co.uk
+>>>>>>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>Yuh.
+>>>>>>>>I was thinking of adding to 'config' options to show
+>>
+>>changesets and/or
+>>
+>>>>>>>>enlisted pojos.
+>>>>>>>>However I think two seperate views would be better.  Sigh.
+>>>>>>>>ChangeSets are a composite I noticed - hence I was going to have an
+>>>>>>>>infinite-leveled tree for this.  May not look so good so
+>>
+>>might just go
+>>
+>>>>>>>>with two levels and use icons to indicate dependencies.
+>>
+>>We'll see how
+>>
+>>>>>>>>it goes.
+>>>>>>>>Question : conceptually are all ChangeSets are on a single
+>>
+>>timeline on
+>>
+>>>>>>>>which there is a defined point where they are changeable or
+>>
+>>not?  Or can
+>>
+>>>>>>>>undoable and redoable changes run concurrently?
+>>>>>>>>
+>>>>>>>>Mike E.
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>Dan Haywood wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>>I've put a patch in to stop all those spurious transactions
+>>>>>>>>
+>>>>>>>>from appearing.
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>>>I see that you are using a tree for the transaction view -
+>>>>>>>>
+>>>>>>>>good-o.  But as
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>>you've noticed, there's actually two or three dimensions to
+>>>>>>>>
+>>>>>>>>what lives in a
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>>transaction
+>>>>>>>>>- the enlisted pojos
+>>>>>>>>>- the change sets (which can be undone)
+>>>>>>>>>- possibly change sets which can be redone.
+>>>>>>>>>
+>>>>>>>>>I think actually we need two views relating to transactions here:
+>>>>>>>>>- the first should be what you are working on, which is really a
+>>>>>>>>>TransactionManager view.  This should show the transactions +
+>>>>>>>>
+>>>>>>>>the enlisted
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>>pojos in each.
+>>>>>>>>>- the second should show the current transaction for the
+>>>>>>>>
+>>>>>>>>current pojo that
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>>has focus, showing the two sets of changesets (undoable
+>>
+>>and redoable).
+>>
+>>>>>>>>>Note that changesets follow the composite pattern, so in theory
+>>>>>>>>
+>>>>>>>>they could
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>>be nested.
+>>>>>>>>>
+>>>>>>>>>Hope that makes sense.
+>>>>>>>>>Dan
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>>_______________________________________________
+>>>>>>>>>Rcpviewer-contributors mailing list
+>>>>>>>>>Rcpviewer-contributors at lists.berlios.de
+>>>>>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>>--
+>>>>>>>>Mike Evans
+>>>>>>>>Incremental Ltd.
+>>>>>>>>www.incremental.eu.com
+>>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>--
+>>>>>>Mike Evans
+>>>>>>Incremental Ltd.
+>>>>>>www.incremental.eu.com
+>>>>>>_______________________________________________
+>>>>>>Rcpviewer-contributors mailing list
+>>>>>>Rcpviewer-contributors at lists.berlios.de
+>>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>_______________________________________________
+>>>>>Rcpviewer-contributors mailing list
+>>>>>Rcpviewer-contributors at lists.berlios.de
+>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>>>
+>>>>
+>>>>--
+>>>>Mike Evans
+>>>>Incremental Ltd.
+>>>>www.incremental.eu.com
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>_______________________________________________
+>>>Rcpviewer-contributors mailing list
+>>>Rcpviewer-contributors at lists.berlios.de
+>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>>
+>>
+>>--
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+>>
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+From dan at haywood-associates.co.uk  Wed Nov 30 20:05:01 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 30 Nov 2005 19:05:01 GMT
+Subject: [Rcpviewer-contributors] Scriptable UIs
+Message-ID: <Zen-1EhXGH-0001lY-B0@pythagoras.zen.co.uk>
+
+Hi Mike,
+
+What I want is a lightweight way to allow UIs to be customised - eg deploy some .jelly script that defines a structure of an editor, but using domain object level semantics.  The intent is primarily to reduce the feedback loop, but also to make it demo'able and therefore get some buy-in (always gonna be a problem).
+
+e.g using XML:
+<rows>
+  <row>
+    <columns>
+      <column width="40%">
+        <attribute name="FirstName"/>
+        <attribute name="LastName"/>
+        <attribute name="Status"/>
+        <reference name="MostRecentOrder"/>
+      </column>
+      <column width="60%">
+        <attribute name="AddressLine1"/>
+        <attribute name="AddressLine2"/>
+        <attribute name="Country"/>
+     </column>
+   </columns>
+  <row>
+  <row>
+    <collection name="Orders">
+  </row>
+</rows>
+
+But it could be a pseudo-scripting equivalent:
+rows {
+  row {
+    columns {
+      column(40) {
+        attribute("FirstName")
+        attribute("LastName")
+        attribute("Status")
+        reference("MostRecentOrder")
+      }
+      column(60) {
+        attribute("AddressLine1")
+        attribute("AddressLine2")
+        attribute("Country")
+      }
+    }
+  }
+  row {
+    collection("Orders")
+  }
+}
+
+or perhaps written in a proper scripting language like Groovy (kudos there)?
+
+or even YAML (www.yaml.org)?
+
+What I'd hope is that a simple parser would be able to then leverage your current architecture pretty easily.  I guess the ideal would be to support the different SWT LayoutManagers (and perhaps write one or two of our own if necessary) and then map "attribute", "reference" and "collection" as necessary.  In addition, in the markup it ought to be possible to override any annotations specified in the code, eg:
+
+@FieldLengthOf(20)
+public String getFirstName() { ... }
+
+would be overridden using:
+<attribute name="firstName" fieldLengthOf="30"/>
+
+Hope that makes some sort of sense...
+
+Dan
+
+-------------
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> Dan,
+> 
+> A query on your desire for markup notation.
+> What's it for?
+> XSWT defines itself as a '1:1 mapping to Java Code' so what's the point?
+> Jelly is another language - we're already expecting users to understand 
+> all your annotations - so why ask them to know another one as well?
+> As for IBM's 'Reflexive User Interface Builder' - both the above 
+> comments apply.
+> 
+> So.. is it to allow users to generate editors other than the default 
+> one?  (the architecture is ready for that).  In which case what we 
+> really want is start the Eclipse tooling - with some GUI builder 
+> specialised for Essential.
+> 
+> Unless I have the wrong end of the stick?
+> 
+> Mike E.
+> 
+> 
+> 
+> 
+> Dan Haywood wrote:
+> > Okay, will let you know if I get stuck.
+> > 
+> > Re: markup, in addition to Jelly/SWT and RIB, I just also came across
+> XSWT,
+> > advertised via www.eclipse-plugins.info.  Their website is at
+> > http://xswt.sourceforge.net/cgi-bin/xswt/home.
+> > 
+> > Dan
+> > 
+> > 
+> > 
+> >>-----Original Message-----
+> >>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> >>Sent: 29 November 2005 17:59
+> >>To: Dan Haywood
+> >>Cc: rcpviewer-contributors at lists.berlios.de
+> >>Subject: Re: [Rcpviewer-contributors] Transaction view and other things
+> >>
+> >>
+> >>let me know if you want me to have a look
+> >>else I'll be getting on with b).
+> >>how exciting
+> >>
+> >>Mike E.
+> >>
+> >>Dan Haywood wrote:
+> >>
+> >>>Right then.
+> >>>
+> >>>I managed to get the master/child thing going for displaying
+> >>
+> >>changesets, and that's when it started spitting out problems with
+> >>the ITransactionManager.  I think it will look good eventually,
+> >>but it's problematic at the moment.
+> >>
+> >>>What I'd really really like is for you to look at (b).  I know
+> >>
+> >>that we need tests and so forth, but I also don't want to get
+> >>bogged down with large and elaborate mocking of bits of the
+> >>Eclipse API related solely to the UI.  So unless there's a
+> >>specific reason (eg for Epic) why you want to learn this stuff,
+> >>I'd much prefer you work on Jelly/SWT.
+> >>
+> >>>Let me know,
+> >>>Dan
+> >>>
+> >>>----------
+> >>>Mike Evans &amp;lang=en">mike.evans at incremental.eu.com>
+> wrote :
+> >>>
+> >>>
+> >>>
+> >>>>Dan,
+> >>>>
+> >>>>I was going to see what a master/child looked like.
+> >>>>ie : master : transactions & their enlisted objects
+> >>>>     child : changesets of the transaction selected in the master
+> >>>>Then an option for the master transaction to be linked to the current
+> >>>>pojo in focus.
+> >>>>If you have your own ideas carry on, else let me know & I'll continue
+> >>>>with that.
+> >>>>
+> >>>>re: alternatives:
+> >>>>a) define nicer (yes I know it could be improved but how...)
+> >>>>b) oo - interesting
+> >>>>c) oo - interesting
+> >>>>
+> >>>>However really I should look at unit tests.
+> >>>>
+> >>>>Regarding the concurrency discussion we can leave the
+> >>
+> >>transaction merges
+> >>
+> >>>>for now.  However I'm a little worried about the idea of
+> >>>>attribute-merging - even if technically feaseable.  Apart from
+> >>
+> >>having to
+> >>
+> >>>>deal with inconsistent attributes we also run the risk that
+> >>
+> >>users change
+> >>
+> >>>> data that they do not correct in the light of other changed data.
+> >>>>
+> >>>>
+> >>>>Mike E.
+> >>>>
+> >>>>Dan Haywood wrote:
+> >>>>
+> >>>>
+> >>>>>Hi Mike,
+> >>>>>Have been playing around with your view and a bunch of issues it's
+> >>>>
+> >>>>throwing
+> >>>>
+> >>>>
+> >>>>>up with the xactn mgmt stuff.
+> >>>>>
+> >>>>>There's enough things that I can see that need attention with
+> >>
+> >>respect to
+> >>
+> >>>>the
+> >>>>
+> >>>>
+> >>>>>interaction between the UI and the ITransationManager, and I
+> >>
+> >>reckon I have
+> >>
+> >>>>>enough Eclipse skills, just about, to work them through.
+> >>>>>
+> >>>>>So, rather than us both tripping over each other, do you want
+> >>
+> >>to turn your
+> >>
+> >>>>>attention to some other area?  And then I'll give you a call when my
+> >>>>
+> >>>>Eclipse
+> >>>>
+> >>>>
+> >>>>>knowledge is exhausted (won't be long).
+> >>>>>
+> >>>>>What's next, then?  I have three suggestions:
+> >>>>>a) a nicer implementation of the operations view.
+> >>>>>b) develop a way of using an optional markup notation (perhaps Commons
+> >>>>
+> >>>>Jelly
+> >>>>
+> >>>>
+> >>>>>(http://jakarta.apache.org/commons/jelly/jellyswt.html),
+> >>>>
+> >>>>similar a little
+> >>>>
+> >>>>
+> >>>>>bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+> >>>>>PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+> >>>>>c) start working on the tooling side - building up a Java AST
+> >>>>
+> >>>>implementation
+> >>>>
+> >>>>
+> >>>>>of the meta-model.
+> >>>>>
+> >>>>>Or anything else that you're interested in, of course.
+> >>>>>
+> >>>>>Dan
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>>-----Original Message-----
+> >>>>>>From: rcpviewer-contributors-admin at berlios.de
+> >>>>>>[mailto:rcpviewer-contributors-admin at berlios.de]On
+> >>>>
+> >>>>Behalf Of Mike Evans
+> >>>>
+> >>>>
+> >>>>>>Sent: 28 November 2005 18:51
+> >>>>>>To: dan at haywood-associates.co.uk;
+> >>>>>>rcpviewer-contributors at lists.berlios.de
+> >>>>>>Subject: [Rcpviewer-contributors] Re: Change sets (was
+> >>
+> >>Transaction view)
+> >>
+> >>>>>>
+> >>>>>>Hi Dan,
+> >>>>>>
+> >>>>>>TRANSACTION PER POJO
+> >>>>>>Having each newly created pojo in its own transaction will
+> >>
+> >>require some
+> >>
+> >>>>>>sort of merge etc. as I would suggest it will normal practice
+> >>
+> >>to create
+> >>
+> >>>>>>more than one dependent pojo at a time (I mean pojos with their own
+> >>>>>>lifecycles but then linked, e.g Beans & EasyBean).
+> >>>>>>
+> >>>>>>Perhaps we can have a convention that identifies one pojo as a
+> >>>>>>(non-unique) factory of another type of pojo in which case when an
+> >>>>>>instance of the latter are created by the former they remain
+> >>
+> >>in the same
+> >>
+> >>>>>>transaction.
+> >>>>>>e.g.  Beans has a addNewEasyBean() method - the addNew prefix
+> >>
+> >>indicating
+> >>
+> >>>>>>a factory method whose output remains in the transaction.
+> >>>>>>
+> >>>>>>Irrespective of that the merge/umnmerge would be needed. Perhaps
+> >>>>>>something on the lines of:
+> >>>>>>
+> >>>>>>MyTransaction(){...}
+> >>>>>>
+> >>>>>>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+> >>>>>>
+> >>>>>>MyTransaction merge( MyTransaction partner ) {
+> >>>>>> return new MyTransaction( this, partner );
+> >>>>>>}
+> >>>>>>
+> >>>>>>MyTransaction[] unmerge() {
+> >>>>>> if ( _dad == null ) throw new IllegalStateException();
+> >>>>>> if ( _mum == null ) throw new IllegalStateException();
+> >>>>>> return new MyTransaction[]{ dad, mum };
+> >>>>>>}
+> >>>>>>
+> >>>>>>I'll have a think - we'll probably need a new transaciton state or two
+> >>>>>>to  get the undo/redo logic right.
+> >>>>>>
+> >>>>>>CONCURRENCY
+> >>>>>>How scalable are we going to be?
+> >>>>>>Is our distribuetd app going to be peer-to-peer or controlled
+> >>
+> >>centrally?
+> >>
+> >>>>>>If centrally we can go for pessimistic locking of all
+> >>
+> >>objects.  As soon
+> >>
+> >>>>>>as a transaction enlists the object, it cannot be enlisted by
+> >>
+> >>any other
+> >>
+> >>>>>>transaction.  I like that where scalability allows, as no user ever
+> >>>>>>wastes time on lost changes (guess how Epic works).
+> >>>>>>
+> >>>>>>Other ideas...
+> >>>>>>Can we emulate a global lock p2p?  S'ppose so. A TransactionManager
+> >>>>>>broadcasts that it has grabbed a lock on a pojo AND when it releases
+> >>>>>>that lock.  All other Transaction Managers record which pojo's are out
+> >>>>>>of bounds.  Fail Safety: the broadcast gives the address of
+> >>
+> >>the locking
+> >>
+> >>>>>>Transaction Manager (TM) so if another TM wants to lock the
+> >>
+> >>pojo it can
+> >>
+> >>>>>>test whether the locking TM is still running and then ...
+> >>>>>>Oh good grief - if you do not like centralised locking let's
+> >>
+> >>leave it to
+> >>
+> >>>>>>File/Save errors for now.
+> >>>>>>
+> >>>>>>
+> >>>>>>Mike E.
+> >>>>>>
+> >>>>>>PS : no coding today - too busy learning NullSoft's installer
+> >>
+> >>- which is
+> >>
+> >>>>>>lovely (if you like Windows).
+> >>>>>>
+> >>>>>>
+> >>>>>>Dan Haywood wrote:
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>(This mail is direct to you only cos the mailing list just
+> >>
+> >>bounced me.
+> >>
+> >>>>>>>Huh).
+> >>>>>>>-------------
+> >>>>>>>
+> >>>>>>>Hi Mike
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>>Question : conceptually are all ChangeSets are on a single
+> >>
+> >>timeline on
+> >>
+> >>>>>>>>which there is a defined point where they are changeable or
+> >>
+> >>not?  Or can
+> >>
+> >>>>>>>>undoable and redoable changes run concurrently?
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>In short: the latter.
+> >>>>>>>
+> >>>>>>>A bit longer: there can be multiple transactions IN_PROGRESS
+> >>
+> >>at the same
+> >>
+> >>>>>>>time.  Each transaction enlists a set of pojos, but a single
+> >>>>>>
+> >>>>>>pojo can only
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>be enlisted in one transaction at a time.  This last is the
+> >>
+> >>rule that I
+> >>
+> >>>>>>>think you partially commented out.  I haven't reinstated it cos
+> >>>>>>
+> >>>>>>I want to
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>see how all this works out in practice.
+> >>>>>>>
+> >>>>>>>The reason that xactn failures occur, I think, is that if one
+> >>>>>>
+> >>>>>>creates one
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>pojo and then another one (eg Beans and then EasyBean) then
+> >>>>>>
+> >>>>>>they will both
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>be in their own transaction.  Attempting to add the EasyBean to
+> >>>>>>
+> >>>>>>the Beans
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>pojo then fails because the EasyBean cannot be enlisted in the
+> >>>>>>
+> >>>>>>Beans xactn.
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>An alternative design for this would be to automatically merge
+> >>>>>>
+> >>>>>>the xactns.
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>But what should happen if the user does an Edit->Undo - should
+> >>>>>>
+> >>>>>>the xactns
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>unmerge again?  So I want to just see it all in use as I
+> >>>>>>
+> >>>>>>originally designed
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>it and then we can see how it behaves in practice.
+> >>>>>>>
+> >>>>>>>By the way, another wrinkle that I know I'll need to address
+> >>
+> >>is that of
+> >>
+> >>>>>>>concurrent updates.  I intend there to be a JMS subscription
+> >>>>>>
+> >>>>>>thing going on
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>so that xactns committed by other users will be
+> >>
+> >>automatically published.
+> >>
+> >>>>>>>That means that the user will always have an up-to-date view,
+> >>>>>>
+> >>>>>>and should be
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>great for when a user isn't in the process of changing an
+> >>>>>>
+> >>>>>>object.  But if
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>they are, then I think that we'll need to get them to
+> >>>>>>
+> >>>>>>acknowledge the update
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>and throw away their own IN_PROGRESS transaction.  My
+> >>
+> >>thinking is again
+> >>
+> >>>>>>>better for them to find out earlier rather than later when
+> >>
+> >>they do their
+> >>
+> >>>>>>>File->Save and get an optimistic locking error.  But I'd
+> >>
+> >>appreciate your
+> >>
+> >>>>>>>views - I've not designed a "conventional" application this
+> >>>>>>
+> >>>>>>way, so I'm a
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>>little nervous if this is a little close to the bleeding edge.
+> >>>>>>>
+> >>>>>>>Later
+> >>>>>>>Dan
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>>-----Original Message-----
+> >>>>>>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> >>>>>>>>Sent: 26 November 2005 12:34
+> >>>>>>>>To: dan at haywood-associates.co.uk
+> >>>>>>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>Yuh.
+> >>>>>>>>I was thinking of adding to 'config' options to show
+> >>
+> >>changesets and/or
+> >>
+> >>>>>>>>enlisted pojos.
+> >>>>>>>>However I think two seperate views would be better.  Sigh.
+> >>>>>>>>ChangeSets are a composite I noticed - hence I was going to have an
+> >>>>>>>>infinite-leveled tree for this.  May not look so good so
+> >>
+> >>might just go
+> >>
+> >>>>>>>>with two levels and use icons to indicate dependencies.
+> >>
+> >>We'll see how
+> >>
+> >>>>>>>>it goes.
+> >>>>>>>>Question : conceptually are all ChangeSets are on a single
+> >>
+> >>timeline on
+> >>
+> >>>>>>>>which there is a defined point where they are changeable or
+> >>
+> >>not?  Or can
+> >>
+> >>>>>>>>undoable and redoable changes run concurrently?
+> >>>>>>>>
+> >>>>>>>>Mike E.
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>Dan Haywood wrote:
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>>I've put a patch in to stop all those spurious transactions
+> >>>>>>>>
+> >>>>>>>>from appearing.
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>>>I see that you are using a tree for the transaction view -
+> >>>>>>>>
+> >>>>>>>>good-o.  But as
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>>you've noticed, there's actually two or three dimensions to
+> >>>>>>>>
+> >>>>>>>>what lives in a
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>>transaction
+> >>>>>>>>>- the enlisted pojos
+> >>>>>>>>>- the change sets (which can be undone)
+> >>>>>>>>>- possibly change sets which can be redone.
+> >>>>>>>>>
+> >>>>>>>>>I think actually we need two views relating to transactions here:
+> >>>>>>>>>- the first should be what you are working on, which is really a
+> >>>>>>>>>TransactionManager view.  This should show the transactions +
+> >>>>>>>>
+> >>>>>>>>the enlisted
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>>pojos in each.
+> >>>>>>>>>- the second should show the current transaction for the
+> >>>>>>>>
+> >>>>>>>>current pojo that
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>>has focus, showing the two sets of changesets (undoable
+> >>
+> >>and redoable).
+> >>
+> >>>>>>>>>Note that changesets follow the composite pattern, so in theory
+> >>>>>>>>
+> >>>>>>>>they could
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>>be nested.
+> >>>>>>>>>
+> >>>>>>>>>Hope that makes sense.
+> >>>>>>>>>Dan
+> >>>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>>_______________________________________________
+> >>>>>>>>>Rcpviewer-contributors mailing list
+> >>>>>>>>>Rcpviewer-contributors at lists.berlios.de
+> >>>>>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>>>>>>>
+> >>>>>>>>
+> >>>>>>>>--
+> >>>>>>>>Mike Evans
+> >>>>>>>>Incremental Ltd.
+> >>>>>>>>www.incremental.eu.com
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>>
+> >>>>>>--
+> >>>>>>Mike Evans
+> >>>>>>Incremental Ltd.
+> >>>>>>www.incremental.eu.com
+> >>>>>>_______________________________________________
+> >>>>>>Rcpviewer-contributors mailing list
+> >>>>>>Rcpviewer-contributors at lists.berlios.de
+> >>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>_______________________________________________
+> >>>>>Rcpviewer-contributors mailing list
+> >>>>>Rcpviewer-contributors at lists.berlios.de
+> >>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>>>
+> >>>>
+> >>>>--
+> >>>>Mike Evans
+> >>>>Incremental Ltd.
+> >>>>www.incremental.eu.com
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>_______________________________________________
+> >>>Rcpviewer-contributors mailing list
+> >>>Rcpviewer-contributors at lists.berlios.de
+> >>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> >>>
+> >>
+> >>--
+> >>Mike Evans
+> >>Incremental Ltd.
+> >>www.incremental.eu.com
+> >>
+> > 
+> > 
+> > 
+> > _______________________________________________
+> > Rcpviewer-contributors mailing list
+> > Rcpviewer-contributors at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Nov 30 20:36:00 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 30 Nov 2005 19:36:00 -0000
+Subject: [Rcpviewer-contributors] 20051130 Dan's progress: xactn mgr tree view + other stuff.
+Message-ID: <LGEELLOAEBMLCOGIKLMKKEJFDFAA.dan@haywood-associates.co.uk>
+
+Transaction manager view now shows transactions + child change sets; isDirty
+logic improved for DefaultEditor so that newly instantiated pojo is shown as
+dirty.  Still creating two many changes, though.
+Logging can now be sent to socket appender, via windows>preferences.
+Any errors now dumped to console via ReportJob.
+
+More tomorrow.
+
+Dan
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Nov 30 20:46:48 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 30 Nov 2005 19:46:48 -0000
+Subject: [Rcpviewer-contributors] Scriptable UIs
+In-Reply-To: <Zen-1EhXGH-0001lY-B0@pythagoras.zen.co.uk>
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEJGDFAA.dan@haywood-associates.co.uk>
+
+Mike,
+
+A further thought on reducing the feedback loop ... since the UI would be
+built at runtime, there should be some sort of refresh logic (either a
+manual File>Refresh or just poll the timestamp of the .jelly script) so that
+the developer could edit the script in the dev environment and the running
+application would immediately pick up the changes.
+
+The Ruby on Rails guys keep going on about this capability and how useful it
+is - to do something similar in a "heavyweight" GUI would be quite
+spectacular (and I reckon, quite easy too...)
+
+Dan
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Dan Haywood
+> Sent: 30 November 2005 19:05
+> To: rcpviewer-contributors at lists.berlios.de
+> Cc: Dan Haywood
+> Subject: [Rcpviewer-contributors] Scriptable UIs
+>
+>
+> Hi Mike,
+>
+> What I want is a lightweight way to allow UIs to be customised -
+> eg deploy some .jelly script that defines a structure of an
+> editor, but using domain object level semantics.  The intent is
+> primarily to reduce the feedback loop, but also to make it
+> demo'able and therefore get some buy-in (always gonna be a problem).
+>
+> e.g using XML:
+> <rows>
+>   <row>
+>     <columns>
+>       <column width="40%">
+>         <attribute name="FirstName"/>
+>         <attribute name="LastName"/>
+>         <attribute name="Status"/>
+>         <reference name="MostRecentOrder"/>
+>       </column>
+>       <column width="60%">
+>         <attribute name="AddressLine1"/>
+>         <attribute name="AddressLine2"/>
+>         <attribute name="Country"/>
+>      </column>
+>    </columns>
+>   <row>
+>   <row>
+>     <collection name="Orders">
+>   </row>
+> </rows>
+>
+> But it could be a pseudo-scripting equivalent:
+> rows {
+>   row {
+>     columns {
+>       column(40) {
+>         attribute("FirstName")
+>         attribute("LastName")
+>         attribute("Status")
+>         reference("MostRecentOrder")
+>       }
+>       column(60) {
+>         attribute("AddressLine1")
+>         attribute("AddressLine2")
+>         attribute("Country")
+>       }
+>     }
+>   }
+>   row {
+>     collection("Orders")
+>   }
+> }
+>
+> or perhaps written in a proper scripting language like Groovy
+> (kudos there)?
+>
+> or even YAML (www.yaml.org)?
+>
+> What I'd hope is that a simple parser would be able to then
+> leverage your current architecture pretty easily.  I guess the
+> ideal would be to support the different SWT LayoutManagers (and
+> perhaps write one or two of our own if necessary) and then map
+> "attribute", "reference" and "collection" as necessary.  In
+> addition, in the markup it ought to be possible to override any
+> annotations specified in the code, eg:
+>
+> @FieldLengthOf(20)
+> public String getFirstName() { ... }
+>
+> would be overridden using:
+> <attribute name="firstName" fieldLengthOf="30"/>
+>
+> Hope that makes some sort of sense...
+>
+> Dan
+>
+> -------------
+> Mike Evans <mike.evans at incremental.eu.com> wrote :
+>
+> > Dan,
+> >
+> > A query on your desire for markup notation.
+> > What's it for?
+> > XSWT defines itself as a '1:1 mapping to Java Code' so what's the point?
+> > Jelly is another language - we're already expecting users to understand
+> > all your annotations - so why ask them to know another one as well?
+> > As for IBM's 'Reflexive User Interface Builder' - both the above
+> > comments apply.
+> >
+> > So.. is it to allow users to generate editors other than the default
+> > one?  (the architecture is ready for that).  In which case what we
+> > really want is start the Eclipse tooling - with some GUI builder
+> > specialised for Essential.
+> >
+> > Unless I have the wrong end of the stick?
+> >
+> > Mike E.
+> >
+> >
+> >
+> >
+> > Dan Haywood wrote:
+> > > Okay, will let you know if I get stuck.
+> > >
+> > > Re: markup, in addition to Jelly/SWT and RIB, I just also came across
+> > XSWT,
+> > > advertised via www.eclipse-plugins.info.  Their website is at
+> > > http://xswt.sourceforge.net/cgi-bin/xswt/home.
+> > >
+> > > Dan
+> > >
+> > >
+> > >
+> > >>-----Original Message-----
+> > >>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> > >>Sent: 29 November 2005 17:59
+> > >>To: Dan Haywood
+> > >>Cc: rcpviewer-contributors at lists.berlios.de
+> > >>Subject: Re: [Rcpviewer-contributors] Transaction view and
+> other things
+> > >>
+> > >>
+> > >>let me know if you want me to have a look
+> > >>else I'll be getting on with b).
+> > >>how exciting
+> > >>
+> > >>Mike E.
+> > >>
+> > >>Dan Haywood wrote:
+> > >>
+> > >>>Right then.
+> > >>>
+> > >>>I managed to get the master/child thing going for displaying
+> > >>
+> > >>changesets, and that's when it started spitting out problems with
+> > >>the ITransactionManager.  I think it will look good eventually,
+> > >>but it's problematic at the moment.
+> > >>
+> > >>>What I'd really really like is for you to look at (b).  I know
+> > >>
+> > >>that we need tests and so forth, but I also don't want to get
+> > >>bogged down with large and elaborate mocking of bits of the
+> > >>Eclipse API related solely to the UI.  So unless there's a
+> > >>specific reason (eg for Epic) why you want to learn this stuff,
+> > >>I'd much prefer you work on Jelly/SWT.
+> > >>
+> > >>>Let me know,
+> > >>>Dan
+> > >>>
+> > >>>----------
+> > >>>Mike Evans &amp;lang=en">mike.evans at incremental.eu.com>
+> > wrote :
+> > >>>
+> > >>>
+> > >>>
+> > >>>>Dan,
+> > >>>>
+> > >>>>I was going to see what a master/child looked like.
+> > >>>>ie : master : transactions & their enlisted objects
+> > >>>>     child : changesets of the transaction selected in the master
+> > >>>>Then an option for the master transaction to be linked to
+> the current
+> > >>>>pojo in focus.
+> > >>>>If you have your own ideas carry on, else let me know &
+> I'll continue
+> > >>>>with that.
+> > >>>>
+> > >>>>re: alternatives:
+> > >>>>a) define nicer (yes I know it could be improved but how...)
+> > >>>>b) oo - interesting
+> > >>>>c) oo - interesting
+> > >>>>
+> > >>>>However really I should look at unit tests.
+> > >>>>
+> > >>>>Regarding the concurrency discussion we can leave the
+> > >>
+> > >>transaction merges
+> > >>
+> > >>>>for now.  However I'm a little worried about the idea of
+> > >>>>attribute-merging - even if technically feaseable.  Apart from
+> > >>
+> > >>having to
+> > >>
+> > >>>>deal with inconsistent attributes we also run the risk that
+> > >>
+> > >>users change
+> > >>
+> > >>>> data that they do not correct in the light of other changed data.
+> > >>>>
+> > >>>>
+> > >>>>Mike E.
+> > >>>>
+> > >>>>Dan Haywood wrote:
+> > >>>>
+> > >>>>
+> > >>>>>Hi Mike,
+> > >>>>>Have been playing around with your view and a bunch of issues it's
+> > >>>>
+> > >>>>throwing
+> > >>>>
+> > >>>>
+> > >>>>>up with the xactn mgmt stuff.
+> > >>>>>
+> > >>>>>There's enough things that I can see that need attention with
+> > >>
+> > >>respect to
+> > >>
+> > >>>>the
+> > >>>>
+> > >>>>
+> > >>>>>interaction between the UI and the ITransationManager, and I
+> > >>
+> > >>reckon I have
+> > >>
+> > >>>>>enough Eclipse skills, just about, to work them through.
+> > >>>>>
+> > >>>>>So, rather than us both tripping over each other, do you want
+> > >>
+> > >>to turn your
+> > >>
+> > >>>>>attention to some other area?  And then I'll give you a
+> call when my
+> > >>>>
+> > >>>>Eclipse
+> > >>>>
+> > >>>>
+> > >>>>>knowledge is exhausted (won't be long).
+> > >>>>>
+> > >>>>>What's next, then?  I have three suggestions:
+> > >>>>>a) a nicer implementation of the operations view.
+> > >>>>>b) develop a way of using an optional markup notation
+> (perhaps Commons
+> > >>>>
+> > >>>>Jelly
+> > >>>>
+> > >>>>
+> > >>>>>(http://jakarta.apache.org/commons/jelly/jellyswt.html),
+> > >>>>
+> > >>>>similar a little
+> > >>>>
+> > >>>>
+> > >>>>>bit to IBM's RIB (http://www.alphaworks.ibm.com/tech/rib)), cf like
+> > >>>>>PropertyEditorSupport/BeanInfo; (Sanssouci also support this)
+> > >>>>>c) start working on the tooling side - building up a Java AST
+> > >>>>
+> > >>>>implementation
+> > >>>>
+> > >>>>
+> > >>>>>of the meta-model.
+> > >>>>>
+> > >>>>>Or anything else that you're interested in, of course.
+> > >>>>>
+> > >>>>>Dan
+> > >>>>>
+> > >>>>>
+> > >>>>>
+> > >>>>>
+> > >>>>>
+> > >>>>>>-----Original Message-----
+> > >>>>>>From: rcpviewer-contributors-admin at berlios.de
+> > >>>>>>[mailto:rcpviewer-contributors-admin at berlios.de]On
+> > >>>>
+> > >>>>Behalf Of Mike Evans
+> > >>>>
+> > >>>>
+> > >>>>>>Sent: 28 November 2005 18:51
+> > >>>>>>To: dan at haywood-associates.co.uk;
+> > >>>>>>rcpviewer-contributors at lists.berlios.de
+> > >>>>>>Subject: [Rcpviewer-contributors] Re: Change sets (was
+> > >>
+> > >>Transaction view)
+> > >>
+> > >>>>>>
+> > >>>>>>Hi Dan,
+> > >>>>>>
+> > >>>>>>TRANSACTION PER POJO
+> > >>>>>>Having each newly created pojo in its own transaction will
+> > >>
+> > >>require some
+> > >>
+> > >>>>>>sort of merge etc. as I would suggest it will normal practice
+> > >>
+> > >>to create
+> > >>
+> > >>>>>>more than one dependent pojo at a time (I mean pojos with
+> their own
+> > >>>>>>lifecycles but then linked, e.g Beans & EasyBean).
+> > >>>>>>
+> > >>>>>>Perhaps we can have a convention that identifies one pojo as a
+> > >>>>>>(non-unique) factory of another type of pojo in which case when an
+> > >>>>>>instance of the latter are created by the former they remain
+> > >>
+> > >>in the same
+> > >>
+> > >>>>>>transaction.
+> > >>>>>>e.g.  Beans has a addNewEasyBean() method - the addNew prefix
+> > >>
+> > >>indicating
+> > >>
+> > >>>>>>a factory method whose output remains in the transaction.
+> > >>>>>>
+> > >>>>>>Irrespective of that the merge/umnmerge would be needed. Perhaps
+> > >>>>>>something on the lines of:
+> > >>>>>>
+> > >>>>>>MyTransaction(){...}
+> > >>>>>>
+> > >>>>>>MyTransaction( MyTransaction dad, MyTransaction mum ) {...}
+> > >>>>>>
+> > >>>>>>MyTransaction merge( MyTransaction partner ) {
+> > >>>>>> return new MyTransaction( this, partner );
+> > >>>>>>}
+> > >>>>>>
+> > >>>>>>MyTransaction[] unmerge() {
+> > >>>>>> if ( _dad == null ) throw new IllegalStateException();
+> > >>>>>> if ( _mum == null ) throw new IllegalStateException();
+> > >>>>>> return new MyTransaction[]{ dad, mum };
+> > >>>>>>}
+> > >>>>>>
+> > >>>>>>I'll have a think - we'll probably need a new transaciton
+> state or two
+> > >>>>>>to  get the undo/redo logic right.
+> > >>>>>>
+> > >>>>>>CONCURRENCY
+> > >>>>>>How scalable are we going to be?
+> > >>>>>>Is our distribuetd app going to be peer-to-peer or controlled
+> > >>
+> > >>centrally?
+> > >>
+> > >>>>>>If centrally we can go for pessimistic locking of all
+> > >>
+> > >>objects.  As soon
+> > >>
+> > >>>>>>as a transaction enlists the object, it cannot be enlisted by
+> > >>
+> > >>any other
+> > >>
+> > >>>>>>transaction.  I like that where scalability allows, as no
+> user ever
+> > >>>>>>wastes time on lost changes (guess how Epic works).
+> > >>>>>>
+> > >>>>>>Other ideas...
+> > >>>>>>Can we emulate a global lock p2p?  S'ppose so. A
+> TransactionManager
+> > >>>>>>broadcasts that it has grabbed a lock on a pojo AND when
+> it releases
+> > >>>>>>that lock.  All other Transaction Managers record which
+> pojo's are out
+> > >>>>>>of bounds.  Fail Safety: the broadcast gives the address of
+> > >>
+> > >>the locking
+> > >>
+> > >>>>>>Transaction Manager (TM) so if another TM wants to lock the
+> > >>
+> > >>pojo it can
+> > >>
+> > >>>>>>test whether the locking TM is still running and then ...
+> > >>>>>>Oh good grief - if you do not like centralised locking let's
+> > >>
+> > >>leave it to
+> > >>
+> > >>>>>>File/Save errors for now.
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>Mike E.
+> > >>>>>>
+> > >>>>>>PS : no coding today - too busy learning NullSoft's installer
+> > >>
+> > >>- which is
+> > >>
+> > >>>>>>lovely (if you like Windows).
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>Dan Haywood wrote:
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>(This mail is direct to you only cos the mailing list just
+> > >>
+> > >>bounced me.
+> > >>
+> > >>>>>>>Huh).
+> > >>>>>>>-------------
+> > >>>>>>>
+> > >>>>>>>Hi Mike
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>>Question : conceptually are all ChangeSets are on a single
+> > >>
+> > >>timeline on
+> > >>
+> > >>>>>>>>which there is a defined point where they are changeable or
+> > >>
+> > >>not?  Or can
+> > >>
+> > >>>>>>>>undoable and redoable changes run concurrently?
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>In short: the latter.
+> > >>>>>>>
+> > >>>>>>>A bit longer: there can be multiple transactions IN_PROGRESS
+> > >>
+> > >>at the same
+> > >>
+> > >>>>>>>time.  Each transaction enlists a set of pojos, but a single
+> > >>>>>>
+> > >>>>>>pojo can only
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>be enlisted in one transaction at a time.  This last is the
+> > >>
+> > >>rule that I
+> > >>
+> > >>>>>>>think you partially commented out.  I haven't reinstated it cos
+> > >>>>>>
+> > >>>>>>I want to
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>see how all this works out in practice.
+> > >>>>>>>
+> > >>>>>>>The reason that xactn failures occur, I think, is that if one
+> > >>>>>>
+> > >>>>>>creates one
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>pojo and then another one (eg Beans and then EasyBean) then
+> > >>>>>>
+> > >>>>>>they will both
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>be in their own transaction.  Attempting to add the EasyBean to
+> > >>>>>>
+> > >>>>>>the Beans
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>pojo then fails because the EasyBean cannot be enlisted in the
+> > >>>>>>
+> > >>>>>>Beans xactn.
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>An alternative design for this would be to automatically merge
+> > >>>>>>
+> > >>>>>>the xactns.
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>But what should happen if the user does an Edit->Undo - should
+> > >>>>>>
+> > >>>>>>the xactns
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>unmerge again?  So I want to just see it all in use as I
+> > >>>>>>
+> > >>>>>>originally designed
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>it and then we can see how it behaves in practice.
+> > >>>>>>>
+> > >>>>>>>By the way, another wrinkle that I know I'll need to address
+> > >>
+> > >>is that of
+> > >>
+> > >>>>>>>concurrent updates.  I intend there to be a JMS subscription
+> > >>>>>>
+> > >>>>>>thing going on
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>so that xactns committed by other users will be
+> > >>
+> > >>automatically published.
+> > >>
+> > >>>>>>>That means that the user will always have an up-to-date view,
+> > >>>>>>
+> > >>>>>>and should be
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>great for when a user isn't in the process of changing an
+> > >>>>>>
+> > >>>>>>object.  But if
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>they are, then I think that we'll need to get them to
+> > >>>>>>
+> > >>>>>>acknowledge the update
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>and throw away their own IN_PROGRESS transaction.  My
+> > >>
+> > >>thinking is again
+> > >>
+> > >>>>>>>better for them to find out earlier rather than later when
+> > >>
+> > >>they do their
+> > >>
+> > >>>>>>>File->Save and get an optimistic locking error.  But I'd
+> > >>
+> > >>appreciate your
+> > >>
+> > >>>>>>>views - I've not designed a "conventional" application this
+> > >>>>>>
+> > >>>>>>way, so I'm a
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>
+> > >>>>>>>little nervous if this is a little close to the bleeding edge.
+> > >>>>>>>
+> > >>>>>>>Later
+> > >>>>>>>Dan
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>>-----Original Message-----
+> > >>>>>>>>From: Mike Evans [mailto:mike.evans at incremental.eu.com]
+> > >>>>>>>>Sent: 26 November 2005 12:34
+> > >>>>>>>>To: dan at haywood-associates.co.uk
+> > >>>>>>>>Subject: Re: [Rcpviewer-contributors] Transaction view
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>Yuh.
+> > >>>>>>>>I was thinking of adding to 'config' options to show
+> > >>
+> > >>changesets and/or
+> > >>
+> > >>>>>>>>enlisted pojos.
+> > >>>>>>>>However I think two seperate views would be better.  Sigh.
+> > >>>>>>>>ChangeSets are a composite I noticed - hence I was
+> going to have an
+> > >>>>>>>>infinite-leveled tree for this.  May not look so good so
+> > >>
+> > >>might just go
+> > >>
+> > >>>>>>>>with two levels and use icons to indicate dependencies.
+> > >>
+> > >>We'll see how
+> > >>
+> > >>>>>>>>it goes.
+> > >>>>>>>>Question : conceptually are all ChangeSets are on a single
+> > >>
+> > >>timeline on
+> > >>
+> > >>>>>>>>which there is a defined point where they are changeable or
+> > >>
+> > >>not?  Or can
+> > >>
+> > >>>>>>>>undoable and redoable changes run concurrently?
+> > >>>>>>>>
+> > >>>>>>>>Mike E.
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>Dan Haywood wrote:
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>>I've put a patch in to stop all those spurious transactions
+> > >>>>>>>>
+> > >>>>>>>>from appearing.
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>>>I see that you are using a tree for the transaction view -
+> > >>>>>>>>
+> > >>>>>>>>good-o.  But as
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>>you've noticed, there's actually two or three dimensions to
+> > >>>>>>>>
+> > >>>>>>>>what lives in a
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>>transaction
+> > >>>>>>>>>- the enlisted pojos
+> > >>>>>>>>>- the change sets (which can be undone)
+> > >>>>>>>>>- possibly change sets which can be redone.
+> > >>>>>>>>>
+> > >>>>>>>>>I think actually we need two views relating to
+> transactions here:
+> > >>>>>>>>>- the first should be what you are working on, which
+> is really a
+> > >>>>>>>>>TransactionManager view.  This should show the transactions +
+> > >>>>>>>>
+> > >>>>>>>>the enlisted
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>>pojos in each.
+> > >>>>>>>>>- the second should show the current transaction for the
+> > >>>>>>>>
+> > >>>>>>>>current pojo that
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>>has focus, showing the two sets of changesets (undoable
+> > >>
+> > >>and redoable).
+> > >>
+> > >>>>>>>>>Note that changesets follow the composite pattern, so in theory
+> > >>>>>>>>
+> > >>>>>>>>they could
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>>be nested.
+> > >>>>>>>>>
+> > >>>>>>>>>Hope that makes sense.
+> > >>>>>>>>>Dan
+> > >>>>>>>>>
+> > >>>>>>>>>
+> > >>>>>>>>>_______________________________________________
+> > >>>>>>>>>Rcpviewer-contributors mailing list
+> > >>>>>>>>>Rcpviewer-contributors at lists.berlios.de
+> > >>>>>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > >>>>>>>>>
+> > >>>>>>>>
+> > >>>>>>>>--
+> > >>>>>>>>Mike Evans
+> > >>>>>>>>Incremental Ltd.
+> > >>>>>>>>www.incremental.eu.com
+> > >>>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>>
+> > >>>>>>--
+> > >>>>>>Mike Evans
+> > >>>>>>Incremental Ltd.
+> > >>>>>>www.incremental.eu.com
+> > >>>>>>_______________________________________________
+> > >>>>>>Rcpviewer-contributors mailing list
+> > >>>>>>Rcpviewer-contributors at lists.berlios.de
+> > >>>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > >>>>>>
+> > >>>>>
+> > >>>>>
+> > >>>>>
+> > >>>>>_______________________________________________
+> > >>>>>Rcpviewer-contributors mailing list
+> > >>>>>Rcpviewer-contributors at lists.berlios.de
+> > >>>>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > >>>>>
+> > >>>>
+> > >>>>--
+> > >>>>Mike Evans
+> > >>>>Incremental Ltd.
+> > >>>>www.incremental.eu.com
+> > >>>
+> > >>>
+> > >>>
+> > >>>
+> > >>>
+> > >>>
+> > >>>_______________________________________________
+> > >>>Rcpviewer-contributors mailing list
+> > >>>Rcpviewer-contributors at lists.berlios.de
+> > >>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > >>>
+> > >>
+> > >>--
+> > >>Mike Evans
+> > >>Incremental Ltd.
+> > >>www.incremental.eu.com
+> > >>
+> > >
+> > >
+> > >
+> > > _______________________________________________
+> > > Rcpviewer-contributors mailing list
+> > > Rcpviewer-contributors at lists.berlios.de
+> > > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> > >
+> >
+> > --
+> > Mike Evans
+> > Incremental Ltd.
+> > www.incremental.eu.com
+> > _______________________________________________
+> > Rcpviewer-contributors mailing list
+> > Rcpviewer-contributors at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+>
+>
+>
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+

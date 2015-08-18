@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: Reviewing your changes
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Reviewing%20your%20changes&In-Reply-To=%3C42B00A51.6060005%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000123.html">
+   <LINK REL="Next"  HREF="000125.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: Reviewing your changes</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20Reviewing%20your%20changes&In-Reply-To=%3C42B00A51.6060005%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: Reviewing your changes">emorning at yahoo.com
+       </A><BR>
+    <I>Wed Jun 15 13:00:33 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000123.html">[Rcpviewer-contributors] Subclipse versions (was: IDomainBuilder)
+</A></li>
+        <LI>Next message: <A HREF="000125.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#124">[ date ]</a>
+              <a href="thread.html#124">[ thread ]</a>
+              <a href="subject.html#124">[ subject ]</a>
+              <a href="author.html#124">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+&gt;<i>Ted,
+</I>&gt;<i>
+</I>&gt;<i>Going through your changes.   (Mike: I've cc'ed you only in case your using
+</I>&gt;<i>Ted's update of your spike for inspiration, otherwise I think you'll pick
+</I>&gt;<i>this up when you come to look at the code yourself).
+</I>&gt;<i>
+</I>&gt;<i>1. DomainObject#persist()
+</I>&gt;<i>
+</I>&gt;<i>	public void persist() {
+</I>&gt;<i>		//REVIEW_CHANGE There's no 'save' method on IDomainObject, so it seems\
+</I>&gt;<i>		// like this method needs to be called whenever we want to save the
+</I>&gt;<i>object.
+</I>&gt;<i>		// tws
+</I>&gt;<i>//		if (isPersistent()) {
+</I>&gt;<i>//			throw new IllegalStateException(&quot;Already persisted.&quot;);
+</I>&gt;<i>//		}
+</I>&gt;<i>		if (getSession() == null) {
+</I>&gt;<i>			throw new IllegalStateException(&quot;Not attached to a session&quot;);
+</I>&gt;<i>		}
+</I>&gt;<i>		getSession().persist(this);
+</I>&gt;<i>		persistent = true;
+</I>&gt;<i>	}
+</I>&gt;<i>
+</I>&gt;<i>There isn't an IDomainObject#save, but there is an IDomainObject#persist.
+</I>&gt;<i>I'm using persist (a) cos isPersistent() is a better than isSaved() and (b)
+</I>&gt;<i>that's what the NOF uses for this concept.  Presumably that's ok?
+</I>&gt;<i>
+</I>&gt;<i>Can you tell me why did you comment out the isPersistent() test?  Did it
+</I>&gt;<i>break something to have that check in?
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+Here's the problem I ran into... in the example app I chose File | New | 
+EasyBean to create a new instance of na EasyBean.
+Initally the EasyBean is not persisted, and it is marked as 'dirty', 
+therefore the Save button is enabled on the toolbar.
+I saved the EasyBean, and the editor calls domainObject.persist().
+
+Then I make a change to the EasyBean and the state of the object once 
+changes to 'dirty' and the Save button becomes enabled.
+Hitting the Save button invokes domainObject.persist() a second time. 
+PROBLEM: the domain object checked to see if it has already been 
+persisted, which it was, and it threw up.
+
+I could see having BOTH a persist method AND a save method on an 
+IDomainObject but I was not sure what you meant to do.
+In a way similar to Hibernate, the  persist method would make an object 
+persistent while the save method would cause changes to the object to be 
+flushed to the store when the associated transaction is committed.
+
+OR, what I did, the persist method makes the object peristent on the 
+first call AND saves the object, and just saves the object on all 
+subsequent calls.
+
+
+
+-------------------------------------------
+
+&gt;<i>Also, could I gently nag you to run any unit tests before finally
+</I>&gt;<i>committing, please: keep the bar green and all that.  The commenting out of
+</I>&gt;<i>isPersistent() actually broke one of the tests.  I suspect though that it
+</I>&gt;<i>might not be clear which is the root test suite is to run, since I can't
+</I>&gt;<i>remember ever saying; for the record it is:
+</I>&gt;<i>de.berlios.rcpviewer.tests/src/de.berlios.rcpviewer.tests/AllRcpViewerTests.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+Oops, sorry, will do.  I was not aware that there were tests available. 
+
+
+-------------------------------------------
+
+&gt;<i>2. DomainRegistry &amp; Domain subclasses vs a final Domain
+</I>&gt;<i>
+</I>&gt;<i>Ok, I understand what you've done, it is different from what I had in mind,
+</I>&gt;<i>but I *think* I prefer your approach.  Let me go through the alternatives
+</I>&gt;<i>and tell me if you wildly disagree.
+</I>&gt;<i>
+</I>&gt;<i>My original idea was that Domain was final and acted as its own static hash
+</I>&gt;<i>(see Domain#instance(String)).  When (somehow) a domain class is looked up
+</I>&gt;<i>(= registered), then an owning Domain would be lazily instantiated.
+</I>&gt;<i>
+</I>&gt;<i>Your design inverts this - you make the Domain itself (or rather a subclass)
+</I>&gt;<i>responsible for registering the domain classes that it owns.  Since the
+</I>&gt;<i>Domain already exists, it makes sense that it is given to a hash; rather
+</I>&gt;<i>than having a static hash within Domain, you instead have DomainRegistry.
+</I>&gt;<i>
+</I>&gt;<i>The question to me is: where does the responsibility for knowing which
+</I>&gt;<i>classes make up a domain reside?  I have remained mute on the answer, while
+</I>&gt;<i>you've decided that the domain itself should know this.  I can't see an
+</I>&gt;<i>argument against that position to be honest, so what I think I'll do is to
+</I>&gt;<i>go with your design: I'll remove the static hash from Domain and refactor my
+</I>&gt;<i>tests to use the DomainRegistry that you introduced.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+One other issue here is how the Domain should register classes.  The  
+EasyBeanDomain class  is forced to  'trick'  the Domain  class into  
+registering  classes by calling the lookup method....
+
+public class EasyBeanDomain
+extends Domain
+{
+
+    public EasyBeanDomain()
+    throws CoreException
+    {
+        super(EasyBeanExample.PLUGIN_ID);
+
+        // register classes
+        if (lookup(EasyBean.class) == null) {
+            String msg= &quot;Failed to register class in 
+domain:&quot;+EasyBean.class.getName();
+            Status status= new Status(Status.ERROR, 
+EasyBeanExample.PLUGIN_ID, 0, msg, null);
+            throw new CoreException(status);
+        }
+    }
+
+}
+
+...the intent would be clearer if there was a 'registerClass' method.
+
+
+-------------------------------------------
+
+
+
+&gt;<i>By the way, I noticed you using the old double check idiom in one of the
+</I>&gt;<i>methods:
+</I>&gt;<i>
+</I>&gt;<i>//	REVIEW_CHANGE Added this method.  ted
+</I>&gt;<i>	public IDomainRegistry getDomainRegistry() {
+</I>&gt;<i>		try {
+</I>&gt;<i>			if (_domainRegistry == null) {
+</I>&gt;<i>				synchronized (this) {
+</I>&gt;<i>					if (_domainRegistry == null)
+</I>&gt;<i>						_domainRegistry= new DomainRegistry();
+</I>&gt;<i>				}
+</I>&gt;<i>			}
+</I>&gt;<i>			return _domainRegistry;
+</I>&gt;<i>		}
+</I>&gt;<i>		catch (CoreException x) {
+</I>&gt;<i>			getLog().log(x.getStatus());
+</I>&gt;<i>			throw new RuntimeException(x);
+</I>&gt;<i>		}
+</I>&gt;<i>	}
+</I>&gt;<i>
+</I>&gt;<i>But this is broken, isn't it
+</I>&gt;<i>(<A HREF="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html">http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html</A>)?
+</I>&gt;<i>Or did JDK 5.0 fix it?  At any rate, I've just made these methods
+</I>&gt;<i>synchronized.  If you know better, we can reinstate your version.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>Are you calling me old!?  Just kidding.
+
+According to the link we should also change the _domainRegistry 
+reference to static.
+Doing that will ensure that the _domainRegistry reference is intialized 
+once and only once before any caller can reference it.
+
+-------------------------------------------
+
+&gt;<i>3 Sessions
+</I>&gt;<i>
+</I>&gt;<i>You added some methods to SessionManager, and asked &quot;How does the action get
+</I>&gt;<i>a Session to use?&quot;
+</I>&gt;<i>
+</I>&gt;<i>The design I had was that there is also a SessionFactory in addition to
+</I>&gt;<i>Session and SessionManager, see AbstractRuntimeTestCase.  The job of the
+</I>&gt;<i>SessionFactory is to hold together a Domain (or rather, the name of a
+</I>&gt;<i>Domain) along with an ObjectStore.  The SessionFactory can then create a
+</I>&gt;<i>Session for the Domain and using the ObjectStore.
+</I>&gt;<i>
+</I>&gt;<i>Actually, I called it SessionFactory, but it's more of a binding:
+</I>&gt;<i>(Marketing, London)
+</I>&gt;<i>(Marketing, NY)
+</I>&gt;<i>(Order Mgmt, London)
+</I>&gt;<i>
+</I>&gt;<i>or
+</I>&gt;<i>(Cust Services, Development)
+</I>&gt;<i>(Cust Services, Production)
+</I>&gt;<i>
+</I>&gt;<i>The question I guess I should pose myself though is would one ever have:
+</I>&gt;<i>(Cust Services, Development)
+</I>&gt;<i>(Cust Services, Development)
+</I>&gt;<i>
+</I>&gt;<i>and I suppose the answer actually is &quot;no&quot;.  So then, why do I have a
+</I>&gt;<i>factory, why not just instantiate Sessions directly rather than
+</I>&gt;<i>SessionFactorys? Good question, don't know.  Huh, I think I need to refactor
+</I>&gt;<i>again.
+</I>&gt;<i>
+</I>&gt;<i>I think what I'll do is keep your SessionManager#addSession, but make it
+</I>&gt;<i>responsible for creating the session at the same time.  And then get rid of
+</I>&gt;<i>the SessionFactory completely.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+In that case I think that you should also change the name from 
+SessionManager#addSession to SessionManager#createSession.
+
+
+&gt;<i>I also haven't solved the question about how does the user indicate which
+</I>&gt;<i>&quot;session&quot; to use, so I think that getCurrentSession/setCurrentSession are
+</I>&gt;<i>still needed.  Regarding the longer term question of switching sessions,
+</I>&gt;<i>I'll add a feature request onto the wiki.  Perhaps have some sort of
+</I>&gt;<i>dedicated view that just lists the sessions currently instantiated, a bit
+</I>&gt;<i>like how one selects a database when using MS SQL Server (or a schema when
+</I>&gt;<i>using Oracle if you like that sort of thing).
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+I'm not so sure about the getCurrentSession/setCurrentSession methods 
+myself.
+Adding those methods was really just a convenience until maybe we came 
+up with something better.
+
+My thinking was that the UI would somehow indicate the current session.
+And maybe different applications might prefer different methods for 
+choosing/indicating the session.
+For instance, in Thunderbird (the e-mail client that I use) the current 
+'session' would be associated with the currently selected folder in the 
+'Folders' view.
+Or, an application might choose to have separate perspectives for each 
+session.
+Or, maybe the session might be settable in Preferences.
+
+The way a UI could manage the 'current' session would be to switch the 
+current session everytime a session-switching UI event occurs.
+For instance, when the perspective is changed to a perspective 
+associated with a different session then the UI would call 
+SessionManager#setCurrentSession.
+
+Alternatively, we could maybe have a way to provide the SessionManager 
+with an application-specific Strategy object that would be able to 
+provide the SessionManager with the current session.
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000123.html">[Rcpviewer-contributors] Subclipse versions (was: IDomainBuilder)
+</A></li>
+	<LI>Next message: <A HREF="000125.html">[Rcpviewer-contributors] Annotations (was RE: IDomainRegistry &amp; EasyBeanDomain)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#124">[ date ]</a>
+              <a href="thread.html#124">[ thread ]</a>
+              <a href="subject.html#124">[ subject ]</a>
+              <a href="author.html#124">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Operation%20invokability%20%28was%20Re%3A%20running%20petstore%20against%20current%20gui...%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKOEAEDEAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000169.html">
+   <LINK REL="Next"  HREF="000177.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Operation%20invokability%20%28was%20Re%3A%20running%20petstore%20against%20current%20gui...%29&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKOEAEDEAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Wed Aug  3 00:28:01 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000169.html">[Rcpviewer-contributors] Re: running petstore against current gui...
+</A></li>
+        <LI>Next message: <A HREF="000177.html">[Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#174">[ date ]</a>
+              <a href="thread.html#174">[ thread ]</a>
+              <a href="subject.html#174">[ subject ]</a>
+              <a href="author.html#174">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> &gt;
+</I>&gt;<i> &gt; One other thing it needs to do (though this is a bit of a
+</I>&gt;<i> nice-to-have) is
+</I>&gt;<i> &gt; to remember any values for parameters when switching between editors.
+</I>&gt;<i> &gt; Otherwise the view is effectively modal because the user cannot
+</I>&gt;<i> leave what
+</I>&gt;<i> &gt; they were doing and come back to it.  But add that to the
+</I>&gt;<i> &quot;to-do&quot; list if
+</I>&gt;<i> &gt; its not easy to implement - I'd rather see collections next.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> A-ha!  I had it in my head that you wanted the ops view to remember
+</I>&gt;<i> values per instance - which is what it currently does.  At first glance
+</I>&gt;<i> to make its state essentially static should be trivial.  However...
+</I>&gt;<i> How do we handle validation of values across instances?
+</I>&gt;<i> Coupla examples:
+</I>&gt;<i> An op becomes invalid because the new focus instance has a different
+</I>&gt;<i> state - easy - just disable.
+</I>&gt;<i> But what about an inapplicable parameter value?  Disable / clear?
+</I>&gt;<i> I'll have a think about how best to do this.
+</I>
+
+My apologies - the behaviour you have (ops view parameters per instance)
+*is* what I wanted.  Don't know what I thought I was seeing when I wrote my
+earlier email.
+
+That said, the point you raise still applies because of the a-modal nature
+of the design.  Suppose that there are 10 widgets in stock, and Order A.1
+for Customer A (not yet saved) is for 5.  The save operation is enabled
+because we do have enough widgets for the order (we don't support
+backorders).  We then create Order B.1 for Customer B is for 6 widgets, and
+we save that immediately.  When we go back to the still-to-be-saved Order
+A.1, its save operation should not be disabled because there are only 4
+widgets in stock.
+
+I have a solution, though.  You recall I said I wanted to create an
+IOperation that you could then register listeners on.  This would be
+analogous to the IDomainObject that the editors listen upon.  So one of the
+things callbacks would be the usability (invokability) of an operation.  So,
+each entry in your ops view would be backed by a corresponding IOperation.
+
+How to accomplish this magic?  Well, first I will have a central registry of
+all currently instantiated IOperations, held in a WeakHashMap in some
+singleton.  Whenever any operation is performed on any object, we then run
+through all IOperations and get them to work out if they can be invoked or
+not.  If they determine that they are now in a different state (cannot now
+be invoked when previously could, or vice versa), then they will notify
+their listeners.
+
+And how to make sure that after any operation is performed (eg save() of
+Order B.1) that we do this impact analysis of all instantiated IOperations?
+Using aspects, of course (probably an after() pointcut or equivalent).
+
+What I don't like about this design is that we are effectively polling all
+pending operations on the off-chance that some of them will have changed
+their state.  But other than somehow declaratively specifying the impact of
+any given operation, I can't see any better solution/
+
+I suspect that these IOperations might be part of the forthcoming job stuff,
+though they are very much in the ...domain plugin (model) rather than the
+...gui (view).
+
+Dan
+
+
+
+
+
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+</I>&gt;<i> Sent: 02 August 2005 08:07
+</I>&gt;<i> To: Dan Haywood
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> Subject: [Rcpviewer-contributors] Re: running petstore against current
+</I>&gt;<i> gui...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Responses below...
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Dan Haywood wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; ... thrown up a couple of things, dead easy to fix I'm sure.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 1. if you instantiate an Order then fails to build the editor:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; DateFieldBuilder:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 		public void setGuiValue(Object obj) {
+</I>&gt;<i> &gt; 			if ( !(obj instanceof Date) ) throw new
+</I>&gt;<i> IllegalArgumentException();
+</I>&gt;<i> &gt; 			_text.setText( FORMATTER.format( (Date)obj ) );
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 		}
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; because obj is null.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Might just need a guard against null?  But I remember you
+</I>&gt;<i> saying that null
+</I>&gt;<i> &gt; handling was on your todo list.
+</I>&gt;<i>
+</I>&gt;<i> Ooops - null check indeed required - added and committed.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 2. I'm only registering 4 classes, but all domain classes appear in the
+</I>&gt;<i> &gt; classbar view.  Could you show only the 4 classes in this view?
+</I>&gt;<i>
+</I>&gt;<i> Err... it being early I may be being dumb but aren't domain classes by
+</I>&gt;<i> definition those that are registered?  Have a look at
+</I>&gt;<i> DomainRegistryUtil.iterateAllClasses() - I basically get all domains
+</I>&gt;<i> from the domain registry and then iteratte through domain.classes() on
+</I>&gt;<i> each.  What ought I be doing?
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; By the way, now had a chance to look at the latest version of the action
+</I>&gt;<i> &gt; view (could we rename this to operation view to be consistent with the
+</I>&gt;<i> &gt; metamodel?)
+</I>&gt;<i>
+</I>&gt;<i> &quot;Operation view&quot; it is.  Another chance for SVN to screw up...
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I have to say that it works rather better than I thought, which
+</I>&gt;<i> &gt; is nice.  I still think a slightly prettier version will be
+</I>&gt;<i> needed at some
+</I>&gt;<i> &gt; stage - one that *doesn't* rely on colours - but its more than
+</I>&gt;<i> good enough
+</I>&gt;<i> &gt; for now.  Thanks.
+</I>&gt;<i>
+</I>&gt;<i> I'm thinking of decorated icons which indicate:
+</I>&gt;<i> - nullability
+</I>&gt;<i> - validity
+</I>&gt;<i> - anything else you can think of.
+</I>&gt;<i> These icons would be used by FieldBuilders too.
+</I>&gt;<i> However that's for later.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; One other thing it needs to do (though this is a bit of a
+</I>&gt;<i> nice-to-have) is
+</I>&gt;<i> &gt; to remember any values for parameters when switching between editors.
+</I>&gt;<i> &gt; Otherwise the view is effectively modal because the user cannot
+</I>&gt;<i> leave what
+</I>&gt;<i> &gt; they were doing and come back to it.  But add that to the
+</I>&gt;<i> &quot;to-do&quot; list if
+</I>&gt;<i> &gt; its not easy to implement - I'd rather see collections next.
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> A-ha!  I had it in my head that you wanted the ops view to remember
+</I>&gt;<i> values per instance - which is what it currently does.  At first glance
+</I>&gt;<i> to make its state essentially static should be trivial.  However...
+</I>&gt;<i> How do we handle validation of values across instances?
+</I>&gt;<i> Coupla examples:
+</I>&gt;<i> An op becomes invalid because the new focus instance has a different
+</I>&gt;<i> state - easy - just disable.
+</I>&gt;<i> But what about an inapplicable parameter value?  Disable / clear?
+</I>&gt;<i> I'll have a think about how best to do this.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Cheers
+</I>&gt;<i> &gt; Dan
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000169.html">[Rcpviewer-contributors] Re: running petstore against current gui...
+</A></li>
+	<LI>Next message: <A HREF="000177.html">[Rcpviewer-contributors] Operation invokability (was Re: running petstore against current gui...)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#174">[ date ]</a>
+              <a href="thread.html#174">[ thread ]</a>
+              <a href="subject.html#174">[ subject ]</a>
+              <a href="author.html#174">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

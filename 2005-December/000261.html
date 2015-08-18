@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Dan's Progress 20051206
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Dan%27s%20Progress%2020051206&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKMEKMDFAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000262.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Dan's Progress 20051206</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Dan%27s%20Progress%2020051206&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKMEKMDFAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Dan's Progress 20051206">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Wed Dec  7 00:53:56 CET 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000262.html">[Rcpviewer-contributors] progress 20051217: distribution + persistence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#261">[ date ]</a>
+              <a href="thread.html#261">[ thread ]</a>
+              <a href="subject.html#261">[ subject ]</a>
+              <a href="author.html#261">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The current transaction view is coming on.
+
+Now (appear to) have undo/redo going for references and collections as well
+as for attributes.  I've also put the executed (undoable) changes on the
+RHS, with the undone (redoable) changes on the LHS.  That sort of works
+better with the icons on the toolbar.  Still haven't looked at operations,
+instantiations or deletions, though - operations should be easy, bit scared
+about the other two.
+
+On the UI front also, currently changing TableViewers in current transaction
+view to TreeViewers, to support the composite pattern as used by the
+ChangeSet.  Looks like the TransactionManager itself isn't aggregated
+changes as I was expecting, so that needs looking at.
+
+In a separate initiative, I've factored out advice from aspects: each
+aspect's advice calls a corresponding method on a peer &quot;advice&quot; object.
+This is primarily for easier refactoring in the future (unlike JDT, AJDT
+doesn't really *do* refactoring); if I change any methods then the (regular
+Java) advice object will be impacted.  The only thing one then needs to
+worry about vis-a-vis aspects is the binding - something which is much more
+stable.
+
+Later.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000262.html">[Rcpviewer-contributors] progress 20051217: distribution + persistence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#261">[ date ]</a>
+              <a href="thread.html#261">[ thread ]</a>
+              <a href="subject.html#261">[ subject ]</a>
+              <a href="author.html#261">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

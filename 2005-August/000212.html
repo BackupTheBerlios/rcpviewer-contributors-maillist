@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Dan's Progress 20050827
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Dan%27s%20Progress%2020050827&In-Reply-To=%3C4312BC5A.1020803%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000210.html">
+   <LINK REL="Next"  HREF="000211.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Dan's Progress 20050827</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Dan%27s%20Progress%2020050827&In-Reply-To=%3C4312BC5A.1020803%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Dan's Progress 20050827">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Aug 29 09:42:18 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000210.html">[Rcpviewer-contributors] Dan's Progress 20050827
+</A></li>
+        <LI>Next message: <A HREF="000211.html">[Rcpviewer-contributors] Progress 20050827
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#212">[ date ]</a>
+              <a href="thread.html#212">[ thread ]</a>
+              <a href="subject.html#212">[ subject ]</a>
+              <a href="author.html#212">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>wow
+will have a look at once GUI stuff done for Dan's film
+
+Mike E.
+
+Dan Haywood wrote:
+
+&gt;<i> Have uploaded my stuff, and commented out the lines that relate to the
+</I>&gt;<i> yet-to-be-seen console view.  Mike - search for &quot;MIKEE Console stuff
+</I>&gt;<i> commented out&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> So, still no real tests, but if you're interested in looking at the aspects,
+</I>&gt;<i> check out (in ...domain.runtime plugin):
+</I>&gt;<i> 
+</I>&gt;<i> - session.PojoAspect:
+</I>&gt;<i>   - now defines a bunch of quite interesting pointcuts to do with
+</I>&gt;<i> interacting with the pojo in various ways (modify attribute, add to
+</I>&gt;<i> collection, set reference, invoke operation)
+</I>&gt;<i> - session.TraceInteractionsAspect
+</I>&gt;<i>   - trace 'em (though not sure if this is exactly working, I've disabled for
+</I>&gt;<i> now)
+</I>&gt;<i> - transaction.TraceTransactionsAspect
+</I>&gt;<i>   - sess what's happening in the transaction packages
+</I>&gt;<i> - tranasction.internal.TransactionChangeAspect
+</I>&gt;<i>   - abstract aspect that does the bulk of the transactional management, and
+</I>&gt;<i> defines some helper methods for its sub-aspects; sub-classed by:
+</I>&gt;<i>   - TransactionAttributeChangeAspect
+</I>&gt;<i>     - rolling changes to an attribute into the current transaction
+</I>&gt;<i>   - TransactionOneToOneReferenceChangeAspect
+</I>&gt;<i>     - rolling changes to an 1:1 reference into the current transaction
+</I>&gt;<i>   - TransactionCollectionReferenceChangeAspect
+</I>&gt;<i>     - rolling changes to a collection into the current transaction
+</I>&gt;<i>   - TransactionInvokeOperationAspect
+</I>&gt;<i>     - explicit xactn demarcation (as opposed to implicit for the other
+</I>&gt;<i> sub-aspects)
+</I>&gt;<i> 
+</I>&gt;<i> Regarding listening to changes, can register listeners on either:
+</I>&gt;<i> - ITransactionManager (TransactionManager.INSTANCE); creating, committing
+</I>&gt;<i> etc of ITransaction;
+</I>&gt;<i> - ITransaction itself; changes being added to the transaction, undo/redo
+</I>&gt;<i> (also duplicates up on commit etc.)
+</I>&gt;<i> 
+</I>&gt;<i> Note that when a user initiates an &quot;interaction&quot;, such as invoking an
+</I>&gt;<i> operation, this may result in several changes, each picked up by the
+</I>&gt;<i> TransactionXxxChangeAspect.  The first of these will locate the current
+</I>&gt;<i> transaction (or potentially create one), and then will set up the
+</I>&gt;<i> transaction so that all subsequent changes resultant from the interaction
+</I>&gt;<i> (eg caused by the operation) are added as an atomic ChangeSet (composite of
+</I>&gt;<i> IChanges).  Thus, if the user were to undo then all changes in that
+</I>&gt;<i> ChangeSet would be undone.
+</I>&gt;<i> 
+</I>&gt;<i> Although transaction are automatically started, they are NOT is not
+</I>&gt;<i> automatically committed.  For that one needs to invoke ITransaction#commit.
+</I>&gt;<i> There can be multiple concurrent transactions at the same time.  As each
+</I>&gt;<i> transaction proceeds it will enroll pojos - those that have been changed.
+</I>&gt;<i> At any given time ITransaction#getEnrolledPojos() will tell you the
+</I>&gt;<i> footprint.  If the user performs an interaction for an object in some
+</I>&gt;<i> transaction that would impact a pojo already enrolled in some other
+</I>&gt;<i> in-progress transaction, then an exception will be thrown and the ChangeSet
+</I>&gt;<i> (ie interaction) rejected.  The transaction remains in place.
+</I>&gt;<i> 
+</I>&gt;<i> At least, all of that's the theory.  But that's why I need to write some
+</I>&gt;<i> tests before I forget all this stuff!
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;<i>From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;&gt;<i>[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Dan Haywood
+</I>&gt;&gt;<i>Sent: 27 August 2005 13:07
+</I>&gt;&gt;<i>To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i>Subject: RE: [Rcpviewer-contributors] Progress 20050827
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>And there was much sadness and gnashing of teeth.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Got my aspect working last night, so was gonna do an update then a commit
+</I>&gt;&gt;<i>and pick up your latest.  However, I canna find the console view, doesn't
+</I>&gt;&gt;<i>seem to be committed in SVN, see
+</I>&gt;&gt;<i><A HREF="http://svn.berlios.de/wsvn/rcpviewer/trunk/workspace/de.berlios.rc">http://svn.berlios.de/wsvn/rcpviewer/trunk/workspace/de.berlios.rc</A>
+</I>&gt;&gt;<i>pviewer.gu
+</I>&gt;&gt;<i>i/src/de/berlios/rcpviewer/gui/?rev=477&amp;sc=1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>So if you're not in the car already...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Dan
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;&gt;<i>From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;&gt;&gt;<i>[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+</I>&gt;&gt;&gt;<i>Sent: 27 August 2005 12:10
+</I>&gt;&gt;&gt;<i>To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i>Subject: [Rcpviewer-contributors] Progress 20050827
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Reference fields now on expandable composites, else unchanged,
+</I>&gt;&gt;&gt;<i>Much faff with label alignment - has made code uglier (unencapsulated)
+</I>&gt;&gt;&gt;<i>so might just give up on right-aligining labels.
+</I>&gt;&gt;&gt;<i>Currently deciding between pretty code or pretty gui.  Probably side
+</I>&gt;&gt;&gt;<i>with the latter, at least until after Dan's movie.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Have also added an icon within the editor body as requested by Dan.
+</I>&gt;&gt;&gt;<i>This is not an active component and, IMHO, looks a bit daft when there
+</I>&gt;&gt;&gt;<i>is only a single editor open - but I can see the point with multiple
+</I>&gt;&gt;&gt;<i>editors open.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Off to the borders now for food, drink and maybe a walk.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>Mike E.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>--
+</I>&gt;&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000210.html">[Rcpviewer-contributors] Dan's Progress 20050827
+</A></li>
+	<LI>Next message: <A HREF="000211.html">[Rcpviewer-contributors] Progress 20050827
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#212">[ date ]</a>
+              <a href="thread.html#212">[ thread ]</a>
+              <a href="subject.html#212">[ subject ]</a>
+              <a href="author.html#212">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

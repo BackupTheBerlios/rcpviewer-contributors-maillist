@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: starting up the domain
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20starting%20up%20the%20domain&In-Reply-To=%3C42A32D40.7040101%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000111.html">
+   <LINK REL="Next"  HREF="000110.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: starting up the domain</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20starting%20up%20the%20domain&In-Reply-To=%3C42A32D40.7040101%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: starting up the domain">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Sun Jun  5 18:50:08 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000111.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+        <LI>Next message: <A HREF="000110.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ted,
+
+I have just got stuck at the very stage you are asking me about - 
+basically manipulating the domain model (as RcpViewer sees it) during tests.
+Here's my logic:
+* I do not see a runtime RcpViewer app having to deal with a changing 
+domain (as I think, do you).  This simplifies things as we have no 
+listening and GUI-regenerating mechanisms to deal with.
+* However for test-driven development I need to test the various 
+permutations on start-up.  This is particularly the case for a generic 
+viewer such as RcpViewer that must be able to deal with any domain it is 
+passed.
+* Hence I want to programatically change the start-up conditions; i.e. 
+change the domain, change the declared classes etc.
+* Hence, between tests, I want to change whatever data RcpViewer uses to 
+generate its GUI.  If this is based on our own extension points, I thus 
+need to change Eclipse's extension registry.  This is what I meant by 
+the 'metadata'.
+
+Which is a bummer.
+
+Actually I have a larger bummer at the moment.  I am trying to start the 
+  main gui development with a basic window with a class bar (as per 
+Dan's wiki) down the left-hand side. With an empty domain, everything is 
+fine - I test for (and get) an error message as expected.  But the next 
+step, i.e. the next test, requires the domain to be populated. I am 
+struggling on how to do this when:
+1) PDEUnit runs up a single instance for all tests
+2) declarative stuff in extension points is handled on the plugin 
+startup - well before PDEUnit calls setup() on any test.
+
+Which is where I am at the moment.
+
+I am very keen not to have to move to event listening on Dan's Domain 
+object but currently other options I have explored (command line args, 
+separate PDEUnit tests for each condition) are all worse ideas.
+
+As to your issues.
+Your extension point implementation for domains/classes seems fine 
+(praise indeed eh?).
+As for sessions I was thinking there would be one automatically started 
+with the app (as you suggest) and some sort of mechanism for allowing 
+the user to explicitly start others - and serviced with the types of 
+API's you're developing,
+
+As for representing multiple sessions visually my thoughts were along 
+these lines:
+* on the left-hand side of the screen is a session-independent 
+'Outlook'-style class bas as Dan and yourself have suggested
+* in the middle is the editor area
+* on the right hand side are one or more of Dan's 'class explorer' 
+views.  Each is a multi-root tree (one root per class) listing all 
+instantiated instances within a session.  If there are multiple 
+sessions, there are multiple views.
+* the classbar and class explorer have similar context menus for 
+new/find/list options only the classbar has to ask the user which 
+session to use if more than one is available.  Ditto for File / New 
+menus etc.
+* this multi-session complexity would be hidden away unless unlocked via 
+preferences.
+
+
+
+Good luck with persistence - rather you than I!
+
+Mike E.
+
+
+
+
+
+
+ted stockwell wrote:
+&gt;<i> Mike Evans wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Okey dokey
+</I>&gt;&gt;<i> Declarative it is
+</I>&gt;&gt;<i> However, just to note one downside.
+</I>&gt;&gt;<i> PDEUnit speeds things up by running up a single application in which 
+</I>&gt;&gt;<i> all tests in the suite are run.
+</I>&gt;&gt;<i> Unless Ted knows differently I have no idea how to change the Eclipse 
+</I>&gt;&gt;<i> metadata at runtime (well actually, I looked and it would be ugly - 
+</I>&gt;&gt;<i> using internal API's etc).
+</I>&gt;&gt;<i> Hence testing any declarative extensions will be difficult - where 
+</I>&gt;&gt;<i> these are Eclipse ones I am not concerned as I have no interest in 
+</I>&gt;&gt;<i> testing the base platform.  However where these are extensions created 
+</I>&gt;&gt;<i> by ourselves testing will be limited.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Sorry, I don't follow you here. I don't really understand why the 
+</I>&gt;<i> metadata would have to change.
+</I>&gt;<i> Can you elaborate?
+</I>&gt;<i> 
+</I>&gt;<i> ---------------------
+</I>&gt;<i> 
+</I>&gt;<i> BTW, I have been thinking about domains, object stores, sessions, and 
+</I>&gt;<i> associated UI since I have been working on my 2nd attempt to create a 
+</I>&gt;<i> spike.
+</I>&gt;<i> My goal is create a spike that does persistence.
+</I>&gt;<i> Of course, that means that I have to use Dan's API. And that of course 
+</I>&gt;<i> means that I have to create a Domain, and an ObjectStore, and a Session.
+</I>&gt;<i> And that I have to get Mike's viewer to use a session, or sessions.
+</I>&gt;<i> 
+</I>&gt;<i> I can imagine an application that would allow the use to add new 
+</I>&gt;<i> sessions (imagine an application like a newsreader, where you can add 
+</I>&gt;<i> connections to new newsgroups at runtime).
+</I>&gt;<i> Therefore, defining sessions declaratively is definitely not sufficient 
+</I>&gt;<i> for all applications.
+</I>&gt;<i> However, I can't (yet) imagine an application that allows the user to 
+</I>&gt;<i> add new Domains to the application except by extending the application 
+</I>&gt;<i> by adding plugins.
+</I>&gt;<i> Therefore, defining domains declaratively seems sufficient.
+</I>&gt;<i> 
+</I>&gt;<i> ----------------------------------
+</I>&gt;<i> Back to my spike...
+</I>&gt;<i> 
+</I>&gt;<i> So far I have managed to segregate Mikes's viewer code into a plugin of 
+</I>&gt;<i> it's own named de.berlios.rcpviewer.rcp.
+</I>&gt;<i> I have create a plugin for my example name 
+</I>&gt;<i> de.berlios.rcpviewer.easybean.  Mike's model classes are in this plugin.
+</I>&gt;<i> I have imported all of Dan's plugins into my project 
+</I>&gt;<i> (de.berlios.rcpviewer.domain, de.berlios.rcpviewer.domain.runtime, etc).
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> So far, here is what I have done...
+</I>&gt;<i> I added an extension point to the de.berlios.rcpviewer.domain.runtime 
+</I>&gt;<i> plugin named 'domains'.
+</I>&gt;<i> The de.berlios.rcpviewer.easybean plugin declaritively exports a domain, 
+</I>&gt;<i> like so...
+</I>&gt;<i>   &lt;extension point=&quot;de.berlios.rcpviewer.runtime.domains&quot;&gt;
+</I>&gt;<i>      &lt;domain id=&quot;domain&quot; class=&quot;mikespike3.model.EasyBeanDomain&quot; /&gt;
+</I>&gt;<i>   &lt;/extension&gt;
+</I>&gt;<i> Notice that I am simply registering a class that implements the IDomain 
+</I>&gt;<i> interface.
+</I>&gt;<i> My mikespike3.model.EasyBeanDomain class subclasses the 
+</I>&gt;<i> de.berlios.rcpviewer.domain.Domain.
+</I>&gt;<i> I added a 'DomainRegistry' class to the 
+</I>&gt;<i> de.berlios.rcpviewer.domain.runtime plugin.  The 
+</I>&gt;<i> de.berlios.rcpviewer.rcp plugin uses this class to get a list of all 
+</I>&gt;<i> available domains and thus to build the UI (initially, just create the 
+</I>&gt;<i> 'New' menu).
+</I>&gt;<i> I added a getDomainRegistry() method to the 
+</I>&gt;<i> de.berlios.rcpviewer.domain.runtime.RuntimePlugin class.  I also added a 
+</I>&gt;<i> method for getting the ISessionManager.
+</I>&gt;<i> 
+</I>&gt;<i> ---------------------------
+</I>&gt;<i> That's where I'm at right now.  My next step is to get the RCPViewer to 
+</I>&gt;<i> create a new object and load it into the editor. Which brings up my next 
+</I>&gt;<i> point...
+</I>&gt;<i> ...the de.berlios.rcpviewer.rcp plugin creates the UI for creating new 
+</I>&gt;<i> objects.  When the user selects the File | New | EasyBean menu item to 
+</I>&gt;<i> create a new EasyBean the associated action needs a Session to actually 
+</I>&gt;<i> create the object.
+</I>&gt;<i> How does the action get a Session to use?
+</I>&gt;<i> 
+</I>&gt;<i> For now what I have done is I have added addSession, getCurrentSession 
+</I>&gt;<i> and setCurrentSession methods to the ISessionManager interface.
+</I>&gt;<i> When the EasyBean application starts up it creates a session, adds it to 
+</I>&gt;<i> the SessionManager and then makes the session the current session.
+</I>&gt;<i> I imagine each RPCViewer application having it's own method of creating 
+</I>&gt;<i> new sessions and switching between them.
+</I>&gt;<i> ------------------------
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000111.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+	<LI>Next message: <A HREF="000110.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] mikespike3, EMF, etc...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20mikespike3%2C%20EMF%2C%20etc...&In-Reply-To=%3C4298661B.8030006%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000082.html">
+   <LINK REL="Next"  HREF="000086.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] mikespike3, EMF, etc...</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20mikespike3%2C%20EMF%2C%20etc...&In-Reply-To=%3C4298661B.8030006%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] mikespike3, EMF, etc...">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Sat May 28 14:37:47 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000082.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+        <LI>Next message: <A HREF="000086.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#84">[ date ]</a>
+              <a href="thread.html#84">[ thread ]</a>
+              <a href="subject.html#84">[ subject ]</a>
+              <a href="author.html#84">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The spike was designed for clarity rather than functionality - it was 
+more of a demo than a technology investigation.  How clear it remains 
+once we want it to do real things is another matter...  Nevertheless, 
+thankyou Ted!
+
+OK - next steps.
+If we want the spike to be the base, two preparatory steps are required:
+- rewrite it for a test driven approach
+- use Dan's metamodel.
+I suggest I do this asap.  That will be next Friday (3rd June) as I will 
+be on a client site until Thursday completing my monthly release cycle. 
+  However, as I reward to myself I have shaded in all of that Friday for 
+RcpViewer.
+Once this is done we can divide up into the different areas as suggested 
+by Ted.  Regarding Ted's ideas:
+- peristence: I have not given any thought to persistence so am happy to 
+offer someone else that opportunity...
+- expand default viewer : I quite fancy that
+- sample metamodel : Dan?  As a thought, how complex is the Java 
+Petstore  model?
+- validation functionality : part of the model spec surely?
+
+My other idea relates to Ted's discussion about his EMF plans. 
+Interestingly, he has identified the same risks as I have wrt to small 
+company software development - though his proposed solutions are bolder 
+than mine (I am relying on the plugin concept and auto-updates).
+
+The DDUI is obviously RcpViewer as we all understand it.  It is 
+essentially an enabler for what he terms the 'active object model'.  Now 
+if this model is static with respect to any single runtime instance (i.e 
+generated once at startup) surely it is effectively the same thing as 
+Dan is working on?  In which case can we not define a single contract / 
+interface that the DDUI works against and 'on the other side' allow Ted 
+and Dan to explore different ways of implementing that contract?  That 
+would give us a clear division of work.
+- Ted : model impl 1
+- Dan : model impl 2
+- Ted / Dan : agree common contract
+- Mike : develop first client for this contract (gui)
+- ? : develop second client for this contract (persistence)
+I see the core work of this project actually being the generation of 
+this contract - which will be the richer if it is developed in 
+conjunction with multiple implementations.
+
+Perhaps this is too much duplication for a small team - but perhaps a 
+period of parallel, cooperative development would offer a better long 
+term result?
+
+Mike E.
+
+
+
+
+
+
+ted stockwell wrote:
+
+&gt;<i> Hi All,
+</I>&gt;<i> 
+</I>&gt;<i> I'm impressed by Mike's last spike.  It's easy to understand and 
+</I>&gt;<i> straightforward.  I think it's a good base on which to move forward with 
+</I>&gt;<i> RCPViewer.
+</I>&gt;<i> At this point I still intend to finish my spike (more on that below, 
+</I>&gt;<i> that's optional reading ;-)) but I don't want to muddy the waters with 
+</I>&gt;<i> my spike.  I can see that Mike's spike is a much better base on which to 
+</I>&gt;<i> move forward than mine will be.
+</I>&gt;<i> 
+</I>&gt;<i> So that said, assuming that we move forward with Mike's spike, what are 
+</I>&gt;<i> the next steps?
+</I>&gt;<i> I think it would be good to come up with several orthogonal areas of 
+</I>&gt;<i> expansion that could be worked on separately by different developers.
+</I>&gt;<i> 
+</I>&gt;<i> I can think of a few general areas of expansion...
+</I>&gt;<i> ...add persistence to mikespike3.
+</I>&gt;<i> ...expand the default viewer layout capability
+</I>&gt;<i> ...create a sample metamodel for development purposes
+</I>&gt;<i> ...add validation functionality to mikespike3
+</I>&gt;<i> 
+</I>&gt;<i> I would be willing to work on any of the above.
+</I>&gt;<i> 
+</I>&gt;<i> I suggest that we create an official code branch from Mike's code.
+</I>&gt;<i> Then each new capability should be developed as a 'spike'. Then, after 
+</I>&gt;<i> the group has reviewed and approved a spike the new functionality be 
+</I>&gt;<i> merged into the official code.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ----------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> About my spike (or lack thereof)...
+</I>&gt;<i> 
+</I>&gt;<i> I am motivated to work on RCPViewer because I am trying to put together 
+</I>&gt;<i> the technical architecture for a next generation Java ERP, basically the 
+</I>&gt;<i> core architecture for the next generation of RPCSoftware's product.
+</I>&gt;<i> I have identified several key things that our product really needs in 
+</I>&gt;<i> order to be more successful (actually, these are things that I consider 
+</I>&gt;<i> necessary to stay in business long term, otherwise the costs of 
+</I>&gt;<i> developing, deploying, and managing systems will grow far beyond what 
+</I>&gt;<i> small businesses can pay for).
+</I>&gt;<i> Two of those things are...
+</I>&gt;<i> ...an Active Object Model.  We need to be able to more easily customize 
+</I>&gt;<i> the product for specific customers, an active object model is key to 
+</I>&gt;<i> being able to do this in a managable way.
+</I>&gt;<i> ...a DDUI (Domain-Driven User Interface).  We need to find a way to 
+</I>&gt;<i> dramatically reduce the effort it takes to develop a good quality UI.  I 
+</I>&gt;<i> hope RCPViewer will be the answer.
+</I>&gt;<i> 
+</I>&gt;<i> So, I think I came to RCPViewer from a different perspective than most.  
+</I>&gt;<i> I need a DDUI that display objects from a domain model that is not 
+</I>&gt;<i> determined until runtime.  Whereas for most everybody else the domain 
+</I>&gt;<i> model is determined at compile time.  This is why I started with EMF.  
+</I>&gt;<i> EMF will be the basis of my active object model.
+</I>&gt;<i> 
+</I>&gt;<i> So, my original thought was that RCPViewer would be a viewer for EMF 
+</I>&gt;<i> objects.  That there would be an adapter to provide EMF-metadata for POJOs.
+</I>&gt;<i> However, EMF is proving to be fairly cumbersome.  After seeing Mike's 
+</I>&gt;<i> spike I can't see why RCPViewer should use EMF when the job can get done 
+</I>&gt;<i> in a much simpler fashion.
+</I>&gt;<i> So,  I intend to finish my spike because I MUST learn the ins and outs 
+</I>&gt;<i> of EMF and I MUST have a DDUI that can display object instances from my 
+</I>&gt;<i> active object model.
+</I>&gt;<i> However, I not convinced that EMF is the best base on which to build 
+</I>&gt;<i> RCPViewer.
+</I>&gt;<i> After finishing my spike I will investigate how to use Mike's spike to 
+</I>&gt;<i> view EMF-generated object instances.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000082.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+	<LI>Next message: <A HREF="000086.html">[Rcpviewer-contributors] mikespike3, EMF, etc...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#84">[ date ]</a>
+              <a href="thread.html#84">[ thread ]</a>
+              <a href="subject.html#84">[ subject ]</a>
+              <a href="author.html#84">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

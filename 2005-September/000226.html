@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: petstore probs...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-September/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20petstore%20probs...&In-Reply-To=%3C43271502.505%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000231.html">
+   <LINK REL="Next"  HREF="000227.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: petstore probs...</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20petstore%20probs...&In-Reply-To=%3C43271502.505%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: petstore probs...">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Tue Sep 13 20:05:54 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000231.html">[Rcpviewer-contributors] Progress 20050913
+</A></li>
+        <LI>Next message: <A HREF="000227.html">[Rcpviewer-contributors] Re: petstore probs...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#226">[ date ]</a>
+              <a href="thread.html#226">[ thread ]</a>
+              <a href="subject.html#226">[ subject ]</a>
+              <a href="author.html#226">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan,
+
+Oh dear - I just remembered the problems you mentioned below and had a 
+quick look.
+
+The customer editor is not opening as its Account is not attached to the 
+session and the editor (more properly the component ReferencePart) is 
+using the session to get the appropriate IDomainObject for the pojo.
+Question : I thought all objects I would deal with are in the session..?
+
+The attributes on StockItem are not being displayed coz:
+* either they are BigDecimals - I have not FieldBuilder for them yet
+* or they are domian-specific value objects which also need field builders.
+
+The field builder thing is not an issue - I just need to create them.
+However I have clearly misunderstood regarding objects and sessions.  Help!
+
+Oh - the 'oh dear' at the start is coz there is no chance of my 
+rectifying all of this before out 17th deadline, what with impromtu 
+holidays and (occasional) real work interfering.
+
+Mike E.
+
+
+
+Dan Haywood wrote:
+&gt;<i> just thought I'd run up rev 484 for petstore; some things immediately are
+</I>&gt;<i> broken:
+</I>&gt;<i> 
+</I>&gt;<i> a) cannot create Customer view
+</I>&gt;<i> b) cannot display some attributes of StockItem.
+</I>&gt;<i> 
+</I>&gt;<i> Could you check it out?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Also, I'm being dumb - where, exactly, is the mysterious randomising GUI
+</I>&gt;<i> button?  I couldn't see it in gui.acme.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000231.html">[Rcpviewer-contributors] Progress 20050913
+</A></li>
+	<LI>Next message: <A HREF="000227.html">[Rcpviewer-contributors] Re: petstore probs...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#226">[ date ]</a>
+              <a href="thread.html#226">[ thread ]</a>
+              <a href="subject.html#226">[ subject ]</a>
+              <a href="author.html#226">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

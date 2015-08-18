@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050826
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050826&In-Reply-To=%3C430ED790.3060203%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000204.html">
+   <LINK REL="Next"  HREF="000206.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050826</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050826&In-Reply-To=%3C430ED790.3060203%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050826">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Fri Aug 26 10:49:20 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000204.html">[Rcpviewer-contributors] Progress 20050825
+</A></li>
+        <LI>Next message: <A HREF="000206.html">[Rcpviewer-contributors] Progress 20050826
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#205">[ date ]</a>
+              <a href="thread.html#205">[ thread ]</a>
+              <a href="subject.html#205">[ subject ]</a>
+              <a href="author.html#205">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Started on Dan's GUI wishlist, however biggest addition is:
+
+1. Console View
+Grab the latest from SVN.
+Clear your workspace data and re-run.
+There is now a 'Window' menu with a single 'Show View' option.  This 
+lists the three optional views.
+Three! Yes - there is now a console view.
+If you open this you'll see that it reports the history of actions (impl 
+based on the ReportJob).
+Soon I'll merge Dan's lof4j stuff and output that to a seperate console. 
+  BTW : This would be a reason to leave log4j appender definition 
+programmatic rather than declared.
+
+Ok - now Dan's wishlist:
+
+1. Dbl-click on reference list (not yet a table) and it opens an editor 
+for the reference object.  No concept of first class/second class yet - 
+to come.  Note somethign similar should happen on the single reference 
+text field but as it is not refershing after a drag'n'drop, I cannot be 
+sure yet.
+
+2. DefaultEditors listens in on all attribute changes and refresh their 
+title if necessary.  Using the default label provider for a domain 
+object (the onyl current label provider unless you have ctreated more) 
+the displayed value is the domain object title() value.
+
+3. Dan's request &quot;...icon + toString() for each object in the body of 
+each editor; the idea being to gives the user another &quot;handle&quot; to the 
+object to drag/drop (rather than go finding it in the session view)...&quot;
+Uh - No.  If you are in an object's editor all the available DnD targets 
+  relate to that object (i.e when the editor gets focus, all context 
+views relate to it), hence unless you want the object to keep 
+referencing itself there is no point have a icon DnD source.
+
+Next Steps:
+* put reference lists into expandable composites
+* make reference lists into reference tables
+Question : for a single reference - do we still want a table for 
+displaying all attributes (currently a single reference uses a Text field)?
+
+Mike E.
+
+
+
+
+
+
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000204.html">[Rcpviewer-contributors] Progress 20050825
+</A></li>
+	<LI>Next message: <A HREF="000206.html">[Rcpviewer-contributors] Progress 20050826
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#205">[ date ]</a>
+              <a href="thread.html#205">[ thread ]</a>
+              <a href="subject.html#205">[ subject ]</a>
+              <a href="author.html#205">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050707
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050707&In-Reply-To=%3CZen-1DqSr7-0000O4-JW%40pythagoras.zen.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000140.html">
+   <LINK REL="Next"  HREF="000142.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050707</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050707&In-Reply-To=%3CZen-1DqSr7-0000O4-JW%40pythagoras.zen.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050707">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Thu Jul  7 11:39:41 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000140.html">[Rcpviewer-contributors] progress 20050707
+</A></li>
+        <LI>Next message: <A HREF="000142.html">[Rcpviewer-contributors] Eclipse RCP community
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#141">[ date ]</a>
+              <a href="thread.html#141">[ thread ]</a>
+              <a href="subject.html#141">[ subject ]</a>
+              <a href="author.html#141">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I have to say your new way of working definitely agrees - getting quite spoilt with (near) daily updates of progress.
+
+To your questions:
+
+1. you said IRuntimeDomainObject vs IDomainObject - I think you meant IRuntimeDomainClass vs IDomainClass.  To which the answer is &quot;yes&quot;, you should be using IRuntimeDomainClass.  (If you want, we could rename IDomainObject to IRuntimeDomainObject, however there is no such thing as an ICompileTimeDomainObject).  Regarding type-safety, I think we should be exploiting Java 5's covariance of return types, but I'm still coming up to speed on the idioms for that so for now I just add a TODO and do the downcast.
+
+2. Decent examples of a domain object: I was going to implement JPetstore.  If you go to xpetstore.sourceforge.net there's a couple of implementations, one of which is a lightweight version using Tomcat, servlets and Hibernate.  I was gonna hijack the domain model there - there's about 8 classes or so.  But otherwise I'm happy to do this, will help me validate the programming model.
+
+Dan
+
+
+---
+Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+
+&gt;<i> No progress yesterday - bogged down on own stuff (hibernate 
+</I>&gt;<i> cross-session stale object problems - yuk!).
+</I>&gt;<i> 
+</I>&gt;<i> Today:
+</I>&gt;<i> Added framework ActionsView - essentially an emulation of 
+</I>&gt;<i> PropertiesSheet but specific to IDomainObjects and IEditorParts.
+</I>&gt;<i> 
+</I>&gt;<i> Tomorrow:
+</I>&gt;<i> Add the actual operations from the IDomainObject to the ActionsView.
+</I>&gt;<i> 
+</I>&gt;<i> Notes:
+</I>&gt;<i> * Corrected ...gui project manifest - it should NOT be dependent on 
+</I>&gt;<i> ...persistence.gui project as this result in cyclic dependencies.  Just 
+</I>&gt;<i> add the later to the runtime path rather than as a dependency if you 
+</I>&gt;<i> want the search functionality.
+</I>&gt;<i> 
+</I>&gt;<i> Questions:
+</I>&gt;<i> 1) Should everything in the gui be in terms of IRunTimeDomainObjects 
+</I>&gt;<i> rather than IDomainObjects?  If so some methods I am currently using 
+</I>&gt;<i> are not type-safe.
+</I>&gt;<i> 2) Dan - can you point me at a decent example of a domain object with 
+</I>&gt;<i> real operations?  Currently the ...acme project supplies only beans.  I 
+</I>&gt;<i> would rather use something that you have thought up than something I 
+</I>&gt;<i> create which simply validates my own assumptions.
+</I>&gt;<i> 
+</I>&gt;<i> Worries:
+</I>&gt;<i> * Drag'n'drop soon - oh gawd...
+</I>&gt;<i> 
+</I>&gt;<i> Mike E.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> -- 
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000140.html">[Rcpviewer-contributors] progress 20050707
+</A></li>
+	<LI>Next message: <A HREF="000142.html">[Rcpviewer-contributors] Eclipse RCP community
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#141">[ date ]</a>
+              <a href="thread.html#141">[ thread ]</a>
+              <a href="subject.html#141">[ subject ]</a>
+              <a href="author.html#141">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

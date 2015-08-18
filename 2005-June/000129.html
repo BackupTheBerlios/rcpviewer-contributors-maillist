@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: busy busy
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20busy%20busy&In-Reply-To=%3C42BFBD5A.5000602%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000128.html">
+   <LINK REL="Next"  HREF="000130.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: busy busy</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20busy%20busy&In-Reply-To=%3C42BFBD5A.5000602%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: busy busy">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Jun 27 10:48:26 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000128.html">[Rcpviewer-contributors] Progress! (of sorts)
+</A></li>
+        <LI>Next message: <A HREF="000130.html">[Rcpviewer-contributors] Progress 20050629
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#129">[ date ]</a>
+              <a href="thread.html#129">[ thread ]</a>
+              <a href="subject.html#129">[ subject ]</a>
+              <a href="author.html#129">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All,
+
+Incremental progress today : have taken the Gui as far as I ought to
+without reference to Ted's stuff - which is not far at all. All that is
+there is a basic classbar implementation with dummy actions.
+Next steps:
+1) I have (finally) got round to downloading Ted's stuff.  Currently 
+have various funnies with it (non-existing plugins etc.) so will 
+reference Dan's comments and get it working.
+2) Then I can incorporate Ted's stuff which will probably be an 
+overwrite-job on what I have got so far - though I'll try to strip out 
+anything unnecessary (as per Ted's comments in his 're:PetStore' mail )
+3) add a session view - this will be the tree of instances open in the
+current session offering similar functionality to the classbar.
+Then we have a basic app which can open editors, display the session etc
+and I am off your individual critical paths.
+
+
+
+Ted - with regards to the test framework - can we hold fire the above is
+done - say until the end of this week?  The reason is that the only
+architecturally-interesting part of the development so far is my use of
+Jobs.  I am thinking that all UI actions will be scheduled Jobs.  Hence
+we have an instant way into:
+- undo / redo management
+- Dan's aspirational scripting capability
+- easier test harness control.
+I was initially concerned that Jobs were perhaps a little heavyweight
+for individual gui updates (especially those on key strokes) but once I
+started poking around in the Tree and TableViewer implementations I
+noted that Jobs are used for all updates and refreshes - hence I think
+this might be a perfectly  reasonable proposal.
+
+Mike E.
+
+PS : other implementation notes within each plugin's wiki
+
+PPS : do we use official Java programming standards?  I have
+deliberately avoided the _ and __ prefixes though I like them.  Ted
+clearly likes them.  Opinions?
+
+
+
+
+
+ted stockwell wrote:
+&gt;<i> Mike Evans wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2) I'll focus on the core development - the test harness is something 
+</I>&gt;&gt;<i> I'll get back to.  There'll still be some TDD, just not as much as I'd 
+</I>&gt;&gt;<i> like.
+</I>&gt;&gt;<i>
+</I>&gt;<i> A test harness is very important to me also.
+</I>&gt;<i> I would be willing to bang my head on the test framework while you are 
+</I>&gt;<i> working on the editor.
+</I>&gt;<i> If you want me to do that then commit what you have so far and give me 
+</I>&gt;<i> an outline of what's been done so far and what your goals are.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Ok having groveled, let me do a volte face and blame my tools.
+</I>&gt;&gt;<i> Yet again I am getting errors commiting new stuff to SVN.
+</I>&gt;&gt;<i> Can we go back to basics and make sure I am not doing something wrong:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1) I have the Subclipse connection set up as per the wiki.
+</I>&gt;&gt;<i> 2) I have a new 'mikespike4' project to add to SVN in mikes-workspace
+</I>&gt;&gt;<i> 3) Team / Share Project / SVN option / ...
+</I>&gt;&gt;<i> THEN do I
+</I>&gt;&gt;<i> 4a) create a new repository location with a url including 
+</I>&gt;&gt;<i> /spikes/mike-workspace
+</I>&gt;&gt;<i> OR do I
+</I>&gt;&gt;<i> 4b) use the default URl and specific /spikes/mikes-workspace/ in the 
+</I>&gt;&gt;<i> module name
+</I>&gt;&gt;<i> OR
+</I>&gt;&gt;<i> 4c) have I got it completely wrong?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I get errors whatever I try.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> First of all, a while back after I upgraded all my SVN-related plugins I 
+</I>&gt;<i> found that I couldn't do a damn thing with Subclipse.
+</I>&gt;<i> I reverted back to the following versions, rebuilt my workspace, and now 
+</I>&gt;<i> things are much better, my build problems are resolved (except when the 
+</I>&gt;<i> user goes braindead ;-))....
+</I>&gt;<i> JavaSVN 0.8.7
+</I>&gt;<i> JavaSVN Subclipse Extension 0.8.7
+</I>&gt;<i> Subclipse 0.9.28
+</I>&gt;<i> 
+</I>&gt;<i> ----------
+</I>&gt;<i> 
+</I>&gt;<i> Also, I am able to successfully commit, update, compare, AND add new 
+</I>&gt;<i> products from with Eclipse.
+</I>&gt;<i> I have found that I MUST have the repository URL set to 
+</I>&gt;<i> svn+<A HREF="ssh://svn.berlios.de/svnroot/repos/rcpviewer">ssh://svn.berlios.de/svnroot/repos/rcpviewer</A> (and the default URL is 
+</I>&gt;<i> set to this).
+</I>&gt;<i> 
+</I>&gt;<i> Other URLs cause Subclipse to barf when I try adding a new project.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000128.html">[Rcpviewer-contributors] Progress! (of sorts)
+</A></li>
+	<LI>Next message: <A HREF="000130.html">[Rcpviewer-contributors] Progress 20050629
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#129">[ date ]</a>
+              <a href="thread.html#129">[ thread ]</a>
+              <a href="subject.html#129">[ subject ]</a>
+              <a href="author.html#129">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

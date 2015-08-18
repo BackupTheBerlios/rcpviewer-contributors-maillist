@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20050713
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050713&In-Reply-To=%3C42D4D540.5040406%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000149.html">
+   <LINK REL="Next"  HREF="000151.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20050713</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020050713&In-Reply-To=%3C42D4D540.5040406%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] progress 20050713">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Wed Jul 13 10:48:00 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000149.html">[Rcpviewer-contributors] progress 20050712
+</A></li>
+        <LI>Next message: <A HREF="000151.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#150">[ date ]</a>
+              <a href="thread.html#150">[ thread ]</a>
+              <a href="subject.html#150">[ subject ]</a>
+              <a href="author.html#150">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Journeyman stuff today.
+Both ...gui and ...gui.acme projects updated.
+
+* add further DnD types - Date and even Boolean (the latter is pointless 
+but at least consistent)
+* using platform functionality for restoring gui state - one gotcha - I 
+have to close all editors on application close as the objects they're 
+displaying do not (yet) live across application sessions
+* using using annotations for parameter display
+
+Have not addded keyboard accelerators yet.
+I think the platform key bindings functionality has got all clever since 
+I last looked at it so will have to gen up on it.
+
+So next stages - as the last progress mail!
+
+Mike E.
+
+
+
+
+
+Dan Haywood wrote:
+
+&gt;&gt;&gt;<i>Mike: within
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;<i>From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;&gt;<i>[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>OK - I'm spending too long on this stuff now so the deliverables will be
+</I>&gt;&gt;<i>slowing a bit from now on.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> First priority has to be the day job.  Glad you've been able to devote so
+</I>&gt;<i> much time recently - the UI is starting to take shape.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>One question : Dan - can we gain access to the name of an operation's
+</I>&gt;&gt;<i>parameters?
+</I>&gt;&gt;<i>ie. op( int first, int second) &gt; extract &quot;first&quot; and &quot;second&quot;
+</I>&gt;&gt;<i>This would make a lot more sense as field labels in the actions view and
+</I>&gt;&gt;<i>arguments display.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> That's supported, though using annotations rather than vanilla Java
+</I>&gt;<i> reflection (which doesn't/can't give access to the formal parameter names).
+</I>&gt;<i> See
+</I>&gt;<i> TestExplicitNamesAndDescriptions#testOperationParameterThatIsExplicitlyNamed
+</I>&gt;<i> (in ...domain.tests plugin).   The fixture this works on is:
+</I>&gt;<i> 
+</I>&gt;<i> @InDomain
+</I>&gt;<i> public class Appointment {
+</I>&gt;<i> 	public void moveTo(
+</I>&gt;<i> 			@Named(&quot;newPeriod&quot;)
+</I>&gt;<i> 			@DescribedAs(&quot;The time when the appointment should now be scheduled&quot;)
+</I>&gt;<i> 			TimePeriod newPeriod,
+</I>&gt;<i> 			@Named(&quot;rationale&quot;)
+</I>&gt;<i> 			@DescribedAs(&quot;The reasoning for moving the appointment&quot;)
+</I>&gt;<i> 			String rationale) {
+</I>&gt;<i> 	}
+</I>&gt;<i> 	public static void createAt(
+</I>&gt;<i> 			@Named(&quot;timePeriod&quot;)
+</I>&gt;<i> 			@DescribedAs(&quot;When the appointment is to run to and from&quot;)
+</I>&gt;<i> 			TimePeriod timePeriod,
+</I>&gt;<i> 			@Named(&quot;agenda&quot;)
+</I>&gt;<i> 			@DescribedAs(&quot;The agenda for this appointment&quot;)
+</I>&gt;<i> 			String agenda) {
+</I>&gt;<i> 	}
+</I>&gt;<i> }
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> --
+</I>&gt;<i> Also, a couple of annoyances...
+</I>&gt;<i> 1. can the GUI remember its initial size across invocations?  It always
+</I>&gt;<i> starts by taking up the whole screen (which on my widescreen laptop, is
+</I>&gt;<i> rather a lot...)
+</I>&gt;<i> 
+</I>&gt;<i> 2. can you add the accelerator for File menu?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000149.html">[Rcpviewer-contributors] progress 20050712
+</A></li>
+	<LI>Next message: <A HREF="000151.html">[Rcpviewer-contributors] progress 20050713
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#150">[ date ]</a>
+              <a href="thread.html#150">[ thread ]</a>
+              <a href="subject.html#150">[ subject ]</a>
+              <a href="author.html#150">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

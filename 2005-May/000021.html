@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] ISession/Session
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20ISession/Session&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKIEGMDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000027.html">
+   <LINK REL="Next"  HREF="000022.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] ISession/Session</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20ISession/Session&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKIEGMDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] ISession/Session">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun May  1 13:41:50 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000027.html">[Rcpviewer-contributors] Acegi Security Was: Dependency Injection
+</A></li>
+        <LI>Next message: <A HREF="000022.html">[Rcpviewer-contributors] Java 5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#21">[ date ]</a>
+              <a href="thread.html#21">[ thread ]</a>
+              <a href="subject.html#21">[ subject ]</a>
+              <a href="author.html#21">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ted queried whether ISession/Session is needed.  In addition to providing
+the POJO wrapping within IDomainObjects, I can justify it on several other
+accounts:
+a) to hold the current footprint of objects that are instantiated
+client-side.  When we move to supporting 3-tier designs there will need to
+be some sort of broker that keeps synchronizes the client-side objects with
+server-side.
+b) some editors/views will need to know the footprint of objects.  See for
+example the &quot;object view&quot;
+(<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/design/views/object">http://www.haywood-associates.co.uk/rcpviewer/space/design/views/object</A>)
+and my ideas for the accessibility tab of the default object editor
+(<A HREF="http://www.haywood-associates.co.uk/rcpviewer/space/design/editor/form">http://www.haywood-associates.co.uk/rcpviewer/space/design/editor/form</A>)
+c) to provide similar functionality (and to abstract away from)
+objectstore-specifics such as Hibernate's own session, eg interacting with
+transaction management
+d) Even if Eclipse's Platform adapter class could do support the
+functionality that I envisage ISession/Session providing, it would mean
+testing the functionality using PDEUnit rather than plain JUnit.  Since
+PDEUnit is heavier weight that JUnit, we should only use it for stuff that
+is intrinsic to testing of the UI.
+e) Also, there will be contributors who are interested in rcpviewer not
+because of the Eclipse UI stuff, but because of the back-end stuff.  We
+shouldn't make such contributors have to learn Eclipse API specifics
+unnecessarily.
+
+What say you all?
+
+Dan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000027.html">[Rcpviewer-contributors] Acegi Security Was: Dependency Injection
+</A></li>
+	<LI>Next message: <A HREF="000022.html">[Rcpviewer-contributors] Java 5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#21">[ date ]</a>
+              <a href="thread.html#21">[ thread ]</a>
+              <a href="subject.html#21">[ subject ]</a>
+              <a href="author.html#21">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Latest contribs / tidy-up
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Latest%20contribs%20/%20tidy-up&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKGEMHDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000073.html">
+   <LINK REL="Next"  HREF="000068.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Latest contribs / tidy-up</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Latest%20contribs%20/%20tidy-up&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKGEMHDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Latest contribs / tidy-up">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Wed May 18 01:52:08 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000073.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+        <LI>Next message: <A HREF="000068.html">[Rcpviewer-contributors] mikespike3 &amp; mikespike3-acme
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#67">[ date ]</a>
+              <a href="thread.html#67">[ thread ]</a>
+              <a href="subject.html#67">[ subject ]</a>
+              <a href="author.html#67">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike,Ted:
+Thanks for your recent contribs into your respective workspaces - I think
+that this spikes area works quite well.
+
+
+Ted:
+I had a peruse over your projects, but found some plugin dependencies seemed
+to be missing.  Which version of EMF are you using (I'm using 2.0.1 which is
+probably a little old?)
+
+Could you also put together a wiki page or README, either online or as a
+.wiki - I'm finding it a little difficult to figure out how it all pieces
+together.
+
+Finally, I noticed that your acegisecurity library plugin has the wrong
+directory + project name - I guess you cloned it from org.apache.log4j.
+
+
+Both:
+I've been tidying up SVN/workspace.  There's a bunch of projects in there
+dating back to when we just started.  What I've done is moved them to the
+workspace of whoever originally contributed them:
+- Build Tools to mikes-workspace
+- ECSPlugin to mikes-workspace
+- RCPViewer to mikes-workspace
+- de.berlios.rcpviewer.nakedobjects to teds-workspace
+- org.apache.log4j: have left alone.
+I think I have that right.  If this stuff is now junk, then go ahead and
+delete from your spike workspace (we can always get it back if nec. :-).  If
+it should go somewhere else, let me know.
+
+
+Finally:
+I've renamed emf-builder to de.berlios.rcpviewer.core, and have converted it
+into a library plugin.  NB: to get it to export, you need to run Eclipse
+itself on a Java 1.5 VM (there was a bug on bugzilla relating to this),
+along with 1.5 compliance level in your workspace.
+
+Thanks all,
+Dan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000073.html">[Rcpviewer-contributors] multiple meta-models &amp; sessions
+</A></li>
+	<LI>Next message: <A HREF="000068.html">[Rcpviewer-contributors] mikespike3 &amp; mikespike3-acme
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#67">[ date ]</a>
+              <a href="thread.html#67">[ thread ]</a>
+              <a href="subject.html#67">[ subject ]</a>
+              <a href="author.html#67">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

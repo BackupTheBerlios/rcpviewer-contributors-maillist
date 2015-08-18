@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050826
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050826&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEGPDEAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000207.html">
+   <LINK REL="Next"  HREF="000209.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050826</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050826&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKAEGPDEAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050826">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sat Aug 27 13:37:36 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000207.html">[Rcpviewer-contributors] Progress 20050827
+</A></li>
+        <LI>Next message: <A HREF="000209.html">[Rcpviewer-contributors] Progress 20050827
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#208">[ date ]</a>
+              <a href="thread.html#208">[ thread ]</a>
+              <a href="subject.html#208">[ subject ]</a>
+              <a href="author.html#208">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> via aspects but I'm not coz a) principle of least surprises b)
+</I>&gt;<i> I'm a coward.
+</I>
+We can always refactor later if we want.  I'm only using them where they are
+clearly the right approach and an OO approach would be very cumbersome.
+
+
+&gt;<i> Icons ... Let me know where they could appear additionally.
+</I>
+I'll let you know as I think of places.  One would be when there is a
+reference or a collection, as part of the LABEL (so shown even if there is
+no object referenced).
+
+
+&gt;<i> By the way does  'commission' mean 'pay for'?
+</I>
+Yup - but hopefully worth it.  It's been a criticism of NOF that it has
+horrid icons - and people get swayed by appearances.  Of course the icons
+will be freely usable by developers using the platform.
+
+
+&gt;<i> I think an inlined gui is better than a table for the collection stuff
+</I>&gt;<i> too.  I'll start with it read-only and have a think about how
+</I>&gt;<i> complicated it would be to make it read-write.
+</I>
+Okay.   Was trying to envisage how this might look, one idea is as follows:
+split the region representing the expandable composite into two columns, say
+1/3:2/3 ratio.  The first column has the list of all objects in the
+collection.  The second large column has the inlined editor and shows the
+currently selected column.
+
+The second column could also have:
+a) &quot;drop&quot; region to allow new objects to be added
+b) a remove button to allow an existing object to be removed (equiv to your
+current + and -)
+
+One thing we could also do is introduce an annotation to indicate the
+&quot;important&quot; attribute - those that should be shown inline (non-important
+ones would be omitted).  But I do feel that this is a little too
+UI-specific; I'm trying to think what the fundamental domain semantic is for
+this (and haven't been able to just yet).
+
+Separately, I still think it would be nice to have a table view; it's a
+natural way to look at a lot of objects together.  So here's an idea (not a
+prereq for the movie, though would be nice); on the header for the
+collection (the expandable composite), have some sort of right-click menu
+saying something like &quot;open as table&quot;.  That would open a new editor that
+showed all the objects in table form, perhaps also indicating the owning
+object somehow.
+
+This would be nice at demonstrating that the UI has more than one way to
+represent any given domain object.  But it would also be genuinely useful -
+there is at least one case on the DSFA where we have had to do a bit of a
+work-around to get the above behaviour.
+
+
+
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Mike Evans [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>]
+</I>&gt;<i> Sent: 27 August 2005 08:37
+</I>&gt;<i> To: Dan Haywood
+</I>&gt;<i> Subject: Re: [Rcpviewer-contributors] Progress 20050826
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> below
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i> Dan Haywood wrote:
+</I>&gt;<i> &gt; Cool.  Sorry I can't keep up with you; it's not that I'm not coding,
+</I>&gt;<i> &gt; rather I'm going up a learning curve on AspectJ right now with these
+</I>&gt;<i> &gt; blinking transactional aspects.
+</I>&gt;<i> Ha!  'can't keep up with me...' - I don't think we should get into
+</I>&gt;<i> relative work rates.  Looking forward to studying the results of your
+</I>&gt;<i> AspectJ research - will be very interesting.  I realise that much of the
+</I>&gt;<i> GUI stuff I have coming up (e.g the consoles) could be beautifully done
+</I>&gt;<i> via aspects but I'm not coz a) principle of least surprises b)
+</I>&gt;<i> I'm a coward.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Anyhow ... I bow to your analysis re: my handle request.  Let me
+</I>&gt;<i> &gt; phrase it another way - I've just commissioned some nice icons for
+</I>&gt;<i> &gt; Petstore, so I'd like them to appear nice and large on the editor
+</I>&gt;<i> &gt; somehow!  There's a pragmatic reason also: builds a metaphor/mental
+</I>&gt;<i> &gt; association for the end-user.
+</I>&gt;<i> Let me know where they could appear additionally.  By the way does
+</I>&gt;<i> 'commission' mean 'pay for'?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Question : for a single reference - do we still want a table for
+</I>&gt;<i> &gt;&gt; displaying all attributes (currently a single reference uses a Text
+</I>&gt;<i> &gt;&gt; field)?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Ho-ho - good one.  Think not, it would look really strange.  Have
+</I>&gt;<i> &gt; another suggestion - it's a bit more coding, but would look nice I
+</I>&gt;<i> &gt; think.  By default, could you show the icon + toString() of a
+</I>&gt;<i> &gt; reference *in* the header of a folding region (ie same device as used
+</I>&gt;<i> &gt; to show a table, as previously discussed).  Then, if the folding
+</I>&gt;<i> &gt; region is opened up, then (here's the tricky bit) show an editor for
+</I>&gt;<i> &gt; the object inlined.  However, to prevent this thing getting too
+</I>&gt;<i> &gt; recursive, show just the attributes of the referenced object, not any
+</I>&gt;<i> &gt; references or collections.   To edit those relationships, the user
+</I>&gt;<i> &gt; would need to double-click to open up a regular editor.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; How does that sound?  I'm hoping it would be pretty natural user
+</I>&gt;<i> &gt; experience, and it is consistent with the collections in the sense
+</I>&gt;<i> &gt; that we display attributes for referenced objects, but nothing
+</I>&gt;<i> &gt; further.
+</I>&gt;<i> I think an inlined gui is better than a table for the collection stuff
+</I>&gt;<i> too.  I'll start with it read-only and have a think about how
+</I>&gt;<i> complicated it would be to make it read-write.
+</I>&gt;<i>
+</I>&gt;<i> Mike E.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Dan
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; -- Mike Evans &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">mike.evans at incremental.eu.com</A>&gt; wrote :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Started on Dan's GUI wishlist, however biggest addition is:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 1. Console View Grab the latest from SVN. Clear your workspace data
+</I>&gt;<i> &gt;&gt; and re-run. There is now a 'Window' menu with a single 'Show View'
+</I>&gt;<i> &gt;&gt; option.  This lists the three optional views. Three! Yes - there is
+</I>&gt;<i> &gt;&gt; now a console view. If you open this you'll see that it reports the
+</I>&gt;<i> &gt;&gt; history of actions (impl based on the ReportJob). Soon I'll merge
+</I>&gt;<i> &gt;&gt; Dan's lof4j stuff and output that to a seperate console. BTW : This
+</I>&gt;<i> &gt;&gt; would be a reason to leave log4j appender definition programmatic
+</I>&gt;<i> &gt;&gt; rather than declared.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Ok - now Dan's wishlist:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 1. Dbl-click on reference list (not yet a table) and it opens an
+</I>&gt;<i> &gt;&gt; editor for the reference object.  No concept of first class/second
+</I>&gt;<i> &gt;&gt; class yet - to come.  Note somethign similar should happen on the
+</I>&gt;<i> &gt;&gt; single reference text field but as it is not refershing after a
+</I>&gt;<i> &gt;&gt; drag'n'drop, I cannot be sure yet.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 2. DefaultEditors listens in on all attribute changes and refresh
+</I>&gt;<i> &gt;&gt; their title if necessary.  Using the default label provider for a
+</I>&gt;<i> &gt;&gt; domain object (the onyl current label provider unless you have
+</I>&gt;<i> &gt;&gt; ctreated more) the displayed value is the domain object title()
+</I>&gt;<i> &gt;&gt; value.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 3. Dan's request &quot;...icon + toString() for each object in the body
+</I>&gt;<i> &gt;&gt; of each editor; the idea being to gives the user another &quot;handle&quot;
+</I>&gt;<i> &gt;&gt; to the object to drag/drop (rather than go finding it in the
+</I>&gt;<i> &gt;&gt; session view)...&quot; Uh - No.  If you are in an object's editor all
+</I>&gt;<i> &gt;&gt; the available DnD targets relate to that object (i.e when the
+</I>&gt;<i> &gt;&gt; editor gets focus, all context views relate to it), hence unless
+</I>&gt;<i> &gt;&gt; you want the object to keep referencing itself there is no point
+</I>&gt;<i> &gt;&gt; have a icon DnD source.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Next Steps: * put reference lists into expandable composites * make
+</I>&gt;<i> &gt;&gt; reference lists into reference tables Question : for a single
+</I>&gt;<i> &gt;&gt; reference - do we still want a table for displaying all attributes
+</I>&gt;<i> &gt;&gt; (currently a single reference uses a Text field)?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Mike E.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; -- Mike Evans Incremental Ltd. www.incremental.eu.com
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; _______________________________________________
+</I>&gt;<i> &gt;&gt; Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Rcpviewer-contributors mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Mike Evans
+</I>&gt;<i> Incremental Ltd.
+</I>&gt;<i> www.incremental.eu.com
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000207.html">[Rcpviewer-contributors] Progress 20050827
+</A></li>
+	<LI>Next message: <A HREF="000209.html">[Rcpviewer-contributors] Progress 20050827
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#208">[ date ]</a>
+              <a href="thread.html#208">[ thread ]</a>
+              <a href="subject.html#208">[ subject ]</a>
+              <a href="author.html#208">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

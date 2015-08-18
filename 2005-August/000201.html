@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050825
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050825&In-Reply-To=%3C430D927D.9040304%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000200.html">
+   <LINK REL="Next"  HREF="000202.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050825</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050825&In-Reply-To=%3C430D927D.9040304%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050825">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Thu Aug 25 11:42:21 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000200.html">[Rcpviewer-contributors] Dan's progress 20050824: Tracing and Transactions.
+</A></li>
+        <LI>Next message: <A HREF="000202.html">[Rcpviewer-contributors] Progress 20050825
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#201">[ date ]</a>
+              <a href="thread.html#201">[ thread ]</a>
+              <a href="subject.html#201">[ subject ]</a>
+              <a href="author.html#201">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Sorry about the silence over the past two days.
+Bogged down with real work.
+Be careful if you use the combination of XDoclet2, Hibernate and Java 5 
+   generics - or more specifically - Java 5 generics with any project 
+using qdox(see <A HREF="http://qdox.codehaus.org/whouses.html">http://qdox.codehaus.org/whouses.html</A>).  qdox's 
+understanding of Java5 is less than perfect.
+
+Anyhow, working on showing histories and feedback on RCPViewer's Gui. 
+So far only a 'ReportJob' that is called by most other jobs is 
+committed.  This simply puts up something on the status line but I 
+intend it to become oh so much more.
+Next a console view for displaying histry which I'll also tie it in with 
+Dan's  log4j set up.
+Then I'll  start paying more attention to Dan's annotations.
+
+Dan - your questions:
+
+a) could you reevaluate toString() whenever the object's attributes have
+changed?
+b) could you put the collection view into a collapsible region, eg like the
+&quot;Dependency Analysis&quot; section on the &quot;Dependencies&quot; tab of the manifest
+viewer.  That'll be needed for lazy loading of collections in the future.
+c) could the list be converted into a table?
+
+Yes to all.  Now or later?  for c) what columns do you want?
+
+Mike E.
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000200.html">[Rcpviewer-contributors] Dan's progress 20050824: Tracing and Transactions.
+</A></li>
+	<LI>Next message: <A HREF="000202.html">[Rcpviewer-contributors] Progress 20050825
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#201">[ date ]</a>
+              <a href="thread.html#201">[ thread ]</a>
+              <a href="subject.html#201">[ subject ]</a>
+              <a href="author.html#201">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] MikeSpike1 &amp; 2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20MikeSpike1%20%26%202&In-Reply-To=%3C427F213C.9090804%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000045.html">
+   <LINK REL="Next"  HREF="000056.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] MikeSpike1 &amp; 2</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20MikeSpike1%20%26%202&In-Reply-To=%3C427F213C.9090804%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] MikeSpike1 &amp; 2">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon May  9 10:37:16 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000045.html">[Rcpviewer-contributors] SVN - further mess
+</A></li>
+        <LI>Next message: <A HREF="000056.html">[Rcpviewer-contributors] mikespike 3...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Are now in the 'spikes' directory in SVN.
+They are not what I set out to do (!).
+Curiously they changed from technical spikes into elementary tutorials 
+in test-driven plug-in development .  Dunno why - s'pose coz I needed to 
+know how to do it myself.
+I persevered on the off-chance that it might be useful to someone coming 
+into the project not familiar with PDE.  I do not think there is 
+anything there that would be of interest to, e.g. Ted.
+
+To give you an idea of what the two (trivial) projects are about I have 
+appended the text of the two explanatory wiki pages at the end of the 
+e-mail.  That'll help you decide whether to not to take a look at the 
+projects.
+
+Spike3 will be a 'proper' spike - using emf-builder's model and looking 
+at how a GUI can be built-up from domain relationships and 
+multiplicities alone - Composite pattern here I come!
+
+Mike E.
+
+
+****  mike spike1-runtime/wiki/Index.wiki ***
+
+1 Mike's Spike 1
+
+This wiki idea is cool!
+
+~~What I've done~~
+1. Created 'mikespike1-runtime' project.  This represents the RCPViewer 
+application as used by an end-user.  I did this using the new plug-in 
+project wizard, selecting to create an RCP app (second page of wizard) 
+and then selecting the 'RCP application with a view' template.
+1. Created 'mikespike1-test' project.   This is all the regression tests 
+for the 'runtime' component.  For this we still need a plugin project 
+(for the PDE test environment) but I chose not to add any code 
+(including no plugin class).  I made it dependent on the 
+mikespike1-runtime and org.junit plugins ( having configured 
+mikespike1-runtime to export the core eclipse plugins it is dependent 
+upon).
+1. Then created a src package in the test project and wrote a 
+junit.framework.TestCase class with a dummy test.
+1. Then needed a test run configuration:
+1. New 'JUnit Plug-in Test'
+1. Name : Test
+1. Run all tests in selected package ... : mikespike1_test
+1. (next tab) Program to Run : run an application : 
+mikespike1_runtime.mikespike1
+1. (next tab) Choose plug-ins and frgements to launch : Deselect all 
+then select the two 2 mikespike1 plugins;
+1. Add Required Plug-ins
+1. Run!
+1. Added some more tests based on the rcp template's generated code
+
+~~Discussion~~
+If you look at the tests you'll see I use reflection to access the 
+underlying SWT GUI widgets.  Hence the tests are tied to the underlying 
+implementations.  I feel this is OK as:
+* to my mind the only way to really test GUI's;
+* the Eclipse platform (or at least JFace) forces us down standard 
+patterns of implementation anyway so this should not be too much of a 
+constraint (as long as we do not keep changing the field names)
+* as we are doing Test-Driven development the tests control the code 
+anyway...
+
+~~Next Steps~~
+So far I have put the cart before the horse in that I added tests to a 
+pre-existing implementation - that produced by the RCP wizard.  So spike 
+2 will do things properly.  Next goto mikespike2-test/wiki/Index.wiki
+
+
+
+
+***  mikespike2-test/wiki/Index.wiki ***
+
+
+1 Mike's Spike 2
+
+~~ Introduction ~~
+This spike is about developing a basic RcpViewer GUI prototype using 
+test-driven development.  Hence this wiki is in the 'test' project 
+rather than the 'runtime' project as from now on test precede and 
+control development.
+
+This 'test' project itself started out as a cut'n'pasted version of 
+mikespike1-test, whilst mikespike2-runtime was created via the new 
+project plug-in wizard, selecting an RCP application and choosing the 
+Hello World template (I fiddled with some of the names/ids).
+
+Creating a runtime configuration for the mikespike2-runtime plugins only 
+(and its required plugins) will show that the wizard has done its work 
+and runs up an empty RCP app window.
+
+__Note__ : in addtion configure mikespike2-runtime to export the core 
+eclipse plugins it is dependent upon.
+
+~~ Development ~~
+Is all controlled from the Test class now.  Each iteration creates a 
+test, runs it, fails and then add the implementation to make the test 
+pass.  Good ol' XP.  So all other notes and explanations of reside in 
+the javadoc of each test.  I realise you are presented with the end 
+implementation of all tests but I hope by following each subsequent 
+test's javadoc you'll get a handle on my thought processes.
+
+__Note__ : you'll nedd to create a JUnit Plugin Test configuartion using 
+only the two mikespike2 plugins and their requisite plugins.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000045.html">[Rcpviewer-contributors] SVN - further mess
+</A></li>
+	<LI>Next message: <A HREF="000056.html">[Rcpviewer-contributors] mikespike 3...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

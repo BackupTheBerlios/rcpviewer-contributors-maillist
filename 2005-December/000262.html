@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] progress 20051217: distribution + persistence
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020051217%3A%20distribution%20%2B%20persistence&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCENBDFAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000261.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] progress 20051217: distribution + persistence</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20progress%2020051217%3A%20distribution%20%2B%20persistence&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKCENBDFAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] progress 20051217: distribution + persistence">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sat Dec 17 14:40:54 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000261.html">[Rcpviewer-contributors] Dan's Progress 20051206
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#262">[ date ]</a>
+              <a href="thread.html#262">[ thread ]</a>
+              <a href="subject.html#262">[ subject ]</a>
+              <a href="author.html#262">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Been making some progress on both the topics of distribution (remoting) as
+well as persistence.
+
+Regarding distribution, the plan is to use xstream (at codehaus.org) to
+serialize the objects across the wire - this has been packaged up into a
+plugin (trunk/3rdparty/net.sf.plugins.xstream).  First item on the todo list
+is to save objects - I'll worry about getting them back (resolving them)
+later.  The design is to serialize the transaction, being a collection of
+changes, and then replay them server-side.  For InstantiationChanges, I also
+need to send over newly instantiated pojos themselves.  That's because we
+need to be able to cope with creating a whole graph of pojos whereby we can
+determine which pojo has been added to which other pojo.  Should work.
+
+Regarding peristence, the plan is to use hibernate - I've packaged up
+version 3.1, plus annotations 3.1beta7, into a plugin
+(trunk/3rdparty/net.sf.plugins.hibernate).    I've also packaged up HSQLDB
+as well - so can start a database instance directly from Eclipse
+(trunk/3rdparty/net.sf.plugins.hsqldb).  I've established that I can save a
+couple of pojos (been working on the Customer &amp; Order in the demo plugin).
+The only thing that one needs to do (for simple spikes, at least) is to add
+@javax.persistence.Entity and @javax.persistence.Id to an Id attribute.  And
+what's really nice is that Hibernate builds the schema for us.
+
+On the topic of databaes plugins, recommend using Clay (Azzurri) to view the
+schemas that Hibernate generates, and the Quantum DB works well enough for
+querying the database.  There's also Hibernates own Tools plugin (3.1beta5
+at time of writing), which I intend to use probably in preference to Quantum
+DB.  However, that requires a hibernate.cfg.xml - the tests I've done thus
+far don't actually have one because the Configuration object (actually, an
+AnnotationConfiguration because I'm using Hibernate annotations) is built up
+programmatically by the test case.
+
+Next step is to link the distribution and persistence pieces together (the
+persistence stuff has just been done in some very anaemic tests thus far).
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000261.html">[Rcpviewer-contributors] Dan's Progress 20051206
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#262">[ date ]</a>
+              <a href="thread.html#262">[ thread ]</a>
+              <a href="subject.html#262">[ subject ]</a>
+              <a href="author.html#262">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

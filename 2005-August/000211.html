@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050827
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-August/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050827&In-Reply-To=%3C4312BC1B.2080002%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000212.html">
+   <LINK REL="Next"  HREF="000213.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050827</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050827&In-Reply-To=%3C4312BC1B.2080002%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050827">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Mon Aug 29 09:41:15 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000212.html">[Rcpviewer-contributors] Dan's Progress 20050827
+</A></li>
+        <LI>Next message: <A HREF="000213.html">[Rcpviewer-contributors] Progress 20050829
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#211">[ date ]</a>
+              <a href="thread.html#211">[ thread ]</a>
+              <a href="subject.html#211">[ subject ]</a>
+              <a href="author.html#211">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>aaargh!
+apologies - I should have explained.
+The console view is provided by the platform by the 
+org.eclipse.ui.console plugin.  This has been added as a dependency for 
+the gui plugin so if the code compiles, the consolve view should be 
+available.
+What you'll need to do is update your run configuration;
+i) it is probably worth clearing the workspace data (Main tab of runtime 
+config) - this'll anyway be needed to get the new 'Window' menu.
+ii) on the 'plugins' tab click 'Add Required Plugins' and then 'Validate 
+   Plug-in Set'.
+
+SO I have removed Dab's commented out stuff and everything hunky-dory. 
+I'll commit later when I have done by coding for the day.
+
+Sorry I did not make this clear.  My fault for trying to claim credit 
+for platform-provided code!
+
+Mike E.
+
+
+Dan Haywood wrote:
+
+&gt;<i> And there was much sadness and gnashing of teeth.
+</I>&gt;<i> 
+</I>&gt;<i> Got my aspect working last night, so was gonna do an update then a commit
+</I>&gt;<i> and pick up your latest.  However, I canna find the console view, doesn't
+</I>&gt;<i> seem to be committed in SVN, see
+</I>&gt;<i> <A HREF="http://svn.berlios.de/wsvn/rcpviewer/trunk/workspace/de.berlios.rcpviewer.gu">http://svn.berlios.de/wsvn/rcpviewer/trunk/workspace/de.berlios.rcpviewer.gu</A>
+</I>&gt;<i> i/src/de/berlios/rcpviewer/gui/?rev=477&amp;sc=1
+</I>&gt;<i> 
+</I>&gt;<i> So if you're not in the car already...
+</I>&gt;<i> 
+</I>&gt;<i> Dan
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i>-----Original Message-----
+</I>&gt;&gt;<i>From: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>
+</I>&gt;&gt;<i>[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors-admin at berlios.de</A>]On Behalf Of Mike Evans
+</I>&gt;&gt;<i>Sent: 27 August 2005 12:10
+</I>&gt;&gt;<i>To: <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i>Subject: [Rcpviewer-contributors] Progress 20050827
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Reference fields now on expandable composites, else unchanged,
+</I>&gt;&gt;<i>Much faff with label alignment - has made code uglier (unencapsulated)
+</I>&gt;&gt;<i>so might just give up on right-aligining labels.
+</I>&gt;&gt;<i>Currently deciding between pretty code or pretty gui.  Probably side
+</I>&gt;&gt;<i>with the latter, at least until after Dan's movie.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Have also added an icon within the editor body as requested by Dan.
+</I>&gt;&gt;<i>This is not an active component and, IMHO, looks a bit daft when there
+</I>&gt;&gt;<i>is only a single editor open - but I can see the point with multiple
+</I>&gt;&gt;<i>editors open.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Off to the borders now for food, drink and maybe a walk.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>Mike E.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>--
+</I>&gt;&gt;<i>Mike Evans
+</I>&gt;&gt;<i>Incremental Ltd.
+</I>&gt;&gt;<i>www.incremental.eu.com
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>_______________________________________________
+</I>&gt;&gt;<i>Rcpviewer-contributors mailing list
+</I>&gt;&gt;<i><A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;&gt;<i><A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Rcpviewer-contributors mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">Rcpviewer-contributors at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000212.html">[Rcpviewer-contributors] Dan's Progress 20050827
+</A></li>
+	<LI>Next message: <A HREF="000213.html">[Rcpviewer-contributors] Progress 20050829
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#211">[ date ]</a>
+              <a href="thread.html#211">[ thread ]</a>
+              <a href="subject.html#211">[ subject ]</a>
+              <a href="author.html#211">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

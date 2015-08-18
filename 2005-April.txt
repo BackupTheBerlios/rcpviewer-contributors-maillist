@@ -1,0 +1,501 @@
+From dan at haywood-associates.co.uk  Wed Apr  6 19:04:52 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 6 Apr 2005 18:04:52 +0100
+Subject: [Rcpviewer-contributors] Purpose
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEANDCAA.dan@haywood-associates.co.uk>
+
+This is a low volume mailing list for those who are contributing code (that
+is to say, developing) to the rcpviewer project.
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Apr  6 22:16:45 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 6 Apr 2005 21:16:45 +0100
+Subject: [Rcpviewer-contributors] Build process.
+Message-ID: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+
+See
+http://www.haywood-associates.co.uk/rcpviewer/space/start/2005-04-06/1#Begin
+ning_to_Build
+
+Also http://www.haywood-associates.co.uk/rcpviewer/space/berlios/build.
+
+
+
+
+From emorning at yahoo.com  Thu Apr  7 14:28:25 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Thu, 07 Apr 2005 07:28:25 -0500
+Subject: [Rcpviewer-contributors] Project Structure?
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+Message-ID: <42552769.4040106@yahoo.com>
+
+I have added a comment about how I have structured my development 
+environment...
+
+http://www.haywood-associates.co.uk/rcpviewer/space/ted/my+project+structure 
+
+
+
+From emorning at yahoo.com  Sun Apr 10 19:55:34 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 10 Apr 2005 12:55:34 -0500
+Subject: [Rcpviewer-contributors] Bookmarking
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+Message-ID: <42596896.90504@yahoo.com>
+
+Hi all,
+
+The ability to bookmark objects would be cool.
+Fortunately the RCP already provides us with a general facility for 
+creating such bookmarks and a standard view for viewing and opening 
+bookmarks.
+
+'Resource markers' are the standard facility for creating 'bookmarks', 
+http://help.eclipse.org/help30/index.jsp?topic=workingSet=developers%20guide&searchWord=bookmark
+
+The standard 'Bookmarks' view in the RCP will display all markers of 
+type IMarker.BOOKMARK, 
+http://help.eclipse.org/help30/index.jsp?topic=workingSet=developers%20guide&searchWord=bookmark
+
+--------
+
+A standard action available on every object 'editor' should be "Add 
+Bookmark..."
+
+
+From emorning at yahoo.com  Sun Apr 10 20:10:19 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 10 Apr 2005 13:10:19 -0500
+Subject: [Rcpviewer-contributors] Versioning
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+Message-ID: <42596C0B.9040308@yahoo.com>
+
+RPC Software sells an ERP system for small & medium sized businesses.  
+Our customers absolutely need to track the changes made to certain 
+documents, like customer orders.  Our product currently only implements 
+a rudimentary audit trail facility for only a couple of documents types, 
+customer orders and comission plans, and the implementation for both are 
+ad hoc methods that were added to the system later in it's development.
+
+I imagine that most systems for which the NO framework would be useful 
+would also benefit from pervasive and consistent support for object 
+'versioning'.
+ From the user perspective I imagine a separate view for every object 
+that can list, in order from most recent to least recent,  the changes 
+to the object and who made those changes.
+Of course, the NO peristence layer would have to be extended to include 
+this facility.
+
+Since we are developing an NO implementation based on the Eclipse 
+framework perhaps it would be possible to have a 'basic' NO 
+implementation, and then have Eclipse extension points that would make 
+it possible to *contribute* additional views to the standard object viewer.
+I imagine the standard NO object viewer as a multi-tabbed editor.  We 
+could have an NO extension point that would allow a third-party plugin 
+to add an additional tab to the standard NO object viewer.  This the NO 
+'versioning' support could then be developed as a separate plugin and 
+then included only when a system requires versioning.
+
+
+From emorning at yahoo.com  Mon Apr 11 00:51:12 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 10 Apr 2005 17:51:12 -0500
+Subject: [Rcpviewer-contributors] The GPL
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+Message-ID: <4259ADE0.5030800@yahoo.com>
+
+Hi all,
+
+I should have looked at the NO license before now, however I just 
+checked and NO is licensed under the GPL.
+Ouch.  I don't want to create a GPL-licensed product.  That would 
+prevent the company that I work for from building a product based on the 
+NO framework and the RCPViewer without licensing our product under the 
+GPL (which isn't going to happen) or without licensing the framework 
+under commercial terms (which isn't going to happen either).
+Granted, if I build the RCPViewer then the NO Foundation (or whoever 
+would control the copyright) might see fit to grant my company a free 
+license.
+Even so, I am a dedicated evangelist of the Eclipse platform.  I see my 
+professional future, and my company's future as being tightly bound to 
+the success of the Eclipse platform in general.  I truly believe that a 
+less restrictive license like the Eclipse Public License is the Eclipse 
+community's best interest and therefore in my best interest.
+
+Any thought about changing the NO framework license to something less 
+restrictive?  LGPL maybe?
+
+-------------
+
+P.S.  My apologies for not checking earlier.
+
+
+
+From dan at haywood-associates.co.uk  Mon Apr 11 12:38:13 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Mon, 11 Apr 2005 11:38:13 +0100
+Subject: [Rcpviewer-contributors] Naked Objects license
+Message-ID: <LGEELLOAEBMLCOGIKLMKKEBJDCAA.dan@haywood-associates.co.uk>
+
+(First, Ted ... I'll copy over your most recent postings to this list when
+the wiki is back online.  I've had some of the some thoughts - all good
+stuff).
+
+
+I share Ted's concerns about NO being licensed under GPL - it doesn't make
+sense for a commercial company such as Ted's or Mike's to contribute their
+expertise to a project ultimately is bound by GPL.
+
+Having worked with Richard and Rob intensively over the last year, there is
+every chance that they will move back to LGPL.  The history is that they
+started as GPL, went over to LGPL, and then, when NO Group Ltd. was formed
+to act as the NO framework's custodian, moved to the dual GPL/commercial
+license.
+
+Once the Irish DSFA project is out of the door, their intent is do
+"relaunch" the NO framework: it will, after all, have a substantial
+reference site at that time.  I think they'll then take the opportunity to
+move back to LGPL.  My estimate is this will be Q3 (perhaps v. early Q4).
+
+If we get RCPViewer in a usable state before that time, then I'll push hard
+for a change in license.  Because having other viewing mechanisms endorses
+the NO concept, and because it is *me* acting as project lead, then I am
+pretty sure they'll change the license earlier.
+
+Dan
+
+
+
+
+
+From emorning at yahoo.com  Sun Apr 10 19:34:50 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Sun, 10 Apr 2005 12:34:50 -0500
+Subject: [Rcpviewer-contributors] One search screen to rule them all?
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKKEAODCAA.dan@haywood-associates.co.uk>
+Message-ID: <425963BA.3070404@yahoo.com>
+
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/rcpviewer-contributors/attachments/20050410/6165f1f2/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: moz-screenshot-1.jpg
+Type: image/jpeg
+Size: 35253 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/rcpviewer-contributors/attachments/20050410/6165f1f2/attachment.jpg>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: moz-screenshot-4.jpg
+Type: image/jpeg
+Size: 95607 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/rcpviewer-contributors/attachments/20050410/6165f1f2/attachment-0001.jpg>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: moz-screenshot-5.jpg
+Type: image/jpeg
+Size: 32713 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/rcpviewer-contributors/attachments/20050410/6165f1f2/attachment-0002.jpg>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: moz-screenshot-7.jpg
+Type: image/jpeg
+Size: 34219 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/rcpviewer-contributors/attachments/20050410/6165f1f2/attachment-0003.jpg>
+
+From mike.evans at incremental.eu.com  Thu Apr 21 20:14:42 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 21 Apr 2005 19:14:42 +0100
+Subject: [Rcpviewer-contributors] Hullo & Testing, Testing
+Message-ID: <4267ED92.6070003@incremental.eu.com>
+
+Just checking the mailing list working for me.
+I'll confine my chat to here now rather than the wiki.
+
+PS : Dan - ignore the 'subscribe' e-mail I sent directly to this mail 
+address - dunno what I was thinking.
+
+Mike E.
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Thu Apr 21 20:06:32 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 21 Apr 2005 19:06:32 +0100
+Subject: [Rcpviewer-contributors] subscribe
+Message-ID: <4267EBA8.4070909@incremental.eu.com>
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Mon Apr 25 14:06:43 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Mon, 25 Apr 2005 13:06:43 +0100
+Subject: [Rcpviewer-contributors] emf-builder
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEFBDCAA.dan@haywood-associates.co.uk>
+
+Uploaded to SVN; see blog posting on wiki:
+http://www.haywood-associates.co.uk/rcpviewer/space/start/2005-04-25/1#EMF_M
+etamodel.
+
+
+
+
+From dan at haywood-associates.co.uk  Tue Apr 26 12:54:58 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 26 Apr 2005 11:54:58 +0100
+Subject: [Rcpviewer-contributors] Further updates to emf-builder
+Message-ID: <LGEELLOAEBMLCOGIKLMKIEFHDCAA.dan@haywood-associates.co.uk>
+
+Now supports mutators as well as accessors; the IDomainClass provides
+convenience methods to query various flags of its attributes (since some of
+our semantics are held in annotations rather than intrinsic to EMF, using
+IDomainClass hides this detail).
+
+
+
+
+
+From dan at haywood-associates.co.uk  Tue Apr 26 13:37:22 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 26 Apr 2005 12:37:22 +0100
+Subject: [Rcpviewer-contributors] technology choices...
+Message-ID: <LGEELLOAEBMLCOGIKLMKGEFIDCAA.dan@haywood-associates.co.uk>
+
+I'd like to do a straw poll of which technology stack to go with.  Could you
+cast your votes at:
+http://www.haywood-associates.co.uk/rcpviewer/space/dan/technology-choices
+
+Thanks
+Dan
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Apr 27 02:11:15 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 27 Apr 2005 01:11:15 +0100
+Subject: [Rcpviewer-contributors] metamodel and facade
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEFMDCAA.dan@haywood-associates.co.uk>
+
+Have done some more work on the metamodel ("workspace/emf-builder" in SVN).
+
+Additionally, have started to put a bit of scaffolding so that the UI can
+instantiate, persist and retrieve domain objects. The "persistence" is just
+into in-memory hashes, but that's good enough for testing against.
+
+See
+http://www.haywood-associates.co.uk/rcpviewer/space/start/2005-04-26/1#Metam
+odel_and_facade for more details and signposting.
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Apr 27 11:29:12 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 27 Apr 2005 10:29:12 +0100
+Subject: [Rcpviewer-contributors] tidying up project-standards
+Message-ID: <LGEELLOAEBMLCOGIKLMKGEFNDCAA.dan@haywood-associates.co.uk>
+
+Please take a look under
+http://www.haywood-associates.co.uk/rcpviewer/space/project-standards (still
+work-in-progress, of course).
+
+In particular, I've described the use of a Eclipse-plugin which provides a
+wiki.  I've used this in the past, think it works well, and am now using it
+for documentation relating to the emf-builder project.
+
+Detailed notes are in
+http://www.haywood-associates.co.uk/rcpviewer/space/project-standards/docume
+ntation/wiki.
+
+
+
+
+
+From emorning at yahoo.com  Wed Apr 27 11:32:33 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Wed, 27 Apr 2005 04:32:33 -0500
+Subject: [Rcpviewer-contributors] My project structure
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKCEFMDCAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKCEFMDCAA.dan@haywood-associates.co.uk>
+Message-ID: <426F5C31.2030507@yahoo.com>
+
+I while back I posted a long (of course!) description of my typlical 
+project structure.
+Then Dan's web site had some problems and that description got lost from 
+the wiki.
+
+Well, I'm not gonna repost the description because I've learned better.  
+After playing with Mike's original project post I took the time to learn 
+more about the PDE and have come to the conclusion that I've been doing 
+things the hard way!
+
+
+
+From emorning at yahoo.com  Wed Apr 27 12:13:42 2005
+From: emorning at yahoo.com (ted stockwell)
+Date: Wed, 27 Apr 2005 05:13:42 -0500
+Subject: [Rcpviewer-contributors] ISession
+In-Reply-To: <426F5C31.2030507@yahoo.com>
+References: <LGEELLOAEBMLCOGIKLMKCEFMDCAA.dan@haywood-associates.co.uk> <426F5C31.2030507@yahoo.com>
+Message-ID: <426F65D6.3050403@yahoo.com>
+
+Hi All,
+
+I've been looking at Dan's code in the emf-builder project.
+The only comment I have so far is about the 
+de.berlios.rcpviewer.session.ISession interface and the 
+de.berlios.rcpviewer.session.local.Session class.  I don't think that 
+they are necessary.
+
+I've been working on my own spike, a rewrite of the "Purchase Order" 
+example application from the "Eclipse Modeling Framework" book.
+In the book a small application is generated by creating the domain 
+model (A 'PurchaseOrder' with some 'LineItems' and 'Locations') and then 
+the application is generated (which includes XML persistence and a GUI).
+ From my perspective generating an application is a non-starter - I need 
+a framework that can be extended at runtime.  That is, I need to be able 
+to add a third-party plugin to a running system that can add an 
+attribute to an existing class - and then have a field for that new 
+attribute show up in the GUI.
+My idea is to rewrite the application so that no generating is involved, 
+the developer creates the domain model and then deploys the application 
+with the RCPViewer.  I am gonna use Hibernate for persistence (hopefully 
+I can create the Hibernate mapping at runtime).
+The application is very small and simple...  my idea is that we can all 
+rewrite our spikes until we gel on a common code base and then expand 
+the spikes with 'features'.
+
+Anyway, back to the reason for this post... the Session interface 
+appears to be responsible for providing the IDomainObject adapters for a 
+POJO.
+In Eclipse-land there is already a very good way to manage the creation 
+of such adapters - the org.eclipse.core.runtime.IAdapterManager interface.
+In Eclipse I would plan on getting the IDomainObject for a POJO in this 
+way...
+
+IAdapterManager adapterManager= Platform.getAdapterManager();
+IDomainObject domainObject= adapterManager.getAdapter(pojo, 
+IDomainObject.class);
+
+
+From dan at haywood-associates.co.uk  Thu Apr 28 01:17:46 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 28 Apr 2005 00:17:46 +0100
+Subject: [Rcpviewer-contributors] further updates to the meta-model.
+Message-ID: <LGEELLOAEBMLCOGIKLMKOEGCDCAA.dan@haywood-associates.co.uk>
+
+Can now:
+- instantiate domain object
+- set values of attribute
+- get values of attribute
+- persist
+- detach from session
+- attach to session
+- get session's footprint of attached objects of given type
+- retrieve from storage (initially unattached to session)
+
+Haven't yet done operations or relationships.
+
+I shan't have the opportunity to do much for a few days, but hopefully
+there's enough for Mike to get his teeth into.
+
+Further details at:
+http://www.haywood-associates.co.uk/rcpviewer/space/design/meta-model
+
+
+
+
+From mike.evans at incremental.eu.com  Sat Apr 30 13:24:21 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sat, 30 Apr 2005 12:24:21 +0100
+Subject: [Rcpviewer-contributors] Java 5?
+Message-ID: <42736AE5.4060104@incremental.eu.com>
+
+Hi,
+
+Done no coding yet.
+Down on client side all week trying, amongst other things, to get 
+Windows 98 clients to talk Java 5 over RMI (sigh...)
+
+Anyway next week I'll get going.  As I am in the mood for using the 
+newest shiniest of everything what is the consensus on going pure Java 5?
+
+Mike E.
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From eoin at copse.org.uk  Sat Apr 30 13:43:14 2005
+From: eoin at copse.org.uk (Eoin Woods)
+Date: Sat, 30 Apr 2005 12:43:14 +0100
+Subject: [Rcpviewer-contributors] Java 5?
+In-Reply-To: <42736AE5.4060104@incremental.eu.com>
+Message-ID: <BE992DE2.2F97%eoin@copse.org.uk>
+
+Using Java 5 is fine with me as part of my motivation for getting involved
+is to be able to use the new shiny things too.
+
+Hopefully Java 5 will be available on the Mac in the next month or so.
+
+Would using this version lock out any significant number of potential users?
+(I'd say probably not as major products, like WebLogic, are now requiring
+it)
+
+E.
+
+
+> From: Mike Evans <mike.evans at incremental.eu.com>
+> Date: Sat, 30 Apr 2005 12:24:21 +0100
+> To: <rcpviewer-contributors at lists.berlios.de>
+> Subject: [Rcpviewer-contributors] Java 5?
+> 
+> Hi,
+> 
+> Done no coding yet.
+> Down on client side all week trying, amongst other things, to get
+> Windows 98 clients to talk Java 5 over RMI (sigh...)
+> 
+> Anyway next week I'll get going.  As I am in the mood for using the
+> newest shiniest of everything what is the consensus on going pure Java 5?
+> 
+> Mike E.
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+

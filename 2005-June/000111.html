@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Re: starting up the domain
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20starting%20up%20the%20domain&In-Reply-To=%3C42A30D01.3030209%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000109.html">
+   <LINK REL="Next"  HREF="000113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Re: starting up the domain</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Re%3A%20starting%20up%20the%20domain&In-Reply-To=%3C42A30D01.3030209%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Re: starting up the domain">emorning at yahoo.com
+       </A><BR>
+    <I>Sun Jun  5 16:32:33 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000109.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+        <LI>Next message: <A HREF="000113.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike Evans wrote:
+
+&gt;<i> Okey dokey
+</I>&gt;<i> Declarative it is
+</I>&gt;<i> However, just to note one downside.
+</I>&gt;<i> PDEUnit speeds things up by running up a single application in which 
+</I>&gt;<i> all tests in the suite are run.
+</I>&gt;<i> Unless Ted knows differently I have no idea how to change the Eclipse 
+</I>&gt;<i> metadata at runtime (well actually, I looked and it would be ugly - 
+</I>&gt;<i> using internal API's etc).
+</I>&gt;<i> Hence testing any declarative extensions will be difficult - where 
+</I>&gt;<i> these are Eclipse ones I am not concerned as I have no interest in 
+</I>&gt;<i> testing the base platform.  However where these are extensions created 
+</I>&gt;<i> by ourselves testing will be limited.
+</I>&gt;<i>
+</I>
+
+Sorry, I don't follow you here. I don't really understand why the 
+metadata would have to change.
+Can you elaborate?
+
+---------------------
+
+BTW, I have been thinking about domains, object stores, sessions, and 
+associated UI since I have been working on my 2nd attempt to create a 
+spike.
+My goal is create a spike that does persistence.
+Of course, that means that I have to use Dan's API. And that of course 
+means that I have to create a Domain, and an ObjectStore, and a Session.
+And that I have to get Mike's viewer to use a session, or sessions.
+
+I can imagine an application that would allow the use to add new 
+sessions (imagine an application like a newsreader, where you can add 
+connections to new newsgroups at runtime).
+Therefore, defining sessions declaratively is definitely not sufficient 
+for all applications.
+However, I can't (yet) imagine an application that allows the user to 
+add new Domains to the application except by extending the application 
+by adding plugins.
+Therefore, defining domains declaratively seems sufficient.
+
+----------------------------------
+Back to my spike...
+
+So far I have managed to segregate Mikes's viewer code into a plugin of 
+it's own named de.berlios.rcpviewer.rcp.
+I have create a plugin for my example name 
+de.berlios.rcpviewer.easybean.  Mike's model classes are in this plugin.
+I have imported all of Dan's plugins into my project 
+(de.berlios.rcpviewer.domain, de.berlios.rcpviewer.domain.runtime, etc).
+
+
+So far, here is what I have done...
+I added an extension point to the de.berlios.rcpviewer.domain.runtime 
+plugin named 'domains'.
+The de.berlios.rcpviewer.easybean plugin declaritively exports a domain, 
+like so...
+   &lt;extension point=&quot;de.berlios.rcpviewer.runtime.domains&quot;&gt;
+      &lt;domain id=&quot;domain&quot; class=&quot;mikespike3.model.EasyBeanDomain&quot; /&gt;
+   &lt;/extension&gt;
+Notice that I am simply registering a class that implements the IDomain 
+interface.
+My mikespike3.model.EasyBeanDomain class subclasses the 
+de.berlios.rcpviewer.domain.Domain.
+I added a 'DomainRegistry' class to the 
+de.berlios.rcpviewer.domain.runtime plugin.  The 
+de.berlios.rcpviewer.rcp plugin uses this class to get a list of all 
+available domains and thus to build the UI (initially, just create the 
+'New' menu).
+I added a getDomainRegistry() method to the 
+de.berlios.rcpviewer.domain.runtime.RuntimePlugin class.  I also added a 
+method for getting the ISessionManager.
+
+---------------------------
+That's where I'm at right now.  My next step is to get the RCPViewer to 
+create a new object and load it into the editor. 
+Which brings up my next point...
+...the de.berlios.rcpviewer.rcp plugin creates the UI for creating new 
+objects.  When the user selects the File | New | EasyBean menu item to 
+create a new EasyBean the associated action needs a Session to actually 
+create the object.
+How does the action get a Session to use?
+
+For now what I have done is I have added addSession, getCurrentSession 
+and setCurrentSession methods to the ISessionManager interface.
+When the EasyBean application starts up it creates a session, adds it to 
+the SessionManager and then makes the session the current session.
+I imagine each RPCViewer application having it's own method of creating 
+new sessions and switching between them.
+------------------------
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000109.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+	<LI>Next message: <A HREF="000113.html">[Rcpviewer-contributors] Re: starting up the domain
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#111">[ date ]</a>
+              <a href="thread.html#111">[ thread ]</a>
+              <a href="subject.html#111">[ subject ]</a>
+              <a href="author.html#111">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

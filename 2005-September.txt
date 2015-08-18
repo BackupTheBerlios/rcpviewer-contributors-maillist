@@ -1,0 +1,981 @@
+From mike.evans at incremental.eu.com  Thu Sep  1 11:40:07 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Thu, 01 Sep 2005 10:40:07 +0100
+Subject: [Rcpviewer-contributors] Progress 20050901
+Message-ID: <4316CC77.8080106@incremental.eu.com>
+
+September already :-(
+Rev 483 committed.
+Reference table a little better behaved (though column resizing using 
+net.sf.plugin.util class has a bug that keeps growing the width).
+There is now also the first stages of a master/child gui.
+Dan - tomorrow I hope to get attribute listeners working - ought they?
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Thu Sep  1 14:16:19 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 1 Sep 2005 12:16:19 GMT
+Subject: [Rcpviewer-contributors] Progress 20050901
+Message-ID: <Zen-1EAnzP-00014Y-Rc@pythagoras.zen.co.uk>
+
+> Dan - tomorrow I hope to get attribute listeners working - ought they?
+
+I think so.  I'll look at tonight.
+
+------------
+Mike Evans <mike.evans at incremental.eu.com> wrote :
+
+> September already :-(
+> Rev 483 committed.
+> Reference table a little better behaved (though column resizing using 
+> net.sf.plugin.util class has a bug that keeps growing the width).
+> There is now also the first stages of a master/child gui.
+> Dan - tomorrow I hope to get attribute listeners working - ought they?
+> 
+> Mike E.
+> 
+> 
+> -- 
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+
+
+
+
+
+
+
+From mike.evans at incremental.eu.com  Fri Sep  2 11:50:27 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Fri, 02 Sep 2005 10:50:27 +0100
+Subject: [Rcpviewer-contributors] Progress 20050902
+Message-ID: <43182063.8080608@incremental.eu.com>
+
+Rev 484 committed.
+* Added alphabetical sort of fields in editor - can switch to using 
+annotations once I learn what they are!
+* Removed MasterDetailsBlock and ChildDetailsPage within editors.parts 
+package.  They just added complexity for no good reason.
+* Added randomising 'configure gui' button - give it a click!
+
+The 'configure gui' button which exists on the CollectionPart only is 
+something I wish to make ubiquitous. The idea is to allow the user to 
+easily and immediately re-configure an element of the gui to suit their 
+needs.  Currently all it does on the CollectionsPart is hide random 
+field/columns - but the idea is there.  Ultimately the aim is to 
+preserve user settings at a gui element / domain class level.
+
+Such a 'learning UI' (a 'louis'?) would be part of the Essential 
+proposition.  A potential weakness of  generic platforms is that they do 
+not provide the user with a focussed GUI.  This might go some way to 
+ameliorating this.
+
+Mike E.
+
+PS : I like that - henceforth the RCP-based GUI project for Essential 
+shall be refered to as Louis.  I'll leave Americans to puzzle over the 
+end 'S'.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Fri Sep  2 23:56:28 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 2 Sep 2005 22:56:28 +0100
+Subject: [Rcpviewer-contributors] Progress 20050902
+In-Reply-To: <43182063.8080608@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKOEIJDEAA.dan@haywood-associates.co.uk>
+
+> * Added alphabetical sort of fields in editor - can switch to using
+> annotations once I learn what they are!
+
+in TestOrderForAttributes:
+
+		IExtendedDomainClass<?> extendedDomainClass =
+			domainClass.getAdapter(IExtendedDomainClass.class);
+		List<EAttribute> orderedAttributes =
+			extendedDomainClass.orderedAttributes();
+
+which is picking up the @Order annotation, take a look at the classes in
+Petstore.
+
+
+> The 'configure gui' button which exists on the CollectionPart only is
+> something I wish to make ubiquitous. The idea is to allow the user to
+> easily and immediately re-configure an element of the gui to suit their
+> needs.... Such a 'learning UI' (a 'louis'?) would be part of the Essential
+> proposition.  A potential weakness of  generic platforms is that they do
+> not provide the user with a focussed GUI.  This might go some way to
+> ameliorating this.
+
+Agreed.  I'd had a similar thought having read somewhere about the Eclipse
+API that I suspect you are using.  However, I had expected this feature to
+be some way down the track on the todo list ... so, a pleasant surprise.
+
+I mentioned this to one of the contractors I've been working with, he
+immediately made a couple of relevant points (which perhaps you've thought
+of, I hadn't):
+a) you'd want a way to reset if you bugger it up and can't figure out how to
+get back
+b) you'd want a way to export and import a bunch of settings so that if your
+colleague had it set up "just so" then you could easily use them.
+Something to put in Windows>Preferences, or wherever?
+
+
+> PS : I like that - henceforth the RCP-based GUI project for Essential
+> shall be refered to as Louis.  I'll leave Americans to puzzle over the
+> end 'S'.
+
+I like that too.  Make a good theme for an article.  You gonna change your
+package names again :-)  I guess it would be org.essentialplatform.louis ?
+
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Sent: 02 September 2005 10:50
+> To: rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Progress 20050902
+>
+>
+> Rev 484 committed.
+> * Added alphabetical sort of fields in editor - can switch to using
+> annotations once I learn what they are!
+> * Removed MasterDetailsBlock and ChildDetailsPage within editors.parts
+> package.  They just added complexity for no good reason.
+> * Added randomising 'configure gui' button - give it a click!
+>
+> The 'configure gui' button which exists on the CollectionPart only is
+> something I wish to make ubiquitous. The idea is to allow the user to
+> easily and immediately re-configure an element of the gui to suit their
+> needs.  Currently all it does on the CollectionsPart is hide random
+> field/columns - but the idea is there.  Ultimately the aim is to
+> preserve user settings at a gui element / domain class level.
+>
+> Such a 'learning UI' (a 'louis'?) would be part of the Essential
+> proposition.  A potential weakness of  generic platforms is that they do
+> not provide the user with a focussed GUI.  This might go some way to
+> ameliorating this.
+>
+> Mike E.
+>
+> PS : I like that - henceforth the RCP-based GUI project for Essential
+> shall be refered to as Louis.  I'll leave Americans to puzzle over the
+> end 'S'.
+>
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From dan at haywood-associates.co.uk  Sat Sep  3 01:16:32 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 3 Sep 2005 00:16:32 +0100
+Subject: [Rcpviewer-contributors] slow progress 20050902
+Message-ID: <LGEELLOAEBMLCOGIKLMKOEIKDEAA.dan@haywood-associates.co.uk>
+
+I haven't done a commit all week, so I thought I'd better do a posting to
+the mailing list at least.
+
+Last week I uploaded some transactional aspects; this week I've been doing
+the tests for them.  Have about 50 written and about 25 are passing.  Don't
+wanna do another commit til I get my green bar back again.
+
+As an update though, I'm starting to understand more concretely the
+interactions between transactions, persistence and resolving of persisted
+objects, and hopefully what all this stuff will look like once we introduce
+a distribution mechanism.  I hope to get the transaction stuff and hopefully
+resolving working by 19th Sept deadline.
+
+Mike: special request - could you add some sort of interface in MY
+...domain.runtime plugin package, something like:
+
+package de.berlios.rcpviewer.eunit; // eunit = Essential Unit
+
+public interface IFixture {
+  // installs a fixture for prototyping or for unit testing
+  public void install();
+}
+
+and then define an extension point to call such, and then make sure that the
+install() method gets called after your bootstrapping is done.  This then
+gives me a place to start populating the objectstore with sample data ready
+for the movie (hoping I get that far).
+
+Thanks
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Sep  6 11:05:48 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 06 Sep 2005 10:05:48 +0100
+Subject: [Rcpviewer-contributors] Progress 20050906
+Message-ID: <431D5BEC.5040401@incremental.eu.com>
+
+No progress yesterday - bogged down in disastrous refactoring of Epic.
+Today did pretty stuff as a light relief.
+Added icons for all fields indicating type and offering tooltip advice. 
+  Ultimately this tooltip advice can be built up from annotations to be 
+truly useful but currently just repeats what the icon indicates.  Icons 
+are also far too garish and distracting (best that an uncreative type 
+such as I can do with Word and Paint!) but I think that when nicely 
+drawn, these could be useful.
+
+Other stuff:
+
+Attribute Sort
+I have not used the IExtendedDomainClass.orderedAttributes method.
+Rather I have copied and extended
+de.berlios.rcpviewer.progmodel.extended.AttributeComparator within the
+gui project as:
+a) I think the model's job is to inform, not to do, so the
+getOrderedAttributes functionality should exist in the gui, not
+IExtendedDomainClass.
+b) References should get ordered to.
+
+Preferences for Gui Config
+Probably will not happen to past movie release.
+
+Package Renaming
+I'll rename to Louis once we do the big change to essentialplatform.
+
+Next steps:
+1. Dan's request for a fixture extension point (I think I have that 
+planned into the architecture anyway)
+
+2. The single reference part has not been touched in a while so bring 
+into line with the collections part.
+
+3. Stop randomising the gui through the config button but do something 
+useful.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+From mike.evans at incremental.eu.com  Mon Sep 12 20:33:16 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Mon, 12 Sep 2005 19:33:16 +0100
+Subject: [Rcpviewer-contributors] Progress 20050912
+Message-ID: <4325C9EC.2090509@incremental.eu.com>
+
+You'll have noticed the lack of 'Progress' mails recently.
+Have been bogged down in a big refactoring of Epic before an incremental
+release scheduled for the end of this week.  Sorry.
+
+Anyhow, have found some time for minor stuff.
+
+Dan - your 'IFixture' request has been granted but it is actually called
+de.berlios.rcpviewer.persistence.IObjectStoreBootStrap.  Ok - it is not
+actually a bootstrapper but I hey.  Let me know if its what you want
+and/or feel free to change.  It is run by an additional bootstrap job on
+the GuiPlugin.
+
+errr - that's it.  I still have to do the other stuff I promised.
+We are a bit tight on time re: the 17th as Thursday/Friday I'm off in a
+shipyard and the following Sunday-Wednesday on a much-needed break
+(organised at the last minute hence my lack of warning).
+
+Hopefully there will be enough for the movie.
+
+Mike E.
+
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Sep 13 19:45:07 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 13 Sep 2005 18:45:07 +0100
+Subject: [Rcpviewer-contributors] Progress 20050913
+Message-ID: <43271023.1040800@incremental.eu.com>
+
+err ... actually checked in the stuff I talked about yesterday (rev 487)
+
+In addition added first go at user-controlled gui config.  This only 
+exists for collections but two things to note so far:
+* I have eschewed the normal dialog box for a slimmer, cleaner shell, 
+what do you think?
+* the table view and the master/child view have independent settings;
+
+In the short time I have been able to allocate to Essential today 
+(aargh! Epic's in-memory db could not handle right outer-joins) I have 
+been faffing with the one-to-one reference gui.  How should it look - 
+anything that resembles the collections gui just wastes space and is 
+confusing - but anything else is inconsistent.  And I only have tomorrow 
+before Dan's movie...
+
+Mike E.
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Tue Sep 13 20:05:54 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 13 Sep 2005 19:05:54 +0100
+Subject: [Rcpviewer-contributors] Re: petstore probs...
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKIEILDEAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKIEILDEAA.dan@haywood-associates.co.uk>
+Message-ID: <43271502.505@incremental.eu.com>
+
+Dan,
+
+Oh dear - I just remembered the problems you mentioned below and had a 
+quick look.
+
+The customer editor is not opening as its Account is not attached to the 
+session and the editor (more properly the component ReferencePart) is 
+using the session to get the appropriate IDomainObject for the pojo.
+Question : I thought all objects I would deal with are in the session..?
+
+The attributes on StockItem are not being displayed coz:
+* either they are BigDecimals - I have not FieldBuilder for them yet
+* or they are domian-specific value objects which also need field builders.
+
+The field builder thing is not an issue - I just need to create them.
+However I have clearly misunderstood regarding objects and sessions.  Help!
+
+Oh - the 'oh dear' at the start is coz there is no chance of my 
+rectifying all of this before out 17th deadline, what with impromtu 
+holidays and (occasional) real work interfering.
+
+Mike E.
+
+
+
+Dan Haywood wrote:
+> just thought I'd run up rev 484 for petstore; some things immediately are
+> broken:
+> 
+> a) cannot create Customer view
+> b) cannot display some attributes of StockItem.
+> 
+> Could you check it out?
+> 
+> 
+> Also, I'm being dumb - where, exactly, is the mysterious randomising GUI
+> button?  I couldn't see it in gui.acme.
+> 
+> 
+> Dan
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Wed Sep 14 00:55:12 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 13 Sep 2005 23:55:12 +0100
+Subject: [Rcpviewer-contributors] Re: petstore probs...
+In-Reply-To: <43271502.505@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKGEKEDEAA.dan@haywood-associates.co.uk>
+
+Mike,
+
+You haven't misunderstood the session thing - I haven't coded the Customer
+correctly.  That said, I did realize when doing the xactn stuff that the
+IPojo.getDomainObject() shouldn't really be delegating to the session -
+every IPojo should have an IDomainObject all the time.  So this method now
+just returns an instance variable that I introduce.  What was creating the
+DomainObject now merely initializes the DomainObject that the IPojo already
+holds.
+
+To answer your question though - it was my intention that at some stage we
+would be able to detach objects from sessions and attach them to other
+sessions.  I suppose you'd want me to say why this would be a good thing?
+Yes, quite.  I think it was so one could effectively move objects from one
+objectstore to another, like a poor man's data migration tool.  Hardly core
+functionality - certainly not essential...
+
+Regards petstore - never mind, I was being too ambitious.  I'll develop a 3
+class model for the movie instead that exercises functionality that is
+working.
+
+Dan
+
+> -----Original Message-----
+> From: rcpviewer-contributors-admin at berlios.de
+> [mailto:rcpviewer-contributors-admin at berlios.de]On Behalf Of Mike Evans
+> Sent: 13 September 2005 19:06
+> To: dan at haywood-associates.co.uk;
+> rcpviewer-contributors at lists.berlios.de
+> Subject: [Rcpviewer-contributors] Re: petstore probs...
+>
+>
+> Dan,
+>
+> Oh dear - I just remembered the problems you mentioned below and had a
+> quick look.
+>
+> The customer editor is not opening as its Account is not attached to the
+> session and the editor (more properly the component ReferencePart) is
+> using the session to get the appropriate IDomainObject for the pojo.
+> Question : I thought all objects I would deal with are in the session..?
+>
+> The attributes on StockItem are not being displayed coz:
+> * either they are BigDecimals - I have not FieldBuilder for them yet
+> * or they are domian-specific value objects which also need field
+> builders.
+>
+> The field builder thing is not an issue - I just need to create them.
+> However I have clearly misunderstood regarding objects and
+> sessions.  Help!
+>
+> Oh - the 'oh dear' at the start is coz there is no chance of my
+> rectifying all of this before out 17th deadline, what with impromtu
+> holidays and (occasional) real work interfering.
+>
+> Mike E.
+>
+>
+>
+> Dan Haywood wrote:
+> > just thought I'd run up rev 484 for petstore; some things
+> immediately are
+> > broken:
+> >
+> > a) cannot create Customer view
+> > b) cannot display some attributes of StockItem.
+> >
+> > Could you check it out?
+> >
+> >
+> > Also, I'm being dumb - where, exactly, is the mysterious randomising GUI
+> > button?  I couldn't see it in gui.acme.
+> >
+> >
+> > Dan
+> >
+> >
+> >
+> >
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Sep 14 01:17:52 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 14 Sep 2005 00:17:52 +0100
+Subject: [Rcpviewer-contributors] Progress 20050913
+In-Reply-To: <43271023.1040800@incremental.eu.com>
+Message-ID: <LGEELLOAEBMLCOGIKLMKCEKFDEAA.dan@haywood-associates.co.uk>
+
+> In addition added first go at user-controlled gui config.  This only
+> exists for collections but two things to note so far:
+> * I have eschewed the normal dialog box for a slimmer, cleaner shell,
+> what do you think?
+
+Good enough for now.  I'm a little ambivalent.  I think as we add further
+features it'll either help define our look-n-feel or it'll stick out like a
+sore thumb ...
+
+
+> * the table view and the master/child view have independent settings;
+
+lovely.
+
+
+> In the short time I have been able to allocate to Essential today
+> (aargh! Epic's in-memory db could not handle right outer-joins) I have
+> been faffing with the one-to-one reference gui.  How should it look -
+> anything that resembles the collections gui just wastes space and is
+> confusing - but anything else is inconsistent.
+
+What I think I'd like is to see the toString() always shown, that is
+alongside the label and icon, left justified with any primitives (eg the
+Beans#numBeans field).  If we could then have some way of showing the
+details view directly below, in a collapsible region, would be great.
+
+So in other words, move the current field that resides in the 1:1
+ReferencePart's collapsible region up to be part of the header of the
+collapsible region, and then in its place put in the same
+part/builder/editor that you use for the details view of the collection
+reference.
+
+If possible :-)
+
+
+> And I only have tomorrow
+> before Dan's movie...
+
+The 19th Sept deadline was to give me a coupla weeks slush.  My hard
+deadline is the end of the month.  But I'm gonna start experimenting with
+CamStudio this week.
+
+That said, I don't think I'm gonna get much work done in the last 2 weeks,
+or indeed through the rest of October.  I'm about to start 6 weeks hard
+teaching for a grad training programme I do each year, and the amount of
+downtime is rather slim.  So it'll be somewhat of a go-slow for me for the
+foreseeable, I'm afraid.  (I can still offer opinions, mind!)
+
+
+
+>
+> Mike E.
+>
+> --
+> Mike Evans
+> Incremental Ltd.
+> www.incremental.eu.com
+>
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>
+
+
+
+
+From dan at haywood-associates.co.uk  Wed Sep 14 08:52:48 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Wed, 14 Sep 2005 07:52:48 +0100
+Subject: [Rcpviewer-contributors] Dan's progress 20050914: rev 491
+Message-ID: <LGEELLOAEBMLCOGIKLMKOEKGDEAA.dan@haywood-associates.co.uk>
+
+Huzzah!
+
+I've checked in my tests for transaction management, with fixes to the
+functionality as per se.  Still some more to do, but only on making sure the
+listeners are being fired.
+
+Please make sure you do an svn update to rev 491.
+
+
+
+
+From mike.evans at incremental.eu.com  Wed Sep 14 10:37:03 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 14 Sep 2005 09:37:03 +0100
+Subject: [Rcpviewer-contributors] Prgoress 20050914
+Message-ID: <4327E12F.80301@incremental.eu.com>
+
+Have added FieldParts and DnD objects for BigDecimal and FilePath, hence 
+StockItem petstore editor works nows.
+Notes:
+- this means that I have added gui stuff to the petstore project - good 
+practice for testing my extension mechanisms.  Have found a specific 
+problem with DnD, so will have to think about a generic mechanism for 
+value objects
+- the FilePath stuff does not pay any heed to the FilePath's filters yet
+- other projects that have been changed - gui and the 
+net.sf.plugins.utils so these'll need updating.
+
+Next will get onto the reference gui part as Dan suggests.  Will also 
+make more robust so a failure does not prevent the whole editor opening.
+
+Might get more done later, dependent on Epic testing...
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Wed Sep 14 10:39:16 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Wed, 14 Sep 2005 09:39:16 +0100
+Subject: [Rcpviewer-contributors] Progress 20050913
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKCEKFDEAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKCEKFDEAA.dan@haywood-associates.co.uk>
+Message-ID: <4327E1B4.8040300@incremental.eu.com>
+
+see below,
+
+Mike E.
+
+Dan Haywood wrote:
+
+>>In addition added first go at user-controlled gui config.  This only
+>>exists for collections but two things to note so far:
+>>* I have eschewed the normal dialog box for a slimmer, cleaner shell,
+>>what do you think?
+> 
+> 
+> Good enough for now.  I'm a little ambivalent.  I think as we add further
+> features it'll either help define our look-n-feel or it'll stick out like a
+> sore thumb ...
+> 
+> 
+Agreed - as I am using normal dialogs elsewhere it could get very messy.
+
+> 
+>>* the table view and the master/child view have independent settings;
+> 
+> 
+> lovely.
+> 
+In'it
+> 
+> 
+>>In the short time I have been able to allocate to Essential today
+>>(aargh! Epic's in-memory db could not handle right outer-joins) I have
+>>been faffing with the one-to-one reference gui.  How should it look -
+>>anything that resembles the collections gui just wastes space and is
+>>confusing - but anything else is inconsistent.
+> 
+> 
+> What I think I'd like is to see the toString() always shown, that is
+> alongside the label and icon, left justified with any primitives (eg the
+> Beans#numBeans field).  If we could then have some way of showing the
+> details view directly below, in a collapsible region, would be great.
+> 
+> So in other words, move the current field that resides in the 1:1
+> ReferencePart's collapsible region up to be part of the header of the
+> collapsible region, and then in its place put in the same
+> part/builder/editor that you use for the details view of the collection
+> reference.
+> 
+> If possible :-)
+> 
+Yuh - I was on these lines - dunno how DnD will work in the header yet 
+will have a go.
+
+> 
+> 
+>>And I only have tomorrow
+>>before Dan's movie...
+> 
+> 
+> The 19th Sept deadline was to give me a coupla weeks slush.  My hard
+> deadline is the end of the month.  But I'm gonna start experimenting with
+> CamStudio this week.
+> 
+> That said, I don't think I'm gonna get much work done in the last 2 weeks,
+> or indeed through the rest of October.  I'm about to start 6 weeks hard
+> teaching for a grad training programme I do each year, and the amount of
+> downtime is rather slim.  So it'll be somewhat of a go-slow for me for the
+> foreseeable, I'm afraid.  (I can still offer opinions, mind!)
+> 
+
+Phew.
+> 
+> 
+> 
+>>Mike E.
+>>
+>>--
+>>Mike Evans
+>>Incremental Ltd.
+>>www.incremental.eu.com
+>>
+>>_______________________________________________
+>>Rcpviewer-contributors mailing list
+>>Rcpviewer-contributors at lists.berlios.de
+>>http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+>>
+> 
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Thu Sep 15 08:56:29 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Thu, 15 Sep 2005 07:56:29 +0100
+Subject: [Rcpviewer-contributors] xactn commit + File>Save
+Message-ID: <LGEELLOAEBMLCOGIKLMKAEKMDEAA.dan@haywood-associates.co.uk>
+
+Hi Mike,
+hmmm - I'm thinking we might need that 2 weeks' slush.
+
+I'm seeing some strange behaviour regarding when xactns are committed vs
+when File>Save is called, but I think that's probably to be expected cos I
+don't think you've made any changes here yet?  Can you arrange it such that
+File>Save will do the following:
+
+ITransaction xactn =
+TransactaionManager.instance().getCurrentTransactionFor(pojoInFocus, false);
+if (xactn != null) {
+   xactn.commit();
+}
+
+To determine whether any given pojo is dirty (annotated with a *), need to
+listen on the TransactoinManager for whether it has been enlisted in an
+xactn or not.  That's the theory - though its the listening stuff that I
+haven't completely tested yet, so I might be fibbing.  Note that committing
+a xactn that has >1 pojo enlisted will effectively "save" them both.
+
+
+---
+The other thing I want to get going is the Customer#placeOrder (in
+examples/workspace/demo).  Right now this isn't working at all, in that the
+UI isn't updated.  I suspect the problem is mine completely: the newly
+created Order isn't shown in either the Session view or the Customer's
+collection.  but if you have any insights, please let me know... :-(
+
+Enough already.
+
+Dan
+
+
+
+
+From dan at haywood-associates.co.uk  Fri Sep 16 08:45:21 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Fri, 16 Sep 2005 07:45:21 +0100
+Subject: [Rcpviewer-contributors] movie uploaded to wiki website
+Message-ID: <LGEELLOAEBMLCOGIKLMKGEKPDEAA.dan@haywood-associates.co.uk>
+
+... well, a first cut one at any rate.  Will redo when we get some nice
+icons; I also want to show how to build up the app from File>New Project -
+should be that much more impressive.  However, worried about the size: 8Mb
+for 2minutes footage can't be right, can it?
+
+The page that has the movie is
+http://www.haywood-associates.co.uk/rcpviewer/space/start/movie.
+
+In the course of doing this, had to do some (partial) fixes to the gui
+(louis?) to get the movie even semi okay.  We need to figure out how to tie
+up the isDirty cycle of ManagedForm with transactions; specifically (as I've
+said) adding a listener on ITranasctionManager and ITransaction.  I hacked
+it for now.
+
+Also, have extended IFieldListener so that it creates the attribute change
+on focusLost.  This works for strings but nothing else, as I say I was
+hacking.  Also, I commented out a guard on _field.getGuiValue() regarding
+something being null; that might need reinstating, but it was stopping
+anything getting saved at all.  At any rate, check out REVIEW_ME for some of
+these changes (rev 498).
+
+Dan
+
+
+
+
+From dan at haywood-associates.co.uk  Sat Sep 17 08:37:24 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 17 Sep 2005 07:37:24 +0100
+Subject: [Rcpviewer-contributors] Flash movie
+Message-ID: <LGEELLOAEBMLCOGIKLMKGELDDEAA.dan@haywood-associates.co.uk>
+
+I just re-discovered Wink (http://www.debugmode.com/wink/, so have re-worked
+the movie (previously in AVI format) as a much more compact Flash movie.  As
+well as demonstrating more features, it is also annotated to explain what's
+going on.
+
+Check it out on the wiki at
+http://www.haywood-associates.co.uk/rcpviewer/space/start/movie.
+
+
+
+
+From mike.evans at incremental.eu.com  Sat Sep 17 16:24:49 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Sat, 17 Sep 2005 15:24:49 +0100
+Subject: [Rcpviewer-contributors] Flash movie
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKGELDDEAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKGELDDEAA.dan@haywood-associates.co.uk>
+Message-ID: <432C2731.30606@incremental.eu.com>
+
+It's good - I think the proposition we're offering could become quite 
+cool.  I'll feel all inspired ... next Wednesday.
+Got back last night, final post-break-in flat cleaning this morning, and 
+now off on holiday.
+So alas no work from me until then.
+Hope your travails do not get worse before then.
+Apologies for the bad timing.
+
+Mike E.
+
+Dan Haywood wrote:
+> I just re-discovered Wink (http://www.debugmode.com/wink/, so have re-worked
+> the movie (previously in AVI format) as a much more compact Flash movie.  As
+> well as demonstrating more features, it is also annotated to explain what's
+> going on.
+> 
+> Check it out on the wiki at
+> http://www.haywood-associates.co.uk/rcpviewer/space/start/movie.
+> 
+> 
+> _______________________________________________
+> Rcpviewer-contributors mailing list
+> Rcpviewer-contributors at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/rcpviewer-contributors
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From dan at haywood-associates.co.uk  Sun Sep 25 18:41:30 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sun, 25 Sep 2005 17:41:30 +0100
+Subject: [Rcpviewer-contributors] Xactn listener tests committed
+Message-ID: <LGEELLOAEBMLCOGIKLMKEEMIDEAA.dan@haywood-associates.co.uk>
+
+Turned out that no fixes were needed to the code itself, but it's good to
+have some tests that prove its working as designed.
+
+So that more-or-less finishes off the xactn stuff for now.  The only
+functionality I've left untested is the reverse/reapply stuff.
+
+That said, I anticipate some changes once I start sending these xactns over
+the wire and start replaying them server-side.  There will probably need to
+be some sort of decoupling of the change sets vs the transaction context.
+One thing at a time, though.
+
+Dan
+
+
+
+
+From mike.evans at incremental.eu.com  Tue Sep 27 10:49:40 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 27 Sep 2005 09:49:40 +0100
+Subject: [Rcpviewer-contributors] Re: thinking of moving to javaforge...
+In-Reply-To: <LGEELLOAEBMLCOGIKLMKIEMHDEAA.dan@haywood-associates.co.uk>
+References: <LGEELLOAEBMLCOGIKLMKIEMHDEAA.dan@haywood-associates.co.uk>
+Message-ID: <433907A4.7070801@incremental.eu.com>
+
+Fine by me.
+It would be a good time to change package names etc, especially as I am, 
+ahem, revamping, the GUI stuff (see progress mail to come).
+
+Mike E.
+
+Dan Haywood wrote:
+
+> ... just announced, eg
+> http://www.theserverside.com/news/thread.tss?thread_id=36704.
+> 
+> I mailed Berlios about renaming rcpviewer to essential or equiv, but got
+> nothing back - they were also unresponsive regarding another query I raised.
+> So I'm thinking of moving our code over - this new site supports Subversion
+> and also has support for CruiseControl, very nice.  It doesn't yet have a
+> mailing list support, but I think they'll be adding features soon.
+> 
+> At any rate, I've created a project called 'essential'; let me know if you
+> have any concerns (I don't see why you would); otherwise I'll give you
+> plenty of notice regarding a move.
+> 
+> Dan
+> 
+> 
+> 
+> 
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+
+From mike.evans at incremental.eu.com  Tue Sep 27 10:57:22 2005
+From: mike.evans at incremental.eu.com (Mike Evans)
+Date: Tue, 27 Sep 2005 09:57:22 +0100
+Subject: [Rcpviewer-contributors] Progress 20050927
+Message-ID: <43390972.6050806@incremental.eu.com>
+
+These progress mails are getting rarer eh?
+Alas this is likely to be the case for over the next quarter as various 
+trips and incremental priorities take over.
+
+However, undaunted, I continue...
+Have been getting a little dismayed at how ugly the GUI code is becoming 
+  so, rather like Stephen Hawking, I'm currently looking for a Unified 
+Architecture.  Getting there slowly - hope to have something to show 
+shortly.  Dan I realise this is totally inappropriate regarding your 
+movie but to get the things you wanted I found myself getting into more 
+and more convoluted ugliness.  Hence the rewrite (and, naturally package 
+changes).
+
+Slap me when lack of visible progress starts hurting.
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+

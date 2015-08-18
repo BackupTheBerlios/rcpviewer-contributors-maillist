@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Introducing Chris Nelson &amp; Bastian Bergerhoff...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Introducing%20Chris%20Nelson%20%26%20Bastian%20Bergerhoff...&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKIEJDDCAA.dan%40haywood-associates.co.uk%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000049.html">
+   <LINK REL="Next"  HREF="000045.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Introducing Chris Nelson &amp; Bastian Bergerhoff...</H1>
+    <B>Dan Haywood</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Introducing%20Chris%20Nelson%20%26%20Bastian%20Bergerhoff...&In-Reply-To=%3CLGEELLOAEBMLCOGIKLMKIEJDDCAA.dan%40haywood-associates.co.uk%3E"
+       TITLE="[Rcpviewer-contributors] Introducing Chris Nelson &amp; Bastian Bergerhoff...">dan at haywood-associates.co.uk
+       </A><BR>
+    <I>Sun May  8 14:13:51 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000049.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+        <LI>Next message: <A HREF="000045.html">[Rcpviewer-contributors] SVN - further mess
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#42">[ date ]</a>
+              <a href="thread.html#42">[ thread ]</a>
+              <a href="subject.html#42">[ subject ]</a>
+              <a href="author.html#42">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Chaps,
+
+I'd like to introduce you to Chris and Bastian.
+
+
+1. Chris Nelson
+
+Chris Nelson is the project lead for Trails, a Java/Tapestry web application
+framework inspired by both Naked Objects and Ruby on Rails.  I noticed
+Trails from a posting up on theserverside, so dug around the web and located
+Chris' email.
+
+I've been raising with Chris the idea of possibly collaborating or
+integrating the projects at some level, and Chris is in agreement that this
+might well be worth doing.  The caveat is that we both want to develop our
+respective code bases further, but a tie-up at some later stage could well
+be worthwhile, allowing a single application to be deployed either via RCP
+or via the web.  There are three possible levels of collaboration that I've
+identified:
+
+* use a common core programming model (progmodel/standard and
+progmodel/extended), or
+* use common core programming model + have rcpviewer provide common
+development-time tooling, or
+* use common core programming model + common tooling + a common
+implementation of our respective meta-models and perhaps more.
+
+Do check out Trails' website and Chris's rather cool demo of his software in
+action.  It's at <A HREF="http://trails.dev.java.net.">http://trails.dev.java.net.</A>
+
+
+2. Bastian Bergerhoff
+
+Bastian Bergerhoff got in touch with Rob Matthews of Naked Objects Group,
+letting him know about a rather neat plugin he'd developed allowing Naked
+Objects runtime to be run within Eclipse.  And Rob forwarded him onto me.
+
+Bastians's plugin already supports some level hot swap coding, so you can
+make changes to your POJO and the application updates in real-time.  His
+vision is to extend this significantly to be able to emulate what Smalltalk
+can do in this area.  He is also interested in working on other
+development-time tooling (wizards etc) - very much the same space as the
+development/tooling side of rcpviewer.
+
+
+Both Chris and Bastian are now on the wiki (you can see a screenshot of
+Bastian's work up there) and subscribe to this mailing list.  I haven't for
+now added Chris and Bastian to Subversion.  Chris after all is busy working
+on Trails, and Bastian has told me he's happy just to monitor what we're up
+to for now but look towards helping on the development tooling side when the
+metamodel matures somewhat.  Chris/Bastian: let me know if/when you'd like
+deeper involvement.
+
+----
+Chris, Bastian: let me briefly introduce you to the other contributors.
+
+Mike Evans is one of our two RCP experts.  I contacted Mike after seeing his
+work in an RCP presentation, and asked him if he'd be interested in helping
+out.  Mike hadn't heard of NO but liked the idea - I was obviously
+persuasive enough since here he is!
+
+Ted Stockwell is the other of our two RCP experts.  This time, Ted contacted
+me after rather fortuitously doing some googling and discovering my wiki.
+(If he'd googled three days earlier he would have found nothing).
+
+Eoin Woods is one of the best software guys I know, having worked with him
+at Sybase.  Although he's now a consultant like me, he has also done plenty
+of system engineering; for example he was project lead for implementing
+Sybase's clustering on NT server.  He'll tell you (a) how hairy and (b) how
+many lines of code that was.  Eoin hasn't been able to contribute yet
+because he's been finishing up his book on Software Architecture (just
+published last week), but says he's looking forward to working on
+persistence/distribution and AOP.
+
+Oh, and there's me.  I think I can justifiably say I have the deepest
+knowledge of Naked Objects having been working on it for the last few years
+and intensively the last 12 months.  I'm also ok at coding.  So, I'm the
+chap with the vision who's hoping he can keep you guys on board to help me
+pull it off...
+
+++++
+One last thing: there's a risk of having too large a team too early - it's a
+risk I'm well aware of.  I'm hoping that as we start to get some
+contributions in then the project will divide up into reasonably well
+defined areas and everyone can contribute in the area that's most of
+interest to them.  Until then, though, here's how I see it:
+* Mike and Ted are the RCP runtime experts
+* Eoin is the runtime architecture expert
+* I'm most interested in owning the metamodel + the development-time
+tooling.
+* Should Bastian join us, I'd like him to work with me on the tooling.
+* And if Chris and I decide to align Trails and RcpViewer, then my ownership
+of the metamodel should help see that through.
+
+But let me know if I'm saying things you're unhappy with - as I say I want
+to keep everyone on board to make this happen.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000049.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+	<LI>Next message: <A HREF="000045.html">[Rcpviewer-contributors] SVN - further mess
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#42">[ date ]</a>
+              <a href="thread.html#42">[ thread ]</a>
+              <a href="subject.html#42">[ subject ]</a>
+              <a href="author.html#42">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

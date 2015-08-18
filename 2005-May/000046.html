@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Ted's screenshot - comment posted.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3C427E1B4F.8070004%40yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000040.html">
+   <LINK REL="Next"  HREF="000048.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Ted's screenshot - comment posted.</H1>
+    <B>ted stockwell</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Ted%27s%20screenshot%20-%20comment%20posted.&In-Reply-To=%3C427E1B4F.8070004%40yahoo.com%3E"
+       TITLE="[Rcpviewer-contributors] Ted's screenshot - comment posted.">emorning at yahoo.com
+       </A><BR>
+    <I>Sun May  8 15:59:43 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000040.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+        <LI>Next message: <A HREF="000048.html">[Rcpviewer-contributors] GUI and virtual domain models (was Ted's screenshot - comment posted.)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#46">[ date ]</a>
+              <a href="thread.html#46">[ thread ]</a>
+              <a href="subject.html#46">[ subject ]</a>
+              <a href="author.html#46">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan Haywood wrote:
+
+
+&gt;<i>---
+</I>&gt;<i>Lets look at grouping (either literally with an SWT Group or in an
+</I>&gt;<i>Expandable Composite), options are:
+</I>&gt;<i>a) grouping is built into the domain model and it represents this by say
+</I>&gt;<i>passing a third array column with the name of the group to put the
+</I>&gt;<i>string into
+</I>&gt;<i>b) the GUI looks for an xml-based IGroupAdapter which return the fields
+</I>&gt;<i>in smaller, named arrays, one for each group
+</I>&gt;<i>c) The GUI is user-configurable as before
+</I>&gt;<i>d) The GUI starts being clever - if the domain model presents Strings it
+</I>&gt;<i>just display them; if it presents a struct or javabean, it automatically
+</I>&gt;<i>groups them.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>This is a more interesting one.  In fact, it's wrong to think of grouping
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>as a GUI concern.  Q: what sort of things would get grouped?  A: things that
+</I>&gt;<i>go together.  For example, the UI for a Customer object might have a &quot;Name&quot;
+</I>&gt;<i>group might consist of (title/firstname/lastname/suffix).
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>But here's the point: apply Eric Evans' Ubiquitous Language principle.
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>If there's such a thing as a &quot;Name&quot;, then it should be in the domain model.
+</I>&gt;<i>So we should say that the Customer class has an immutable composition
+</I>&gt;<i>(&quot;aggregation by value&quot;) 1:1 relationship with Name.  This domain
+</I>&gt;<i>information is all that the UI component needs.  We can then have a
+</I>&gt;<i>collapsible group in the Customer's form that when collapsed shows the
+</I>&gt;<i>Name's toString (&quot;Mr. John Daniels&quot;) and when opened up shows the
+</I>&gt;<i>constituent fields and allows them to be edited.  The same use of
+</I>&gt;<i>relationships for a 1:M relationship should allow Order/Order-Details to be
+</I>&gt;<i>shown on a single form.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>These are some of the lessons we've learnt from the Irish DSFA gig.
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>Because the NO framework's viewer isn't really all that sophisticated, we've
+</I>&gt;<i>had to work harder at finding a way to express the information within the
+</I>&gt;<i>domain model.  The Name class I quoted is one that from the DSFA.  Another
+</I>&gt;<i>example is DateOfBirth (the date, a date verified flag, and a date
+</I>&gt;<i>verification source lookup).  Finding ways to represent this info within the
+</I>&gt;<i>domain object means that one can also start to put &quot;know-how-to&quot;
+</I>&gt;<i>responsibilities into these objects (eg Name#change, or
+</I>&gt;<i>DateOfBirth#verifyUsingSource).  It also - I would argue - makes the domain
+</I>&gt;<i>model better than it otherwise would have been: UI grouping really is the
+</I>&gt;<i>sign that analysis has been mislocated at the UI layer rather than the
+</I>&gt;<i>domain layer.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>---
+</I>&gt;<i>Of course all of these are variations on the same processing, I am just
+</I>&gt;<i>talking about where responsibility lies.  My problem is that I see the
+</I>&gt;<i>repsonsibility ending up in several places - a generally bad outcome.
+</I>&gt;<i>On the one hand some data is core to the domain model so should be there
+</I>&gt;<i>- the name of the field presented to the user for one.  However other
+</I>&gt;<i>stuff makes more sense in the GUI configuration - is a date field
+</I>&gt;<i>represented by a text box with validation or a calender widget?
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>I would say that every date field should be rendered the same way.  If
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>there's a reason why a date in one class should be rendered one way, and a
+</I>&gt;<i>date in another class should be rendered another, then there is probably
+</I>&gt;<i>some difference in domain semantics.  Find a way to capture that information
+</I>&gt;<i>in the domain model.
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>To make this concrete, suppose a regular Date is rendered as a text box
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>and we choose this as our default rendering.  However, an Appointment's date
+</I>&gt;<i>(which the users conceptually think as occuring on a Calendar) should be
+</I>&gt;<i>rendered using a drop-down calendar widget.  In this case, I would suggest
+</I>&gt;<i>creating a value object subclass of Date called something like CalendarDate,
+</I>&gt;<i>and have my Appointment use this.  (This is probably so common that
+</I>&gt;<i>rcpviewer should ship a library of these values with defined semantics for
+</I>&gt;<i>domain programmers to choose from).
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i>As ever, hope some of the above makes sense....
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  
+</I>&gt;<i>
+</I>
+My initial response to Dan's comments was gonna be that requiring all 
+this stuff to be in the domain model was a problem because it excluded 
+the use of legacy domains that were not 'properly' designed.
+For instance, one of my grand visions is to use RCPViewer to create a UI 
+for UBL (Universal Business Language, 
+<A HREF="http://www.oasis-open.org/committees/ubl/charter.php">http://www.oasis-open.org/committees/ubl/charter.php</A>).  However, since 
+UBL was not developed with NO sensibilities in mind, it might not be 
+suitable for use with an NO GUI.
+
+So, my next thought was that I could create a customized domain model on 
+top of UBL that would group attributes that needed grouping, provide 
+field orders, create data type subclasses where needed, add methods, etc.
+I buy into Dan's argument in favor of the 'Ubiquitous Language 
+principle' so creating a new domain model on top of any existing legacy 
+domain model might not be a bad idea because the resulting domain model 
+could be easier for developers to understand and reuse.
+
+Then it occurred to me that there is really no difference between...
+
+ a) creating a new domain model on top of a legacy domain model and 
+putting everything that the RCPViewer needs to construct a GUI into the 
+domain model, and
+
+b) creating GUI metadata model putting everything that the RCPViewer 
+needs to construct a GUI for a legacy domain model into the GUI metamodel
+
+ From my perspective, options a) and b) are the same.  If I think of the 
+GUI metamodel as just creating a new domain model on top of a legacy 
+model and appropriately regrouping, sorting, and changing the data types 
+of attributes, etc. then suddenly the two approaches appear to be the same.
+
+The only thing that I can think of that absolutely needs to be external 
+from the domain model into some XML-y type of configuration are labels.
+
+---------------------------------
+
+Before reading this post I responded to one Mike's posts by saying that 
+almost all GUI-related data should be in the GUI metadata layer.  Now 
+I'm gonna say that almost all GUI-related data should be in the domain 
+model.  And I'm correct both times!
+The difference is that from now on I will think of the GUI metadata 
+layer as a 'virtual domain model' built on top of a legacy domain 
+model.  If a domain model already provides all the methods and 
+attributes required to work with RCPViewer then very little or no extra 
+GUI metadata will be required.  A legacy domain model will require more 
+GUI metadata to be provided.
+
+
+
+Does this approach make sense to you guys?
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000040.html">[Rcpviewer-contributors] Ted's screenshot - comment posted.
+</A></li>
+	<LI>Next message: <A HREF="000048.html">[Rcpviewer-contributors] GUI and virtual domain models (was Ted's screenshot - comment posted.)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#46">[ date ]</a>
+              <a href="thread.html#46">[ thread ]</a>
+              <a href="subject.html#46">[ subject ]</a>
+              <a href="author.html#46">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>

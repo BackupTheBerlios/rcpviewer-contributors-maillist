@@ -1,0 +1,77 @@
+From dan at haywood-associates.co.uk  Wed Dec  7 00:53:56 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Tue, 6 Dec 2005 23:53:56 -0000
+Subject: [Rcpviewer-contributors] Dan's Progress 20051206
+Message-ID: <LGEELLOAEBMLCOGIKLMKMEKMDFAA.dan@haywood-associates.co.uk>
+
+The current transaction view is coming on.
+
+Now (appear to) have undo/redo going for references and collections as well
+as for attributes.  I've also put the executed (undoable) changes on the
+RHS, with the undone (redoable) changes on the LHS.  That sort of works
+better with the icons on the toolbar.  Still haven't looked at operations,
+instantiations or deletions, though - operations should be easy, bit scared
+about the other two.
+
+On the UI front also, currently changing TableViewers in current transaction
+view to TreeViewers, to support the composite pattern as used by the
+ChangeSet.  Looks like the TransactionManager itself isn't aggregated
+changes as I was expecting, so that needs looking at.
+
+In a separate initiative, I've factored out advice from aspects: each
+aspect's advice calls a corresponding method on a peer "advice" object.
+This is primarily for easier refactoring in the future (unlike JDT, AJDT
+doesn't really *do* refactoring); if I change any methods then the (regular
+Java) advice object will be impacted.  The only thing one then needs to
+worry about vis-a-vis aspects is the binding - something which is much more
+stable.
+
+Later.
+
+
+
+
+From dan at haywood-associates.co.uk  Sat Dec 17 14:40:54 2005
+From: dan at haywood-associates.co.uk (Dan Haywood)
+Date: Sat, 17 Dec 2005 13:40:54 -0000
+Subject: [Rcpviewer-contributors] progress 20051217: distribution + persistence
+Message-ID: <LGEELLOAEBMLCOGIKLMKCENBDFAA.dan@haywood-associates.co.uk>
+
+Been making some progress on both the topics of distribution (remoting) as
+well as persistence.
+
+Regarding distribution, the plan is to use xstream (at codehaus.org) to
+serialize the objects across the wire - this has been packaged up into a
+plugin (trunk/3rdparty/net.sf.plugins.xstream).  First item on the todo list
+is to save objects - I'll worry about getting them back (resolving them)
+later.  The design is to serialize the transaction, being a collection of
+changes, and then replay them server-side.  For InstantiationChanges, I also
+need to send over newly instantiated pojos themselves.  That's because we
+need to be able to cope with creating a whole graph of pojos whereby we can
+determine which pojo has been added to which other pojo.  Should work.
+
+Regarding peristence, the plan is to use hibernate - I've packaged up
+version 3.1, plus annotations 3.1beta7, into a plugin
+(trunk/3rdparty/net.sf.plugins.hibernate).    I've also packaged up HSQLDB
+as well - so can start a database instance directly from Eclipse
+(trunk/3rdparty/net.sf.plugins.hsqldb).  I've established that I can save a
+couple of pojos (been working on the Customer & Order in the demo plugin).
+The only thing that one needs to do (for simple spikes, at least) is to add
+@javax.persistence.Entity and @javax.persistence.Id to an Id attribute.  And
+what's really nice is that Hibernate builds the schema for us.
+
+On the topic of databaes plugins, recommend using Clay (Azzurri) to view the
+schemas that Hibernate generates, and the Quantum DB works well enough for
+querying the database.  There's also Hibernates own Tools plugin (3.1beta5
+at time of writing), which I intend to use probably in preference to Quantum
+DB.  However, that requires a hibernate.cfg.xml - the tests I've done thus
+far don't actually have one because the Configuration object (actually, an
+AnnotationConfiguration because I'm using Hibernate annotations) is built up
+programmatically by the test case.
+
+Next step is to link the distribution and persistence pieces together (the
+persistence stuff has just been done in some very anaemic tests thus far).
+
+
+
+

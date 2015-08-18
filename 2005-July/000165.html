@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Rcpviewer-contributors] Progress 20050729
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/rcpviewer-contributors/2005-July/index.html" >
+   <LINK REL="made" HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050729&In-Reply-To=%3C42E9EB02.5080108%40incremental.eu.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000163.html">
+   <LINK REL="Next"  HREF="000166.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Rcpviewer-contributors] Progress 20050729</H1>
+    <B>Mike Evans</B> 
+    <A HREF="mailto:rcpviewer-contributors%40lists.berlios.de?Subject=Re%3A%20%5BRcpviewer-contributors%5D%20Progress%2020050729&In-Reply-To=%3C42E9EB02.5080108%40incremental.eu.com%3E"
+       TITLE="[Rcpviewer-contributors] Progress 20050729">mike.evans at incremental.eu.com
+       </A><BR>
+    <I>Fri Jul 29 10:38:26 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000163.html">[Rcpviewer-contributors] Progress 20050727
+</A></li>
+        <LI>Next message: <A HREF="000166.html">[Rcpviewer-contributors] action view + prerequisites
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#165">[ date ]</a>
+              <a href="thread.html#165">[ thread ]</a>
+              <a href="subject.html#165">[ subject ]</a>
+              <a href="author.html#165">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Actions tree view now has in-place editing via CellEditors.
+Note that this only works with the types you find in the ...celleditors 
+package - ie. domain objects and int's, as I have yet to code any other 
+cell editors (or DnD adapters).
+I have added some new beans to the .acme project so that I can next 
+cover all primitive types.
+Then I'll think about better null handling.
+Then I'll think about arrays.
+The I'll think about Collections (as promised earlier this week!).
+Sigh - boilerplate faff must must be done.
+
+Note a project dependecy change.  I have started using and editing Ted's 
+net.sf.plugins.utils package so you'll need to update that and add it to 
+the .gui project dependency list.
+
+Finally - Ted you'll note that I do quite a bit of manipulation of the 
+default JFace object behaviours:
+* dynamically changing the viewer's cell editors - see ActionsViewPage
+* overriding default CellEditor behaviour - all of .celleditors package.
+Let me know if you are uncomfortable with anything I am doing and/or 
+have better ideas...
+
+Mike E.
+
+
+-- 
+Mike Evans
+Incremental Ltd.
+www.incremental.eu.com
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000163.html">[Rcpviewer-contributors] Progress 20050727
+</A></li>
+	<LI>Next message: <A HREF="000166.html">[Rcpviewer-contributors] action view + prerequisites
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#165">[ date ]</a>
+              <a href="thread.html#165">[ thread ]</a>
+              <a href="subject.html#165">[ subject ]</a>
+              <a href="author.html#165">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/rcpviewer-contributors">More information about the Rcpviewer-contributors
+mailing list</a><br>
+</body></html>
